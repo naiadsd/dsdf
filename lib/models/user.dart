@@ -1,17 +1,19 @@
-import 'package:dsd/models/auth/auth_results.dart';
+import 'package:dsd/state/models/auth_results.dart';
+import 'package:flutter/foundation.dart' show immutable;
 
+@immutable
 class User {
-  final int? id;
+  final String? id;
   final String? email;
   final String? password;
-
   final String? dailyNote;
   final int? totalOrders;
   final double? valueAdded;
   final bool? isloading;
   final AuthResult? result;
-  const User(
-    this.id,
+
+  const User({
+    required this.id,
     this.email,
     this.password,
     this.dailyNote,
@@ -19,27 +21,22 @@ class User {
     this.valueAdded,
     this.isloading,
     this.result,
-  );
+  });
 
-  const User.unknown(
-    this.email,
-    this.password,
-    this.dailyNote,
-    this.totalOrders,
-    this.valueAdded,
-  )   : result = null,
+  const User.unknown()
+      : result = null,
         isloading = false,
         id = null;
 
   User copiedwithIsLoading(bool isload) => User(
-        id,
-        email,
-        password,
-        dailyNote,
-        totalOrders,
-        valueAdded,
-        isload,
-        result,
+        id: id,
+        email: email,
+        password: password,
+        dailyNote: dailyNote,
+        totalOrders: totalOrders,
+        valueAdded: valueAdded,
+        isloading: isload,
+        result: result,
       );
 
   @override

@@ -1,45 +1,99 @@
 import 'package:dsd/firebase_options.dart';
 import 'package:dsd/models/customer.dart';
 import 'package:dsd/models/item.dart';
-import 'package:dsd/services/customers.dart';
+import 'package:dsd/state/auth/backend/authenticator.dart';
+import 'package:dsd/state/auth/providers/auth_state_provider.dart';
+import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/views/lists/cusotmers.dart';
 import 'package:dsd/views/lists/items.dart';
+import 'package:dsd/views/login/login_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    const ProviderScope(child: MyApp(),),);
+  runApp(ProviderScope(
+    child: App(),
+  ));
+}
+
+class App extends ConsumerWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp(
+      title: 'DSD',
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blueGrey,
+        indicatorColor: Colors.blueGrey,
+      ),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('DSD'),
+        ),
+        body: Consumer(builder: ((context, ref, child) {
+          final isloggedin = ref.watch(isLoggedInProvider);
+          //final authProvider = ref.read(authStateProvider.notifier);
+          final a = Authenticator();
+
+          if (isloggedin) {
+            return Text('Hello DSD list of customers go here${a.displayName}');
+          } else {
+            return LoginView();
+          }
+        })),
+      ),
+    );
+  }
 }
 
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-        title: 'DSD',
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.blueGrey,
-          indicatorColor: Colors.blueGrey,
-        ),
-        theme: ThemeData(
-         brightness: Brightness.light,
-          primarySwatch: Colors.blue,
-        ),
-        themeMode: ThemeMode.dark,
-        home: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: CustomerList(customerss: fetchCustomers(1, 0),),
-        ),);
+      title: 'DSD',
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blueGrey,
+        indicatorColor: Colors.blueGrey,
+      ),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+
+      home: Consumer(builder: (
+        context,
+        ref,
+        child,
+      ) {
+        final isLogged = ref.watch(isLoggedInProvider);
+        if (isLogged) {
+          return const Text('logged in');
+        } else {
+          return const Text('not logged in');
+          //  return const LoginView();
+        }
+      }),
+      //home: CustomerList(customerss: fetchCustomers(1, 0),),
+    );
   }
 }
 

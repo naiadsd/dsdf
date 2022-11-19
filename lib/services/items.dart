@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 Future<List<Item>> fetchItems() async {
   final response = await http.get(Uri.parse(
       "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/item/getItems"));
-  print("strted");
+
   if (response.statusCode == 200) {
     Map<String, dynamic> map = json.decode(response.body);
     List<dynamic> items = map["items"];

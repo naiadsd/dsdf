@@ -24,6 +24,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> loginWithGoogle() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();
+    // print(result.toString());
     final userId = _authenticator.userId;
     if (result == AuthResult.success && userId != null) {
       //write logic to create if we want to create or store new user information.

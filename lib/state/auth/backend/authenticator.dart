@@ -1,5 +1,6 @@
 import 'package:dsd/state/auth/models/auth_results.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticator {
@@ -15,6 +16,19 @@ class Authenticator {
 
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  Future<AuthResult> loginWithEmailPassword(
+      String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      // ignore: unnecessary_null_comparison
+      return AuthResult.success;
+    } catch (e) {
+      return AuthResult.aborted;
+    }
   }
 
   Future<AuthResult> loginWithGoogle() async {

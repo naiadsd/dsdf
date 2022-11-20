@@ -1,5 +1,20 @@
-class UserDetails {
-  UserDetails({
+// ignore_for_file: unnecessary_this
+
+class User {
+  String? lastName;
+  String? uuid;
+  int? phoneNumber;
+  int? id;
+  String? email;
+  String? role;
+  String? firstName;
+  int? route;
+  String? userId;
+  String? note;
+  int? totalOrders;
+  double? valueAdded;
+
+  User({
     required this.lastName,
     required this.uuid,
     required this.phoneNumber,
@@ -13,20 +28,12 @@ class UserDetails {
     required this.totalOrders,
     required this.valueAdded,
   });
-  late final String lastName;
-  late final String uuid;
-  late final int phoneNumber;
-  late final int id;
-  late final String email;
-  late final String role;
-  late final String firstName;
-  late final int route;
-  late final String userId;
-  late final String note;
-  late final int totalOrders;
-  late final double valueAdded;
 
-  UserDetails.fromJson(Map<String, dynamic> json) {
+  User.unknown()
+      : id = 0,
+        email = null;
+
+  User.fromJson(Map<String, dynamic> json) {
     lastName = json['lastName'];
     uuid = json['uuid'];
     phoneNumber = json['phoneNumber'];
@@ -57,4 +64,18 @@ class UserDetails {
     _data['valueAdded'] = valueAdded;
     return _data;
   }
+
+  set setTotalOrders(int totalOrder) {
+    totalOrders = totalOrder;
+  }
+
+  set setTotalvalue(double value) {
+    valueAdded = value;
+  }
+
+  int get routeNumber => route ?? 0;
+
+  int get gettoalOrders => totalOrders ?? 0;
+
+  double get getValueAdded => valueAdded ?? 0.0;
 }

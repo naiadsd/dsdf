@@ -4,6 +4,7 @@ import 'package:dsd/models/item.dart';
 import 'package:dsd/state/auth/backend/authenticator.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
+import 'package:dsd/views/home.dart';
 import 'package:dsd/views/lists/cusotmers.dart';
 import 'package:dsd/views/lists/items.dart';
 import 'package:dsd/views/login/login_view.dart';
@@ -49,7 +50,7 @@ class App extends ConsumerWidget {
           //final authProvider = ref.read(authStateProvider.notifier);
 
           if (isloggedin) {
-            return Text('Hello DSD list of customers go here');
+            return const Home();
           } else {
             return const LoginView();
           }

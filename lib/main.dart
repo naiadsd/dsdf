@@ -47,12 +47,11 @@ class App extends ConsumerWidget {
         body: Consumer(builder: ((context, ref, child) {
           final isloggedin = ref.watch(isLoggedInProvider);
           //final authProvider = ref.read(authStateProvider.notifier);
-          final a = Authenticator();
 
           if (isloggedin) {
-            return Text('Hello DSD list of customers go here${a.displayName}');
+            return Text('Hello DSD list of customers go here');
           } else {
-            return LoginView();
+            return const LoginView();
           }
         })),
       ),

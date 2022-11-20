@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDuhn_KXh-Fu6ZkenNZ5k8MbKQSWny2stI',
-    appId: '1:860998321979:android:6a64c2f2777f397448d91e',
-    messagingSenderId: '860998321979',
-    projectId: 'dsdnaia-1bbb8',
-    storageBucket: 'dsdnaia-1bbb8.appspot.com',
+    apiKey: 'AIzaSyB1nSMwAxwhOEzhiVnDLgsx_fXgxsOhqRY',
+    appId: '1:612937777664:android:0bb9a822a0080e01884ee5',
+    messagingSenderId: '612937777664',
+    projectId: 'gelaterianaia-a3f12',
+    storageBucket: 'gelaterianaia-a3f12.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBbsoQGNaBG4o7xzozFsBi4A6DIWjB_zo4',
-    appId: '1:860998321979:ios:be8667a12bf3a9c048d91e',
-    messagingSenderId: '860998321979',
-    projectId: 'dsdnaia-1bbb8',
-    storageBucket: 'dsdnaia-1bbb8.appspot.com',
-    iosClientId: '860998321979-hv0b1hb773ifg0ap6v8o9rvq3ni32pk6.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBs1u2KVjy_r5tyopSjvAkjNlVLyciwuh8',
+    appId: '1:612937777664:ios:5dccdb28eac7fd02884ee5',
+    messagingSenderId: '612937777664',
+    projectId: 'gelaterianaia-a3f12',
+    storageBucket: 'gelaterianaia-a3f12.appspot.com',
+    iosClientId: '612937777664-r01ckl64skvjfk9hpfph51g82fiar5hk.apps.googleusercontent.com',
     iosBundleId: 'com.dsdnaid.dsd',
   );
 }

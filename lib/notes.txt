@@ -1,3 +1,22 @@
 Platform  Firebase App Id
 android   1:860998321979:android:6a64c2f2777f397448d91e
 ios       1:860998321979:ios:be8667a12bf3a9c048d91e
+
+
+Get UserDetails: https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/user/userdetails/1649958772426
+
+https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/user/userdetailsbyuuid/KuELNqZO5AMs6zXtdAQGlpeC6la2
+
+
+rama@gelaterianaia.com
+Krishna@123
+
+
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\krishna\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 5D:AF:2A:05:51:92:A6:2F:46:56:73:FF:12:26:67:96
+SHA1: 14:FD:F9:65:91:07:05:FD:FD:CC:D7:1D:BA:27:C2:FD:20:C1:B5:C5
+SHA-256: 85:10:C4:E0:1B:4D:47:55:23:9A:AA:33:D2:E0:C2:D1:21:86:00:8A:72:E9:8A:B9:46:F7:63:8F:4B:27:FC:AE
+Valid until: Tuesday, 12 October 2049

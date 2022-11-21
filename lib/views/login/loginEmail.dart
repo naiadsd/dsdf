@@ -14,7 +14,11 @@ class LoginEmail extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 2,
       child: TextField(
         controller: emailController,
-        decoration: const InputDecoration(hintText: 'Email'),
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Email',
+            labelStyle:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
     );
   }

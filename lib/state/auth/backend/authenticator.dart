@@ -21,12 +21,12 @@ class Authenticator {
   Future<AuthResult> loginWithEmailPassword(
       String email, String password) async {
     try {
-      await FirebaseAuth.instance
+      final res = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      // ignore: unnecessary_null_comparison
       return AuthResult.success;
     } catch (e) {
+      print(e.toString());
       return AuthResult.aborted;
     }
   }
@@ -38,6 +38,7 @@ class Authenticator {
       ],
     );
     final signInAccount = await googleSignIn.signIn();
+
     if (signInAccount == null) {
       return AuthResult.aborted;
     }

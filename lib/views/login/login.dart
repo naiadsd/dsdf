@@ -1,4 +1,6 @@
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
+import 'package:dsd/state/auth/providers/user_id_provider.dart';
+import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/views/login/google_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,6 +13,7 @@ class Login extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
@@ -58,22 +61,34 @@ class Login extends ConsumerWidget {
               const SizedBox(
                 height: 30,
               ),
-              Container(
-                width: size.width,
-                height: 70,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(20)),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700),
+              GestureDetector(
+                child: Container(
+                  width: size.width,
+                  height: 70,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
                 ),
+                onTap: () async {
+                  final authProvider = ref.read(authStateProvider.notifier);
+                  final result = await authProvider.loginWithEmailPassword(
+                      emailController.text, passwordController.text);
+                  print('reult${result.toString()}');
+                  final userID = ref.read(userIdProvider);
+                  final userDetailsPRovider =
+                      ref.read(userDetailsProvider.notifier);
+                  userDetailsPRovider.fetchUserDetails(userID);
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -99,10 +114,14 @@ class Login extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(30)),
                 child: GestureDetector(
                   child: const GoogleButton(),
-                  onTap: () {
-                    print('tappd');
+                  onTap: () async {
                     final authProvider = ref.read(authStateProvider.notifier);
-                    authProvider.loginWithGoogle();
+                    await authProvider.loginWithGoogle();
+
+                    final userID = ref.read(userIdProvider);
+                    final userDetailsPRovider =
+                        ref.read(userDetailsProvider.notifier);
+                    userDetailsPRovider.fetchUserDetails(userID);
                   },
                 ),
               ),

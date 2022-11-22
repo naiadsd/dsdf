@@ -31,7 +31,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'DSD',
+      // title: 'DSD',
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
@@ -44,9 +44,6 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('DSD'),
-        ),
         body: Consumer(builder: ((context, ref, child) {
           final isloggedin = ref.watch(isLoggedInProvider);
           //final authProvider = ref.read(authStateProvider.notifier);
@@ -76,7 +73,7 @@ class MyApp extends ConsumerWidget {
       ),
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
       ),
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
@@ -134,7 +131,7 @@ class CustomerList extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text("Customers"),
-          backgroundColor: Colors.cyan,
+          backgroundColor: Color.fromARGB(255, 159, 0, 212),
           centerTitle: true,
         ),
         body: Center(

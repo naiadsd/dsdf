@@ -67,12 +67,23 @@ class LoginView extends ConsumerWidget {
                     }
                   },
                   child: const Text('Login')),
-              GestureDetector(
-                child: const GoogleButton(),
-                onTap: () {
-                  final authProvider = ref.read(authStateProvider.notifier);
-                  authProvider.loginWithGoogle();
-                },
+              Container(
+                height: 100,
+                color: Colors.amber,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.red,
+                    style: BorderStyle.solid,
+                    width: 2.0,
+                  ),
+                ),
+                child: GestureDetector(
+                  child: const GoogleButton(),
+                  onTap: () {
+                    final authProvider = ref.read(authStateProvider.notifier);
+                    authProvider.loginWithGoogle();
+                  },
+                ),
               ),
             ],
           ),

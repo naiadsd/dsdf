@@ -7,6 +7,7 @@ import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/views/home.dart';
 import 'package:dsd/views/lists/cusotmers.dart';
 import 'package:dsd/views/lists/items.dart';
+import 'package:dsd/views/login/login.dart';
 import 'package:dsd/views/login/login_view.dart';
 import 'package:dsd/views/login/signin.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class App extends ConsumerWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -53,7 +54,7 @@ class App extends ConsumerWidget {
           if (isloggedin) {
             return const Home();
           } else {
-            return const Sign();
+            return const Login();
           }
         })),
       ),

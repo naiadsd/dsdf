@@ -39,3 +39,21 @@ Valid until: Tuesday, 12 October 2049
         "valueAdded": 6055.92
     }
 }
+
+For those who are not iOS devs and stumble upon this hoping that it resolves the issue. I had trouble running my project with flutter run after making the changes here.
+
+I was able to resolve the issue by editing my Release.xcconfig file to add these two lines at the bottom:
+
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
+Then I added this line to the bottom of my Debug.xcconfig
+
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+For those looking for these two files in XCode, here is where I found them:
+image
+
+After doing this, pod install worked just fine and so did flutter run. Hopefully, this saves someone else a headache.
+
+Referencing: https://stackoverflow.com/questions/53630136/using-cocoapods-libraries-in-flutter-ios-platform-specific-code
+
+Other notes, I am using XCode 12 and Flutter 1.22.2

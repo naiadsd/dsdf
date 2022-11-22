@@ -34,6 +34,7 @@ class User {
         email = null;
 
   User.fromJson(Map<String, dynamic> json) {
+    //print(json);
     lastName = json['lastName'];
     uuid = json['uuid'];
     phoneNumber = json['phoneNumber'];
@@ -45,10 +46,11 @@ class User {
     userId = json['userId'];
     note = json['note'];
     totalOrders = json['totalOrders'];
-    valueAdded = json['valueAdded'];
+    valueAdded = json['valueAdded'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
+    ;
     final _data = <String, dynamic>{};
     _data['lastName'] = lastName;
     _data['uuid'] = uuid;

@@ -22,9 +22,9 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
   Future _init() async {
     prefs = await SharedPreferences.getInstance();
     var userInfo = prefs.getString('userInfo');
-
-    if (validator(userInfo)) {
-      state = User.fromJson(json.decode(userInfo ?? ''));
+    print('userInfo$userInfo');
+    if (userInfo != null) {
+      state = User.fromJson(json.decode(userInfo));
     }
   }
 
@@ -52,7 +52,9 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
   Future<void> fetchUserDetails(String uuid) async {
     final result = await _userSerevice.fetchUserDetails(uuid);
     final userinfo = result.toJson();
+    print('from fetch storing');
     prefs.setString('userInfo', json.encode(userinfo));
+    print('storing finished ');
     state = User(
       lastName: result.lastName,
       uuid: uuid,

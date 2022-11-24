@@ -15,27 +15,38 @@ class Home extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/background.jpeg'),
+                      fit: BoxFit.cover)),
+              child: SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: Container(
+                  alignment: const Alignment(0.0, 2.5),
+                  child: const CircleAvatar(
+                    child: Text('R'),
+                    radius: 60.0,
+                  ),
+                ),
               ),
-              Text(
-                'Welcome to DSD ${userDetails.firstName}',
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              GestureDetector(
-                child: const Text('Logout'),
-                onTap: () {
-                  final authProvider = ref.read(authStateProvider.notifier);
-                  authProvider.logout();
-                },
-              ),
-            ],
-          ),
+            ),
+            Text(
+              'Welcome to DSD ${userDetails.firstName}',
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+            GestureDetector(
+              child: const Text('Logout'),
+              onTap: () {
+                final authProvider = ref.read(authStateProvider.notifier);
+                authProvider.logout();
+              },
+            ),
+          ],
         ),
       ),
     );

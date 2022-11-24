@@ -117,7 +117,6 @@ class LoginView extends ConsumerWidget {
                   ),
                 ),
                 onTap: () async {
-                  print('tapped');
                   final authProvider = ref.read(authStateProvider.notifier);
                   await authProvider.loginWithEmailPassword(
                       emailController.text, passwordController.text);

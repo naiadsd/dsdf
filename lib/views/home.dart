@@ -10,41 +10,91 @@ class Home extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
+    final size = MediaQuery.of(context).size;
+    String? avatrString =
+        '${userDetails.firstName?.substring(0, 1)}${userDetails.lastName?.substring(0, 1)}';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: SingleChildScrollView(
+      backgroundColor: Colors.grey[400],
+      body: SafeArea(
         child: Column(
           children: [
             Container(
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('images/background.jpeg'),
-                      fit: BoxFit.cover)),
+                gradient: LinearGradient(colors: [
+                  Colors.deepPurple,
+                  Colors.deepPurple,
+                  Colors.deepPurpleAccent
+                ]),
+              ),
               child: SizedBox(
                 width: double.infinity,
-                height: 200,
+                height: size.height * 0.2,
                 child: Container(
                   alignment: const Alignment(0.0, 2.5),
                   child: const CircleAvatar(
-                    child: Text('R'),
+                    backgroundColor: Colors.deepPurpleAccent,
                     radius: 60.0,
+                    child: Text(
+                      'RR',
+                      style:
+                          TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
             ),
-            Text(
-              'Welcome to DSD ${userDetails.firstName}',
-              style: Theme.of(context).textTheme.displaySmall,
+            const SizedBox(
+              height: 50,
             ),
-            GestureDetector(
-              child: const Text('Logout'),
-              onTap: () {
-                final authProvider = ref.read(authStateProvider.notifier);
-                authProvider.logout();
-              },
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${userDetails.firstName} ${userDetails.lastName}',
+                    style: const TextStyle(color: Colors.black, fontSize: 24),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[500],
+                          border: Border.all(color: Colors.white, width: 5),
+                          borderRadius: BorderRadius.circular(50)),
+                          child: Column(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Sign Out',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        final authProvider =
+                            ref.read(authStateProvider.notifier);
+                        authProvider.logout();
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

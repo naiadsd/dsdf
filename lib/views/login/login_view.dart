@@ -24,13 +24,24 @@ class LoginView extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Container(
+            //   color: Colors.transparent,
+            //   child: Image(
+            //     color: Colors.transparent,
+            //     colorBlendMode: BlendMode.darken,
+            //     height: 150,
+            //     filterQuality: FilterQuality.low,
+            //     image: AssetImage('images/dsdlogo.jpg'),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             Text(
               'Hello Again..',
               style: GoogleFonts.bebasNeue(
                 fontSize: 40,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
@@ -40,7 +51,7 @@ class LoginView extends ConsumerWidget {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
@@ -53,7 +64,8 @@ class LoginView extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 18.0),
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: emailController,
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Email',
                     ),
@@ -61,7 +73,7 @@ class LoginView extends ConsumerWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Padding(
@@ -74,8 +86,9 @@ class LoginView extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 18.0),
                   child: TextField(
+                    controller: passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Password',
                     ),
@@ -85,52 +98,76 @@ class LoginView extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    'Sign In',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
+                onTap: () async {
+                  print('tapped');
+                  final authProvider = ref.read(authStateProvider.notifier);
+                  await authProvider.loginWithEmailPassword(
+                      emailController.text, passwordController.text);
+
+                  final userID = ref.read(userIdProvider);
+                  final userDetailsPRovider =
+                      ref.read(userDetailsProvider.notifier);
+                  userDetailsPRovider.fetchUserDetails(userID);
+                },
               ),
             ),
-            Center(child: Text('Or')),
+            const Center(child: Text('Or')),
             Padding(
               padding: const EdgeInsets.all(25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FaIcon(FontAwesomeIcons.google, color: Colors.white),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Center(
-                      child: Text(
-                        'Sign In with Google',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      FaIcon(FontAwesomeIcons.google, color: Colors.white),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Center(
+                        child: Text(
+                          'Sign In with Google',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                onTap: () async {
+                  final authProvider = ref.read(authStateProvider.notifier);
+                  await authProvider.loginWithGoogle();
+
+                  final userID = ref.read(userIdProvider);
+                  final userDetailsPRovider =
+                      ref.read(userDetailsProvider.notifier);
+                  userDetailsPRovider.fetchUserDetails(userID);
+                },
               ),
             ),
           ],

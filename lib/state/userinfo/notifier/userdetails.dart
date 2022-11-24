@@ -20,6 +20,7 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
   }
 
   Future _init() async {
+    print('this is called');
     prefs = await SharedPreferences.getInstance();
     var userInfo = prefs.getString('userInfo');
 

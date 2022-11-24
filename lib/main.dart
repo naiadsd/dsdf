@@ -51,7 +51,7 @@ class App extends ConsumerWidget {
           if (isloggedin) {
             return const Home();
           } else {
-            return const Login();
+            return const LoginView();
           }
         })),
       ),

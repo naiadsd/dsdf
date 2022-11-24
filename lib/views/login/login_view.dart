@@ -7,6 +7,8 @@ import 'package:dsd/views/login/login_password.dart';
 import 'package:dsd/state/auth/providers/user_id_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LoginView extends ConsumerWidget {
@@ -17,76 +19,121 @@ class LoginView extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('DSD'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40,
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Hello Again..',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 40,
               ),
-              Text(
-                'Welcome to DSD',
-                style: Theme.of(context).textTheme.displaySmall,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'welcome back to DSD',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 30,
+                fontWeight: FontWeight.normal,
               ),
-              LoginEmail(emailController: emailController),
-              const SizedBox(height: 30.0),
-              LoginPassword(passwordController: passwordController),
-              const SizedBox(height: 30.0),
-              const SizedBox(height: 30.0),
-              ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      final authService = ref.read(authStateProvider.notifier);
-                      final result = await authService.loginWithEmailPassword(
-                          emailController.text, passwordController.text);
-                      final userService =
-                          ref.read(userDetailsProvider.notifier);
-                      if (result == AuthResult.success) {
-                        final userId = ref.read(userIdProvider);
-                        print('userID $userId');
-                        userService.fetchUserDetails(userId);
-                        //  Navigator.of(context).pushReplacement(
-                        //      MaterialPageRoute(builder: (context) => const Home()));
-                      }
-                      // await _authService.signInWithEmailAndPassword(
-                      //   email: email,
-                      //   password: password,
-                      // );
-                      // Navigator.of(context)
-                      //     .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(e.toString()),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('Login')),
-              Container(
-                height: 100,
-                color: Colors.amber,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.red,
-                    style: BorderStyle.solid,
-                    width: 2.0,
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Email',
+                    ),
                   ),
                 ),
-                child: GestureDetector(
-                  child: const GoogleButton(),
-                  onTap: () {
-                    final authProvider = ref.read(authStateProvider.notifier);
-                    authProvider.loginWithGoogle();
-                  },
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Password',
+                    ),
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Center(child: Text('Or')),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FaIcon(FontAwesomeIcons.google, color: Colors.white),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Center(
+                      child: Text(
+                        'Sign In with Google',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

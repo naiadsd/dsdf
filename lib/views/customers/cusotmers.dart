@@ -1,6 +1,6 @@
 import 'package:dsd/models/customer.dart';
 import 'package:dsd/models/item.dart';
-import 'package:dsd/views/customer.dart';
+import 'package:dsd/views/customers/customer.dart';
 
 import 'package:flutter/material.dart';
 

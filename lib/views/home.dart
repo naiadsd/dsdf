@@ -126,7 +126,7 @@ class Home extends ConsumerWidget {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "${userDetails.valueAdded}",
+                                      "\$ ${userDetails.valueAdded}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 28,

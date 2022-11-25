@@ -42,6 +42,8 @@ dependencies:
   email_validator: ^2.1.17
   shared_preferences: ^2.0.15
   google_fonts:
+  go_router: ^5.2.0
+  url_strategy:
 dev_dependencies:
   flutter_test:
     sdk: flutter

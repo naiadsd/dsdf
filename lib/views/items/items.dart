@@ -1,5 +1,5 @@
 import 'package:dsd/models/item.dart';
-import 'package:dsd/views/item.dart';
+import 'package:dsd/views/items/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';

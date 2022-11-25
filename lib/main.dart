@@ -1,18 +1,14 @@
 import 'package:dsd/firebase_options.dart';
-import 'package:dsd/models/customer.dart';
-import 'package:dsd/models/item.dart';
-import 'package:dsd/state/auth/backend/authenticator.dart';
-import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
+import 'package:dsd/views/customers/customer_list.dart';
 import 'package:dsd/views/home.dart';
-import 'package:dsd/views/lists/cusotmers.dart';
-import 'package:dsd/views/lists/items.dart';
-import 'package:dsd/views/login/login.dart';
 import 'package:dsd/views/login/login_view.dart';
-import 'package:dsd/views/login/signin.dart';
+import 'package:dsd/views/orders/orders.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
@@ -20,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ProviderScope(
+  runApp(const ProviderScope(
     child: App(),
   ));
 }
@@ -30,7 +26,7 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp.router(
       // title: 'DSD',
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -43,18 +39,19 @@ class App extends ConsumerWidget {
       ),
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Consumer(builder: ((context, ref, child) {
-          final isloggedin = ref.watch(isLoggedInProvider);
-          //final authProvider = ref.read(authStateProvider.notifier);
+      routerConfig: _router,
+      // home: Scaffold(
+      //   body: Consumer(builder: ((context, ref, child) {
+      //     final isloggedin = ref.watch(isLoggedInProvider);
+      //     //final authProvider = ref.read(authStateProvider.notifier);
 
-          if (isloggedin) {
-            return const Home();
-          } else {
-            return const LoginView();
-          }
-        })),
-      ),
+      //     if (isloggedin) {
+      //       return const Home();
+      //     } else {
+      //       return const LoginView();
+      //     }
+      //   })),
+      // ),
     );
   }
 }
@@ -96,54 +93,28 @@ class MyApp extends ConsumerWidget {
   }
 }
 
-class ItemList extends StatelessWidget {
-  final Future<List<Item>> items;
-  const ItemList({required this.items});
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (context, state) {
+        return Consumer(builder: ((context, ref, child) {
+          final isloggedin = ref.watch(isLoggedInProvider);
+          //final authProvider = ref.read(authStateProvider.notifier);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Items"),
-          backgroundColor: Colors.cyan,
-          centerTitle: true,
-        ),
-        body: Center(
-          child: FutureBuilder<List<Item>>(
-            future: items,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {}
-              return snapshot.hasData
-                  ? Items(items: snapshot.data ?? [])
-                  : const Center(child: CircularProgressIndicator());
-            },
-          ),
-        ));
-  }
-}
-
-class CustomerList extends StatelessWidget {
-  final Future<List<Customer>> customerss;
-  const CustomerList({required this.customerss});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Customers"),
-          backgroundColor: Color.fromARGB(255, 159, 0, 212),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: FutureBuilder<List<Customer>>(
-            future: customerss,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {}
-              return snapshot.hasData
-                  ? Customers(customers: snapshot.data ?? [])
-                  : const Center(child: CircularProgressIndicator());
-            },
-          ),
-        ));
-  }
-}
+          if (isloggedin) {
+            return const Home();
+          } else {
+            return const LoginView();
+          }
+        }));
+      },
+    ),
+    GoRoute(
+      path: '/orders',
+      builder: (context, state) {
+        return const Orders();
+      },
+    ),
+  ],
+);

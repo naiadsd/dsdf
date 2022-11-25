@@ -81,9 +81,9 @@ class Login extends ConsumerWidget {
                 ),
                 onTap: () async {
                   final authProvider = ref.read(authStateProvider.notifier);
-                  final result = await authProvider.loginWithEmailPassword(
+                  await authProvider.loginWithEmailPassword(
                       emailController.text, passwordController.text);
-                  print('reult${result.toString()}');
+
                   final userID = ref.read(userIdProvider);
                   final userDetailsPRovider =
                       ref.read(userDetailsProvider.notifier);

@@ -1,7 +1,10 @@
 import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
-import 'package:dsd/views/customers/customer_list.dart';
+import 'package:dsd/views/customers/cusotmers.dart';
+
 import 'package:dsd/views/home.dart';
+import 'package:dsd/views/items/items.dart';
+
 import 'package:dsd/views/login/login_view.dart';
 import 'package:dsd/views/orders/orders.dart';
 
@@ -109,6 +112,14 @@ final GoRouter _router = GoRouter(
           }
         }));
       },
+    ),
+    GoRoute(
+      path: '/customers',
+      builder: ((context, state) => const Customers()),
+    ),
+    GoRoute(
+      path: '/items',
+      builder: ((context, state) => const Items()),
     ),
     GoRoute(
       path: '/orders',

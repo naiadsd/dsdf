@@ -1,5 +1,4 @@
-import 'package:dsd/models/customer.dart';
-import 'package:dsd/models/item.dart';
+import 'package:dsd/state/customers/model/customer.dart';
 import 'package:flutter/material.dart';
 
 class CustomerContainer extends StatelessWidget {

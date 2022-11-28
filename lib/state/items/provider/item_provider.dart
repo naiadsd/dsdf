@@ -9,6 +9,6 @@ final itemProvider = Provider<ItemService>(
 
 final itemDataProvider = FutureProvider<List<Item>>(
   (ref) {
-    return ref.read(itemProvider).fetchItems();
+    return ref.watch(itemProvider).fetchItems();
   },
 );

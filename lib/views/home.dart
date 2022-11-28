@@ -1,7 +1,7 @@
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
-
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -228,9 +228,7 @@ class Home extends ConsumerWidget {
                             ),
                           ),
                           onTap: () async {
-                            final authProvider =
-                                ref.read(authStateProvider.notifier);
-                            authProvider.logout();
+                            return context.go('/orders');
                           },
                         ),
                       ),
@@ -263,6 +261,56 @@ class Home extends ConsumerWidget {
                       },
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Customers',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        context.go('/customers');
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Items',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        context.go('/items');
+                      },
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -278,15 +326,15 @@ class Home extends ConsumerWidget {
           BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.iceCream), label: 'Items'),
           BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.user),
-              label: 'Profiles',
-              activeIcon: Icon(
-                FontAwesomeIcons.user,
-                color: Colors.deepPurpleAccent,
-              )),
+            icon: Icon(FontAwesomeIcons.user),
+            label: 'Profiles',
+            activeIcon: Icon(
+              FontAwesomeIcons.user,
+              color: Colors.deepPurpleAccent,
+            ),
+          ),
         ],
         currentIndex: 2,
-        onTap: (int index) {},
       ),
     );
   }

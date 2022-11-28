@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dsd/state/auth/backend/authenticator.dart';
 import 'package:dsd/state/userinfo/backend/userdetailservice.dart';
 import 'package:dsd/state/userinfo/model/user.dart';

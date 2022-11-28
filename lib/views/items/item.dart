@@ -1,4 +1,4 @@
-import 'package:dsd/models/item.dart';
+import 'package:dsd/state/items/models/item.dart';
 import 'package:flutter/material.dart';
 
 class ItemContainer extends StatelessWidget {

@@ -7,6 +7,7 @@ import 'package:dsd/views/items/items.dart';
 
 import 'package:dsd/views/login/login_view.dart';
 import 'package:dsd/views/orders/orders.dart';
+import 'package:dsd/views/pages/rootApp.dart';
 
 import 'package:flutter/material.dart';
 
@@ -29,20 +30,24 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
+    return MaterialApp(
       // title: 'DSD',
       darkTheme: ThemeData(
+        fontFamily: 'WorkSans',
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
         indicatorColor: Colors.blueGrey,
       ),
       theme: ThemeData(
+        fontFamily: 'WorkSans',
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      routerConfig: _router,
+
+      home: RootApp(),
+      //routerConfig: _router,
       // home: Scaffold(
       //   body: Consumer(builder: ((context, ref, child) {
       //     final isloggedin = ref.watch(isLoggedInProvider);

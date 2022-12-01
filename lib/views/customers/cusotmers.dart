@@ -1,8 +1,8 @@
-import 'package:dsd/state/customers/backend/customer_service.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 
 import 'package:dsd/views/customers/customer.dart';
+import 'package:dsd/views/customers/customercontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -90,13 +90,25 @@ class _CustomersState extends ConsumerState<Customers> {
             width: double.infinity,
             child: customers.when(
                 data: (data) {
-                  List<Customer> cusotmerList = data.map((e) => e).toList();
+                  List<Customer> mainList = data.map((e) => e).toList();
+
+                  List<Customer> cusotmerList = mainList
+                      .where(
+                        (element) =>
+                            element.customerName.contains(_searchfiler.text),
+                      )
+                      .toList();
+                  //.((cu) => cu.customerName.contains(_searchfiler.text)));
+
                   return Column(
                     children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
                       Expanded(
                         child: ListView.builder(
                           itemBuilder: ((context, index) {
-                            return CustomerContainer(
+                            return CustomerItem(
                               customer: cusotmerList[index],
                             );
                           }),

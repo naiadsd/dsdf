@@ -1,6 +1,5 @@
 import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
-import 'package:dsd/views/customers/cusotmers.dart';
 
 import 'package:dsd/views/home.dart';
 import 'package:dsd/views/items/items.dart';
@@ -120,11 +119,11 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/customers',
-      builder: ((context, state) => const Customers()),
+      builder: ((context, state) => const Text('sd')),
     ),
     GoRoute(
       path: '/items',
-      builder: ((context, state) => const Items()),
+      builder: ((context, state) => const Text('Hello items')),
     ),
     GoRoute(
       path: '/orders',

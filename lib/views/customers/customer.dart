@@ -1,105 +1,107 @@
 import 'package:dsd/state/customers/model/customer.dart';
+import 'package:dsd/theme/colors.dart';
+import 'package:dsd/theme/padding.dart';
 import 'package:flutter/material.dart';
 
-class CustomerContainer extends StatelessWidget {
+class CustomerItem extends StatelessWidget {
   final Customer customer;
 
-  const CustomerContainer({Key? key, required this.customer}) : super(key: key);
+  const CustomerItem({Key? key, required this.customer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: Colors.deepPurpleAccent,
-            borderRadius: BorderRadius.circular(30)),
-        height: 200,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              customer.customerName,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 120,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                          width: 3,
-                        )),
-                    child: const Icon(
-                      Icons.person,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: 1,
-                          )),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      width: size.width,
+      height: size.width * 0.35,
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
+      decoration: BoxDecoration(
+        color: textWhite,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: textBlack.withOpacity(0.3),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: size.width * 0.3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: size.width * 0.23,
+                  height: size.width * 0.23,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        color: customer.isPromoAvailable
+                            ? Colors.green[400]
+                            : secondary,
+                        alignment: Alignment.center,
+                        child: Text(
+                          customer.customerName[0],
+                          style: const TextStyle(
+                              color: textWhite,
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )),
+                ),
+                const SizedBox(width: miniSpacer + 5),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${customer.customerName}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: secondary,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const Divider(
+                        height: 4,
+                        color: Colors.black,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            customer.customerId,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            customer.shipToAddressLineOne,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          customer.billToAddressLineTwo.isNotEmpty
+                          customer.shipToAddressLineTwo.isNotEmpty
                               ? Text(
-                                  '${customer.billToAddressLineTwo}\n${customer.shipToCity}\n${customer.shipToSate}-${customer.shipToZip}',
+                                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
                                   style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700))
+                                    fontSize: 15,
+                                    color: grey,
+                                  ),
+                                )
                               : Text(
-                                  '${customer.shipToCity}\n${customer.shipToSate}-${customer.shipToZip}',
+                                  '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
                                   style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700)),
+                                    fontSize: 15,
+                                    color: grey,
+                                  ),
+                                ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

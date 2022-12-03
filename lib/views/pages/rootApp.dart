@@ -1,10 +1,7 @@
 import 'package:dsd/theme/colors.dart';
-import 'package:dsd/views/customers/cusotmers.dart';
-import 'package:dsd/views/customers/listcustomer.dart';
+import 'package:dsd/views/customers/customers.dart';
 import 'package:dsd/views/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RootApp extends StatefulWidget {
@@ -27,10 +24,9 @@ class _RootAppState extends State<RootApp> {
   Widget getBody() {
     return IndexedStack(
       index: pageIndex,
-      children: [
+      children: const [
         ListCustomer(),
         Home(),
-        Customers(),
       ],
     );
   }

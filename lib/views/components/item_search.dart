@@ -1,11 +1,14 @@
+import 'package:dsd/state/search/customer_search.dart';
+import 'package:dsd/state/search/item_search.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
 import 'package:dsd/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomSearchField extends StatefulWidget {
-  const CustomSearchField({
+class ItemSearchField extends ConsumerStatefulWidget {
+  const ItemSearchField({
     Key? key,
     required this.hintField,
     this.backgroundColor,
@@ -15,12 +18,16 @@ class CustomSearchField extends StatefulWidget {
   final Color? backgroundColor;
 
   @override
-  _CustomSearchFieldState createState() => _CustomSearchFieldState();
+  ConsumerState createState() => _CustomSearchFieldState();
 }
 
-class _CustomSearchFieldState extends State<CustomSearchField> {
+class _CustomSearchFieldState extends ConsumerState<ItemSearchField> {
   @override
   Widget build(BuildContext context) {
+    final itemSearchPro = ref.watch(itemSearchProvider.notifier);
+
+    final customerSearchConroller = TextEditingController();
+
     var size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
@@ -52,6 +59,7 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
               height: 38,
               alignment: Alignment.topCenter,
               child: TextField(
+                controller: customerSearchConroller,
                 style: TextStyle(fontSize: 15),
                 cursorColor: textBlack,
                 decoration: InputDecoration(
@@ -82,12 +90,15 @@ class _CustomSearchFieldState extends State<CustomSearchField> {
                 )
               ],
             ),
-            child: Container(
+            child: InkWell(
               child: SvgPicture.asset(
-                assetImg + '/filter_icon.svg',
+                '$assetImg/filter_icon.svg',
                 color: textWhite,
                 height: 13.0,
               ),
+              onTap: () {
+                itemSearchPro.setSearchText(customerSearchConroller.text);
+              },
             ),
           ),
         ],

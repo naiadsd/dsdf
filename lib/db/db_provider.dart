@@ -29,6 +29,7 @@ class DBProvier {
 
   createCustomer(Customer customer) async {
     final db = await database;
+    print(customer.toJson());
     final res = await db.insert(customerTable, customer.toJson());
     print('customer inserted...');
     return res;

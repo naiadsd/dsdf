@@ -39,6 +39,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     final userDetails = ref.watch(userDetailsProvider);
+
     return Column(
       children: [
         Stack(
@@ -92,8 +93,8 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                       const SizedBox(
                         height: spacer - 30,
                       ),
-                      Text(
-                        '$totoalNoOfCustomers customers found.',
+                      const Text(
+                        'customers found.',
                         style: const TextStyle(color: textWhite),
                       )
                     ],

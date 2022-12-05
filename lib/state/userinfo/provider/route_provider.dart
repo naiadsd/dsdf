@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final currentRouteProvider = Provider<int>(
   (ref) {
-    final userDetails = ref.read(userDetailsProvider);
+    final userDetails = ref.watch(userDetailsProvider);
     return userDetails.route ?? 0;
   },
 );

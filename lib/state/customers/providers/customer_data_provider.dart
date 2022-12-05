@@ -9,7 +9,9 @@ final customerDataProvider = FutureProvider<List<Customer>>((ref) async {
   final route = ref.watch(currentRouteProvider);
   final day = ref.watch(routeDayProvider);
   final searchText = ref.watch(customerSerachProvider);
-  var customers = await ref.watch(customerProvider).fetchCustomers(1, 1);
+  print('$day$route');
+  var customers = await ref.watch(customerProvider).fetchCustomers(route, day);
+  print(customers.length);
   if (searchText.isNotEmpty) {
     return customers
         .where((element) => (element.customerName.contains(searchText)))

@@ -1,6 +1,10 @@
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
+import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
+import 'package:dsd/theme/colors.dart';
+import 'package:dsd/theme/padding.dart';
+import 'package:dsd/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,25 +16,29 @@ class Home extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
+    final routeDay = ref.watch(routeDayProvider);
     // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
-    String avatrString =
-        '${userDetails.firstName?.substring(0, 1)}${userDetails.lastName?.substring(0, 1)}';
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: background,
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(0),
+        child: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 30,
-              ),
               Container(
-                color: Colors.deepPurpleAccent,
+                color: secondary,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -48,7 +56,7 @@ class Home extends ConsumerWidget {
                     children: [
                       const Center(
                         child: CircleAvatar(
-                          backgroundColor: Colors.deepPurpleAccent,
+                          backgroundColor: secondary,
                           radius: 60.0,
                           child: Text(
                             'RR',
@@ -58,7 +66,7 @@ class Home extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Text(
                         '${userDetails.firstName} ${userDetails.lastName}',
@@ -77,7 +85,7 @@ class Home extends ConsumerWidget {
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                      color: Colors.deepPurpleAccent,
+                      color: secondary,
                       //   border: Border.all(color: Colors.white, width: 5),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
@@ -108,7 +116,7 @@ class Home extends ConsumerWidget {
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     const Text(
                                       'Route',
@@ -134,7 +142,7 @@ class Home extends ConsumerWidget {
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     const Text(
                                       'Value Added',
@@ -160,7 +168,7 @@ class Home extends ConsumerWidget {
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     const Text(
                                       'Orders ',
@@ -179,162 +187,133 @@ class Home extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Switch Route',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Center(
+                            child: Text(
+                              'Switch Day',
+                              style: TextStyle(
+                                color: secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          onTap: () async {
-                            switchRoute(context, userDetails.route ?? 0);
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            height: 120,
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(4),
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: (() {
+                                        ref
+                                            .watch(routeDayProvider.notifier)
+                                            .setRoute(index + 1);
+                                      }),
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            routeDay == days[index]["id"]
+                                                ? Colors.green
+                                                : secondary,
+                                        radius: 40.0,
+                                        child: Text(
+                                          days[index]["day"].toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                              itemCount: days.length,
                             ),
-                            child: const Center(
-                              child: Text(
-                                'Refresh Data',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          ),
+                        ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Center(
+                            child: Text(
+                              'Switch Route',
+                              style: TextStyle(
+                                color: secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          onTap: () async {
-                            return context.go('/orders');
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Sign out',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            height: 120,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: (() {
+                                        ref
+                                            .watch(userDetailsProvider.notifier)
+                                            .setRoute(index + 1);
+                                      }),
+                                      child: CircleAvatar(
+                                        backgroundColor: userDetails.route ==
+                                                int.parse(routes[index]["route"]
+                                                    .toString())
+                                            ? Colors.green
+                                            : secondary,
+                                        radius: 40.0,
+                                        child: Text(
+                                          routes[index]["route"].toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                              itemCount: routes.length,
                             ),
                           ),
-                        ),
-                      ),
-                      onTap: () async {
-                        final authProvider =
-                            ref.read(authStateProvider.notifier);
-                        authProvider.logout();
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Customers',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ),
-                      onTap: () async {
-                        context.go('/customers');
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Items',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () async {
-                        context.go('/items');
-                      },
-                    ),
+                        ]),
                   ),
                 ],
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.peopleRobbery),
-            label: 'Customers',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.iceCream), label: 'Items'),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.user),
-            label: 'Profiles',
-            activeIcon: Icon(
-              FontAwesomeIcons.user,
-              color: Colors.deepPurpleAccent,
-            ),
-          ),
-        ],
-        currentIndex: 2,
       ),
     );
   }
@@ -354,7 +333,7 @@ class Home extends ConsumerWidget {
         Container(
           width: double.infinity,
           height: 150,
-          margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+          margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400, width: 0.5),
             borderRadius: BorderRadius.circular(15),
@@ -480,3 +459,117 @@ class MyBottomSheet extends StatelessWidget {
     );
   }
 }
+/*
+                 Padding(
+                    padding: const EdgeInsets.all(appPadding),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Customers',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        context.go('/customers');
+                      },
+                    ),
+                  ),
+
+
+
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: secondary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Sign out',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        final authProvider =
+                            ref.read(authStateProvider.notifier);
+                        authProvider.logout();
+                      },
+                    ),
+                  ),
+
+
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Switch Route',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            switchRoute(context, userDetails.route ?? 0);
+                          },
+                        ),
+                      ),
+                  
+                      GestureDetector(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: secondary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Refresh Data',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          return context.go('/orders');
+                        },
+                      ),
+                    ],
+                  ),
+*/

@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/items/provider/item_provider.dart';
@@ -7,6 +8,7 @@ import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/item_search.dart';
 import 'package:dsd/views/items/item.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,7 +21,6 @@ class Items extends ConsumerStatefulWidget {
 }
 
 class ItemsState extends ConsumerState<Items> {
-  final TextEditingController _searchfiler = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +34,40 @@ class ItemsState extends ConsumerState<Items> {
         ),
       ),
       body: getBody(),
+      extendBody: true,
+      bottomSheet: Container(
+        padding: EdgeInsets.all(30),
+        height: 120,
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Total Value'),
+                  Text(
+                    '\$ 1000.00',
+                    style: TextStyle(color: secondary, fontSize: 24),
+                  ),
+                ],
+              ),
+              TextButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: primary,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    'Check out',
+                    style: TextStyle(color: textWhite, fontSize: 26),
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -71,13 +106,18 @@ class ItemsState extends ConsumerState<Items> {
                               color: textWhite,
                             ),
                           ),
-                          const Text(
-                            "Items",
-                            style: TextStyle(
-                                color: textWhite,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400),
-                          )
+                          Badge(
+                            badgeContent: Text('4'),
+                            position:
+                                const BadgePosition(start: 30, bottom: 30),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -123,7 +163,7 @@ class ItemsState extends ConsumerState<Items> {
   }
 
   Widget getItems() {
-    var items = ref.watch(itemDataProvider);
+    var items = ref.watch(filterdItems);
     return Expanded(
         child: items.when(
       data: (data) {

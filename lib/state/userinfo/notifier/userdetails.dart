@@ -19,10 +19,9 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
   }
 
   Future _init() async {
-    print('this is called');
     prefs = await SharedPreferences.getInstance();
     var userInfo = prefs.getString('userInfo');
-    print('userInfo$userInfo');
+
     if (userInfo != null) {
       state = User.fromJson(json.decode(userInfo));
     }
@@ -52,9 +51,8 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
   Future<void> fetchUserDetails(String uuid) async {
     final result = await _userSerevice.fetchUserDetails(uuid);
     final userinfo = result.toJson();
-    print('from fetch storing');
     prefs.setString('userInfo', json.encode(userinfo));
-    print('storing finished ');
+
     state = User(
       lastName: result.lastName,
       uuid: uuid,
@@ -69,5 +67,15 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
       totalOrders: result.totalOrders,
       valueAdded: result.valueAdded,
     );
+  }
+
+  void setRoute(int routeN) async {
+    prefs = await SharedPreferences.getInstance();
+    var userInfo = prefs.getString('userInfo');
+
+    if (userInfo != null) {
+      state = User.fromJson(json.decode(userInfo));
+      state.route = routeN;
+    }
   }
 }

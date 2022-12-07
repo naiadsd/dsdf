@@ -10,7 +10,8 @@ final customerDataProvider = FutureProvider<List<Customer>>((ref) async {
   final day = ref.watch(routeDayProvider);
   final searchText = ref.watch(customerSerachProvider);
   print('$day$route');
-  var customers = await ref.watch(customerProvider).fetchCustomers(route, day);
+  var customers =
+      await ref.watch(customerProvider).fetchCustomersfromDB(route, day);
   print(customers.length);
   if (searchText.isNotEmpty) {
     return customers

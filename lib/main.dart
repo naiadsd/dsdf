@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ class App extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final internet = InternetConnectionChecker();
     return MaterialApp(
       // title: 'DSD',
       darkTheme: ThemeData(
@@ -46,6 +48,9 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
 
       home: RootApp(),
+      //: Center(
+      //  child: Text('no internet connection...'),
+      //),
       //routerConfig: _router,
       // home: Scaffold(
       //   body: Consumer(builder: ((context, ref, child) {

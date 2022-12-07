@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
@@ -20,6 +22,7 @@ class ListCustomer extends ConsumerStatefulWidget {
 
 class _ListCustomerState extends ConsumerState<ListCustomer> {
   int totoalNoOfCustomers = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +139,11 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
         );
       },
       error: (error, stackTrace) {
-        return Text(error.toString());
+        return Center(
+            child: Padding(
+          padding: const EdgeInsets.all(appPadding),
+          child: Text('Please check internet connection\n' + error.toString()),
+        ));
       },
       loading: (() => const Padding(
             padding: EdgeInsets.only(top: 30.0),

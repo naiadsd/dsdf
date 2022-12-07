@@ -63,11 +63,15 @@ class DBProvier {
     return list;
   }
 
+  storeAllCustomers(List<Customer> customers) async {
+    for (var element in customers) {
+      await createCustomer(element);
+    }
+  }
+
   Future<List<Item>> getAllItems() async {
     final db = await database;
-
     final res = await db.rawQuery('select * from $itemsTable');
-
     List<Item> items =
         res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
 
@@ -85,10 +89,24 @@ class DBProvier {
 
     return items;
   }
+
+  Future<int> deleteAllItems() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM $itemsTable');
+
+    return res;
+  }
+
+  Future<int> deleteAllCustomers() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM $customerTable');
+
+    return res;
+  }
 }
 
 Future<void> createCustomersTable(Database db) async {
-  await db.execute('CREATE TABLE $customerTable ('
+  await db.execute('CREATE TABLE IF NOT EXISTS $customerTable ('
       'id INTEGER PRIMARY KEY,'
       '$billToAddressLineOne TEXT,'
       '$accountNo TEXT,'
@@ -121,14 +139,14 @@ Future<void> createCustomersTable(Database db) async {
       '$useStandardTerms TEXT,'
       '$dueDays TEXT,'
       '$soldhere TEXT,'
-      '$isPromoAvailable BOOLEAN,'
+      '$isPromoAvailable BOOLEAN'
       ')');
 
   print('customer table created..');
 }
 
 Future<void> createItemsTable(Database db) async {
-  await db.execute('CREATE TABLE $itemsTable ('
+  await db.execute('CREATE TABLE IF NOT EXISTS $itemsTable ('
       'id INTEGER PRIMARY KEY,'
       '$itemId TEXT,'
       '$isItemInActive BOOLEAN,'
@@ -150,7 +168,7 @@ Future<void> createItemsTable(Database db) async {
       '$salePriceNine NUMERIC,'
       '$salePriceTen NUMERIC,'
       '$salePriceSix NUMERIC,'
-      '$reOrderQuantity TEXT,'
+      '$reOrderQuantity TEXT'
       ')');
 
   print('item table created..');

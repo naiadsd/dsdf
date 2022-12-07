@@ -69,39 +69,43 @@ class Customer {
   late final bool isPromoAvailable;
 
   Customer.fromJson(Map<String, dynamic> json) {
+    print(json);
     id = json['id'];
-    billToAddressLineOne = json['billToAddressLineOne'];
-    accountNo = json['accountNo'];
-    shipToAddressLineOne = json['shipToAddressLineOne'];
-    prepaidTerms = json['prepaidTerms'];
-    shipToAddressLineTwo = json['shipToAddressLineTwo'];
-    serviceSequence = json['serviceSequence'];
-    isInactive = json['isInactive'];
-    billFirstName = json['billFirstName'];
-    billLastName = json['billLastName'];
-    shipToCity = json['shipToCity'];
-    shipToSate = json['shipToSate'];
-    billToAddressLineTwo = json['billToAddressLineTwo'];
-    routeCode = json['routeCode'];
-    billToZip = json['billToZip'];
-    discountDays = json['discountDays'];
-    serviceDays = json['serviceDays'];
-    billToCity = json['billToCity'];
-    serviceFrequency = json['serviceFrequency'];
-    creditLimit = json['creditLimit'];
-    customerId = json['customerId'];
-    phone = json['phone'];
-    CODTerms = json['CODTerms'];
-    salesAccount = json['salesAccount'];
-    billToState = json['billToState'];
-    pricingLevel = json['pricingLevel'];
-    discountPercentage = json['discountPercentage'];
-    customerName = json['customerName'];
-    shipToZip = json['shipToZip'];
-    useStandardTerms = json['useStandardTerms'];
-    dueDays = json['dueDays'];
-    soldhere = json['soldhere'];
-    isPromoAvailable = json['isPromoAvailable'];
+    billToAddressLineOne = json['billToAddressLineOne'] ?? '';
+    accountNo = json['accountNo'] ?? '';
+    shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
+    prepaidTerms = json['prepaidTerms'] ?? '';
+    shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
+    serviceSequence = json['serviceSequence'] ?? '';
+    isInactive = json['isInactive'] ?? '';
+    billFirstName = json['billFirstName'] ?? '';
+    billLastName = json['billLastName'] ?? '';
+    shipToCity = json['shipToCity'] ?? '';
+    shipToSate = json['shipToSate'] ?? '';
+    billToAddressLineTwo = json['billToAddressLineTwo'] ?? '';
+    routeCode = json['routeCode'] ?? '';
+    billToZip = json['billToZip'] ?? '';
+    discountDays = json['discountDays'] ?? '';
+    serviceDays = json['serviceDays'] ?? '';
+    billToCity = json['billToCity'] ?? '';
+    serviceFrequency = json['serviceFrequency'] ?? '';
+    creditLimit = json['creditLimit'] ?? '';
+    customerId = json['customerId'] ?? '';
+    phone = json['phone'] ?? '';
+    CODTerms = json['CODTerms'] ?? '';
+    salesAccount = json['salesAccount'] ?? '';
+    billToState = json['billToState'] ?? '';
+    pricingLevel = json['pricingLevel'] ?? '';
+    discountPercentage = json['discountPercentage'] ?? '';
+    customerName = json['customerName'] ?? '';
+    shipToZip = json['shipToZip'] ?? '';
+    useStandardTerms = json['useStandardTerms'] ?? '';
+    dueDays = json['dueDays'] ?? '';
+    soldhere = json['soldhere'] ?? '';
+    isPromoAvailable = false;
+    //json['isPromoAvailable'] ?? json['isPromoAvailable'] == 0
+    //  ? false
+    // : true;
   }
 
   Map<String, dynamic> toJson() {

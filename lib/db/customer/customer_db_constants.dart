@@ -31,4 +31,4 @@ const String shipToZip = 'shipToZip';
 const String useStandardTerms = 'useStandardTerms';
 const String dueDays = 'dueDays';
 const String soldhere = 'soldhere';
-const String isPromoAvailable = 'isPromoAconst';
+const String isPromoAvailable = 'isPromoAvailable';

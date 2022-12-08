@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/items/provider/item_provider.dart';
@@ -45,7 +46,7 @@ class ItemsState extends ConsumerState<Items> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text('Total Value'),
                   Text(
                     '\$ 1000.00',
@@ -72,6 +73,7 @@ class ItemsState extends ConsumerState<Items> {
   }
 
   Widget getBody() {
+    final noOfItems = ref.watch(totalCartItemsProvider);
     var size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -107,7 +109,7 @@ class ItemsState extends ConsumerState<Items> {
                             ),
                           ),
                           Badge(
-                            badgeContent: Text('4'),
+                            badgeContent: Text(noOfItems.toString()),
                             position:
                                 const BadgePosition(start: 30, bottom: 30),
                             child: IconButton(

@@ -29,9 +29,9 @@ class DBProvier {
 
   createCustomer(Customer customer) async {
     final db = await database;
-    print(customer.toJson());
+
     final res = await db.insert(customerTable, customer.toJson());
-    print('customer inserted...');
+
     return res;
   }
 
@@ -141,8 +141,6 @@ Future<void> createCustomersTable(Database db) async {
       '$soldhere TEXT,'
       '$isPromoAvailable BOOLEAN'
       ')');
-
-  print('customer table created..');
 }
 
 Future<void> createItemsTable(Database db) async {
@@ -170,6 +168,4 @@ Future<void> createItemsTable(Database db) async {
       '$salePriceSix NUMERIC,'
       '$reOrderQuantity TEXT'
       ')');
-
-  print('item table created..');
 }

@@ -5,6 +5,7 @@ import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/items/provider/item_provider.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
+import 'package:dsd/views/cart/cart.dart';
 import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/item_search.dart';
 import 'package:dsd/views/items/item.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart';
 
 class Items extends ConsumerStatefulWidget {
   final Customer customer;
@@ -34,133 +36,165 @@ class ItemsState extends ConsumerState<Items> {
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: getBody(),
+      body: getBody(context),
       extendBody: true,
-      bottomSheet: Container(
-        padding: EdgeInsets.all(30),
-        height: 120,
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('Total Value'),
-                  Text(
-                    '\$ 1000.00',
-                    style: TextStyle(color: secondary, fontSize: 24),
-                  ),
-                ],
-              ),
-              TextButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: primary,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'Check out',
-                    style: TextStyle(color: textWhite, fontSize: 26),
-                  ))
-            ],
-          ),
-        ),
-      ),
     );
   }
 
-  Widget getBody() {
+  Widget getBody(BuildContext c) {
     final noOfItems = ref.watch(totalCartItemsProvider);
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            ClipPath(
-              clipper: BottomClipper(),
-              child: Container(
-                width: size.width,
-                height: 300,
-                decoration: const BoxDecoration(
-                  color: secondary,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: appPadding, right: appPadding),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: spacer + 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: (() {
-                              Navigator.pop(context);
-                            }),
-                            child: const Icon(
-                              Icons.arrow_back_ios_new,
-                              color: textWhite,
-                            ),
-                          ),
-                          Badge(
-                            badgeContent: Text(noOfItems.toString()),
-                            position:
-                                const BadgePosition(start: 30, bottom: 30),
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.shopping_cart,
-                                color: Colors.white,
+    var size = MediaQuery.of(c).size;
+    return Stack(alignment: Alignment.topCenter, children: [
+      Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              ClipPath(
+                clipper: BottomClipper(),
+                child: Container(
+                  width: size.width,
+                  height: 300,
+                  decoration: const BoxDecoration(
+                    color: secondary,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: appPadding, right: appPadding),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: spacer + 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: (() {
+                                Navigator.pop(c);
+                              }),
+                              child: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: textWhite,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: spacer - 30,
-                      ),
-                      Flexible(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Text(
-                                widget.customer.customerName,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: textWhite,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w700,
+                            Badge(
+                              badgeContent: Text(noOfItems.toString()),
+                              position:
+                                  const BadgePosition(start: 30, bottom: 30),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: spacer - 20,
-                            ),
-                            const ItemSearchField(
-                              hintField: 'Try ice cream',
-                              backgroundColor: background,
-                            ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: spacer - 30,
+                        ),
+                        Flexible(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, right: 8.0),
+                                child: Text(
+                                  widget.customer.customerName,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: textWhite,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: spacer - 20,
+                              ),
+                              const ItemSearchField(
+                                hintField: 'Try ice cream',
+                                backgroundColor: background,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          getItems(),
+        ],
+      ),
+      checkOutContainer(c),
+    ]);
+  }
+
+  Widget checkOutContainer(BuildContext c) {
+    var size = MediaQuery.of(c).size;
+    var sidepadding = size.width * 0.19;
+
+    final totalCartValue = ref.watch(totalCartValueProvider);
+    return Positioned(
+      bottom: 30,
+      left: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: sidepadding),
+        height: 120,
+        width: size.width,
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
         ),
-        getItems(),
-      ],
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+          decoration: BoxDecoration(
+              color: primary, borderRadius: BorderRadius.circular(25)),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      //'\$ 100000.00',
+                      '\$ ${totalCartValue.toStringAsFixed(2)}',
+                      style: const TextStyle(color: textWhite, fontSize: 22),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                TextButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: secondary,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          c,
+                          MaterialPageRoute(
+                              builder: (context) => const CartData()));
+                    },
+                    child: const Text(
+                      'Check out',
+                      style: TextStyle(color: textWhite, fontSize: 20),
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -192,89 +226,3 @@ class ItemsState extends ConsumerState<Items> {
     ));
   }
 }
-//       body: Column(
-//         children: [
-//           const SizedBox(
-//             height: 40,
-//           ),
-// //search bar,
-//           Container(
-//             decoration: BoxDecoration(
-//                 color: Colors.grey.shade300,
-//                 borderRadius: BorderRadius.circular(15)),
-//             margin: const EdgeInsets.symmetric(horizontal: 10),
-//             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-//             child: Row(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const Icon(
-//                   Icons.search,
-//                   size: 35,
-//                 ),
-//                 Expanded(
-//                   child: Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                     child: TextField(
-//                       controller: _searchfiler,
-//                       decoration: const InputDecoration(
-//                         border: InputBorder.none,
-//                       ),
-//                       style: const TextStyle(
-//                           color: Colors.black,
-//                           fontSize: 20,
-//                           fontWeight: FontWeight.w300),
-//                     ),
-//                   ),
-//                 ),
-//                 InkWell(
-//                   child: const Icon(
-//                     Icons.tune,
-//                     size: 45,
-//                   ),
-//                   onTap: () {},
-//                 )
-//               ],
-//             ),
-//           ),
-
-//           const SizedBox(
-//             height: 20,
-//           ),
-//           //items//
-//           Expanded(
-//               child: Container(
-//             decoration: const BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.only(
-//                     topLeft: Radius.circular(60),
-//                     topRight: Radius.circular(60))),
-//             width: double.infinity,
-//             child: items.when(
-//                 data: (data) {
-//                   List<Item> itemlist = data.map((e) => e).toList();
-//                   return Column(
-//                     children: [
-//                       Expanded(
-//                         child: ListView.builder(
-//                           itemBuilder: ((context, index) {
-//                             return ItemContainer(
-//                               item: itemlist[index],
-//                             );
-//                           }),
-//                           itemCount: itemlist.length,
-//                         ),
-//                       )
-//                     ],
-//                   );
-//                 },
-//                 error: ((error, stackTrace) => Text(error.toString())),
-//                 loading: (() => const Center(
-//                       child: CircularProgressIndicator(),
-//                     ))),
-//           )),
-//         ],
-//       ),
-//     );
-//   }
-// }

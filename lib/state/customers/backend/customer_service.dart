@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 class CustomerService {
   const CustomerService();
   Future<List<Customer>> fetchCustomers(int route, int day) async {
-    print('fetching custoemr');
     final response = await http.get(Uri.parse(
         "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/customer/getcustomersbyrouteday/$route/$day"));
 
@@ -27,7 +26,6 @@ class CustomerService {
   }
 
   Future<List<Customer>> fetchAllCustomers(int route, int day) async {
-    print('fetching custoemr');
     final response = await http.get(Uri.parse(
         "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/customer/getcustomers"));
 
@@ -48,7 +46,6 @@ class CustomerService {
 }
 
 Future<List<Customer>> fetchCustomersForSave(int route, int day) async {
-  print('fetching custoemr');
   final response = await http.get(Uri.parse(
       "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/customer/getcustomersbyrouteday/$route/$day"));
 

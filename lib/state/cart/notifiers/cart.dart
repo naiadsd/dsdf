@@ -17,11 +17,19 @@ class CartState extends StateNotifier<Cart> {
     state = state.copiedWithCustomer(customerId);
   }
 
+  createCart(int customerId, String driverId) {
+    state = state.createCart(customerId, driverId);
+  }
+
   addItem(CartItem item) {
     state = state.addNewItem(item);
   }
 
-  addnewItem(int id, int quantity, double price) {
-    state = state.addItemQuantity(id, quantity, price);
+  removeItem(int id) {
+    state = state.removeItem(id);
+  }
+
+  changeitemQuantity(int id, int quantity) {
+    state = state.addItemQuantity(id, quantity);
   }
 }

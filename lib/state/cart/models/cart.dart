@@ -1,3 +1,4 @@
+import 'package:dsd/db/item/item_db_contants.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -19,41 +20,82 @@ class Cart {
     this.totalPrice = 0.0,
   });
 
+  double getCartTotal() {
+    double tp = 0.0;
+    if (items!.isNotEmpty) {
+      for (var element in items!) {
+        tp = tp + element.totalPrice;
+      }
+      return tp;
+    } else {
+      return tp;
+    }
+  }
+
+  Cart createCart(int cuId, String driverID) {
+    return Cart(
+        customerId: cuId, driverID: driverID, orderdatetime: orderdatetime);
+  }
+
   Cart.initial() : orderdatetime = DateTime.now();
 
   void addItem(
-      int id, int quantity, double price, String promoId, double salePrice) {
+    int id,
+    int quantity,
+    double promoPrice,
+    String promoId,
+    double salePrice,
+    bool isPromo,
+    double reOrderQuantity,
+  ) {
     items?.add(CartItem(
       itemId: id,
       promoId: promoId,
-      promoPrice: price,
+      promoPrice: promoPrice,
       saleprice: salePrice,
-      totalPrice: quantity * price,
+      totalPrice: quantity * reOrderQuantity * promoPrice,
+      reOrderQuantity: reOrderQuantity,
+      isPromoApplied: isPromo,
     ));
+
+    totalPrice = getCartTotal();
   }
 
-  Cart addItemQuantity(int id, int quantity, double price) {
+  Cart addItemQuantity(int id, int quantity) {
     var citems = items;
-    var ct = totalPrice ?? 0.0;
 
     citems?.forEach((element) {
       if (element.itemId == id) {
         element.quantity = quantity;
-        element.totalPrice = quantity * element.reOrderQuantity * price;
+        element.totalPrice =
+            quantity * element.reOrderQuantity * element.promoPrice;
       }
     });
-
+    double ct = getCartTotal();
     return Cart(
       items: citems,
       customerId: customerId,
       driverID: driverID,
       orderdatetime: orderdatetime,
-      totalPrice: ct + price * quantity,
+      totalPrice: ct,
     );
   }
 
-  Cart copiedWithCustomer(int id) => Cart(
-        customerId: id,
+  Cart removeItem(int id) {
+    var citems = items;
+
+    citems?.removeWhere((element) => element.itemId == id);
+    return Cart(
+      customerId: customerId,
+      driverID: driverID,
+      orderdatetime: orderdatetime,
+      items: citems,
+      totalPrice: getCartTotal(),
+    );
+  }
+
+  Cart copiedWithCustomer(int customerId) => Cart(
+        customerId: customerId,
         driverID: driverID,
         orderdatetime: DateTime.now(),
         items: items,
@@ -62,6 +104,10 @@ class Cart {
 
   Cart addNewItem(CartItem item) {
     var citems = items ?? [];
+    double totav = item.reOrderQuantity * item.quantity * item.promoPrice;
+    if (citems.isNotEmpty) {
+      totav = totav + getCartTotal();
+    } else {}
 
     citems.add(item);
 
@@ -70,13 +116,7 @@ class Cart {
       driverID: driverID,
       items: citems,
       orderdatetime: orderdatetime,
-      totalPrice: item.totalPrice,
+      totalPrice: totav,
     );
-  }
-
-  //Cart(customerId: customerId, driverID: driverID, orderdatetime: orderdatetime)
-  bool removeItem(itemId) {
-    items?.removeWhere((element) => element.itemId == itemId);
-    return true;
   }
 }

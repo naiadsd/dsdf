@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dsd/state/auth/providers/user_id_provider.dart';
+import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
@@ -107,12 +109,12 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
             ),
           ],
         ),
-        getCustomers(),
+        getCustomers(userDetails.uuid ?? ''),
       ],
     );
   }
 
-  Widget getCustomers() {
+  Widget getCustomers(String driverId) {
     var customers = ref.watch(customerDataProvider);
     return Expanded(
         child: customers.when(
@@ -128,6 +130,9 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                 customer: customers[index],
               ),
               onTap: () {
+                ref
+                    .watch(cartProvider.notifier)
+                    .createCart(customers[index].id, driverId);
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: ((context) {
                   return Items(customer: customers[index]);

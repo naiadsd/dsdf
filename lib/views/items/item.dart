@@ -1,3 +1,5 @@
+import 'package:dsd/state/cart/models/cart_item.dart';
+import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/theme/colors.dart';
 
@@ -51,6 +53,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Container(
       padding: const EdgeInsets.all(2),
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -148,271 +151,196 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                 ),
               ),
               Container(
-                  width: size.width * 0.3,
-                  height: 42,
-                  alignment: Alignment.center,
-                  child: itemsAdded > 0
-                      ? Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              itemsAdded == 1
-                                  ? SizedBox(
-                                      width: size.width * 0.1,
-                                      child: InkWell(
-                                        child: const Icon(
-                                          Icons.delete_outline,
-                                          color: Colors.black,
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            itemsAdded = 0;
-                                            cartPrice = itemsAdded *
-                                                double.parse(getPrice());
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  : SizedBox(
-                                      width: size.width * 0.1,
-                                      child: InkWell(
-                                        onTap: (() {
-                                          setState(() {
-                                            itemsAdded = itemsAdded - 1;
-                                            priceController.text =
-                                                itemsAdded.toString();
-                                            cartPrice = itemsAdded *
-                                                double.parse(getPrice());
-                                          });
-                                        }),
-                                        child: const Icon(
-                                          Icons.remove,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                              SizedBox(
-                                width: size.width * 0.1,
-                                child: Center(
-                                  child: TextField(
-                                    controller: priceController,
-
-                                    keyboardType: TextInputType.number,
-                                    // ignore: prefer_const_constructors
-
-                                    style: const TextStyle(
-                                      color: textBlack,
-
-                                      // background: Colors.transparent,
-                                    ),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        itemsAdded =
-                                            int.parse(priceController.text);
-                                        priceController.text =
-                                            itemsAdded.toString();
-
-                                        cartPrice = itemsAdded *
-                                            double.parse(getPrice());
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: size.width * 0.1,
-                                child: InkWell(
-                                  onTap: (() {
-                                    setState(() {
-                                      itemsAdded++;
-                                      priceController.text =
-                                          itemsAdded.toString();
-                                      cartPrice =
-                                          itemsAdded * double.parse(getPrice());
-                                    });
-                                  }),
-                                  child: const Icon(
-                                    Icons.add,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : OutlinedButton(
-                          style: const ButtonStyle(
-                            alignment: Alignment.center,
-                          ),
-                          child: const Text(
-                            "Add to Cart",
-                            style: TextStyle(
-                              color: primary,
-                            ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              itemsAdded++;
-                              priceController.text = itemsAdded.toString();
-                            });
-                          },
-                        )),
+                width: size.width * 0.3,
+                height: 42,
+                alignment: Alignment.center,
+                child: itemsAdded > 0 ? addCartItem() : addItemFirstTime(),
+              ),
             ],
           ),
         ],
       ),
     );
   }
-}
-/**
- * Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: size.width * 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.15,
-                        child: Text(
-                          '\$ ${getPrice()}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.15,
-                        child: Text(
-                          'CS\\${widget.item.reOrderQuantity}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.3,
-                        child: Text(
-                          '\$ ${cartPrice.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
+
+  Widget addItemFirstTime() {
+    final cart = ref.watch(cartProvider.notifier);
+
+    addtoCartFirstTime() {
+      setState(() {
+        itemsAdded++;
+        priceController.text = itemsAdded.toString();
+        cartPrice = itemsAdded * double.parse(getPrice());
+      });
+
+      cart.addItem(
+        CartItem(
+            itemId: widget.item.id,
+            promoId: '1223',
+            promoPrice: double.parse(getPrice()),
+            saleprice: double.parse(getPrice()),
+            quantity: itemsAdded,
+            isPromoApplied: false,
+            reOrderQuantity: double.parse(widget.item.reOrderQuantity),
+            totalPrice: double.parse(getPrice()) * itemsAdded),
+      );
+    }
+
+    return OutlinedButton(
+      style: const ButtonStyle(
+        alignment: Alignment.center,
+      ),
+      onPressed: addtoCartFirstTime,
+      child: const Text(
+        "Add to Cart",
+        style: TextStyle(
+          color: primary,
+        ),
+      ),
+    );
+  }
+
+  Widget addCartItem() {
+    final cart = ref.watch(cartProvider.notifier);
+
+    void increaseCart() {
+      setState(
+        () {
+          itemsAdded++;
+          priceController.text = itemsAdded.toString();
+          cartPrice = itemsAdded * double.parse(getPrice());
+        },
+      );
+
+      cart.changeitemQuantity(widget.item.id, itemsAdded);
+    }
+
+    void decreaseCart() {
+      setState(
+        () {
+          itemsAdded = itemsAdded - 1;
+          priceController.text = itemsAdded.toString();
+          cartPrice = itemsAdded * double.parse(getPrice());
+        },
+      );
+
+      cart.changeitemQuantity(widget.item.id, itemsAdded);
+    }
+
+    onEditCart(String val) {
+      setState(() {
+        itemsAdded = int.parse(priceController.text);
+        priceController.text = itemsAdded.toString();
+
+        cartPrice = itemsAdded * double.parse(getPrice());
+      });
+    }
+
+    onRemoveFromCart() {
+      setState(
+        () {
+          itemsAdded = itemsAdded - 1;
+          priceController.text = itemsAdded.toString();
+          cartPrice = itemsAdded * double.parse(getPrice());
+        },
+      );
+      cart.removeItem(widget.item.id);
+    }
+
+    var size = MediaQuery.of(context).size;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      decoration: BoxDecoration(
+        color: textWhite,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          itemsAdded == 1
+              ? Container(
+                  padding: const EdgeInsets.only(left: 6, right: 5),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        right: BorderSide(
+                      width: 1,
+                      color: Colors.black,
+                    )),
+                  ),
+                  child: InkWell(
+                    onTap: onRemoveFromCart,
+                    child: const Icon(
+                      Icons.delete_outline,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              : Container(
+                  padding: const EdgeInsets.only(left: 6, right: 5),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        right: BorderSide(
+                      width: 1,
+                      color: Colors.black,
+                    )),
+                  ),
+                  child: InkWell(
+                    onTap: decreaseCart,
+                    child: const Icon(
+                      Icons.remove,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-                Container(
-                  color: Colors.transparent,
-                  child: itemsAdded > 0
-                      ? 
-                      
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            itemsAdded == 1
-                                ? SizedBox(
-                                    width: size.width * 0.1,
-                                    child: InkWell(
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          itemsAdded = 0;
-                                          cartPrice = itemsAdded *
-                                              double.parse(getPrice());
-                                        });
-                                      },
-                                    ),
-                                  )
-                                : SizedBox(
-                                    width: size.width * 0.1,
-                                    child: InkWell(
-                                      onTap: (() {
-                                        setState(() {
-                                          itemsAdded = itemsAdded - 1;
-                                          priceController.text =
-                                              itemsAdded.toString();
-                                          cartPrice = itemsAdded *
-                                              double.parse(getPrice());
-                                        });
-                                      }),
-                                      child: const Icon(
-                                        Icons.remove,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                            SizedBox(
-                              width: size.width * 0.1,
-                              child: TextFormField(
-                                controller: priceController,
-                                keyboardType: TextInputType.number,
-                                // ignore: prefer_const_constructors
-                                style: TextStyle(
-                                  color: textWhite,
-                                  // background: Colors.transparent,
-                                ),
-                                onEditingComplete: () {
-                                  setState(() {
-                                    itemsAdded =
-                                        int.parse(priceController.text);
-                                    priceController.text =
-                                        itemsAdded.toString();
-
-                                    cartPrice =
-                                        itemsAdded * double.parse(getPrice());
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: size.width * 0.1,
-                              child: InkWell(
-                                onTap: (() {
-                                  setState(() {
-                                    itemsAdded++;
-                                    priceController.text =
-                                        itemsAdded.toString();
-                                    cartPrice =
-                                        itemsAdded * double.parse(getPrice());
-                                  });
-                                }),
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(
-                          width: size.width * 0.2,
-                          child: ElevatedButton(
-                              onPressed: (() {
-                                setState(() {
-                                  itemsAdded++;
-                                  priceController.text = itemsAdded.toString();
-                                });
-                              }),
-                              child: const Text('Add to Cart')),
-                        ),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.only(
+                left: 5.0,
+              ),
+              child: TextField(
+                textAlign: TextAlign.center,
+                controller: priceController,
+                decoration: InputDecoration(
+                  filled: true,
+                  border: const OutlineInputBorder(
+                      gapPadding: 2.0,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                  contentPadding: EdgeInsets.zero,
                 ),
-              ],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: false),
+                style: const TextStyle(
+                  color: textBlack,
+                ),
+                onChanged: (val) {
+                  onEditCart(val);
+                },
+              ),
             ),
           ),
- * 
- */
+          Container(
+            padding: const EdgeInsets.only(right: 6, left: 5),
+            decoration: const BoxDecoration(
+              border: Border(
+                  left: BorderSide(
+                width: 1,
+                color: Colors.black,
+              )),
+            ),
+            child: InkWell(
+              onTap: increaseCart,
+              child: const Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

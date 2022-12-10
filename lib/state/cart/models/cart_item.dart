@@ -8,7 +8,7 @@ class CartItem {
   late double promoPrice;
   late double saleprice;
   late double totalPrice;
-  late int reOrderQuantity;
+  late double reOrderQuantity;
 
   CartItem({
     required this.itemId,

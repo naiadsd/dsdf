@@ -52,6 +52,17 @@ class DBProvier {
     return list;
   }
 
+  Future<Item> getItemById(int id) async {
+    final db = await database;
+    final res =
+        await db.rawQuery('select * from $itemsTable where $itemId=$id');
+
+    List<Item> items =
+        res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
+    Item c = items[0];
+    return c;
+  }
+
   Future<List<Customer>> searchCustomer(String search) async {
     final db = await database;
     final res = await db.rawQuery(

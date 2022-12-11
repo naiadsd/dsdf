@@ -34,4 +34,10 @@ class CartItem {
     this.quantity = quantity;
     this.totalPrice = this.promoPrice * quantity;
   }
+
+  @override
+  String toString() {
+    super.toString();
+    return this.itemId.toString();
+  }
 }

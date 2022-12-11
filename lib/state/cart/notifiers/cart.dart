@@ -22,6 +22,7 @@ class CartState extends StateNotifier<Cart> {
   }
 
   addItem(CartItem item) {
+    //print(state.toString());
     state = state.addNewItem(item);
   }
 

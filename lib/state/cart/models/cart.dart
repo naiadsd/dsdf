@@ -103,13 +103,15 @@ class Cart {
       );
 
   Cart addNewItem(CartItem item) {
-    var citems = items ?? [];
+    List<CartItem> citems = items ?? [];
+
     double totav = item.reOrderQuantity * item.quantity * item.promoPrice;
+    item.totalPrice = totav;
     if (citems.isNotEmpty) {
       totav = totav + getCartTotal();
     } else {}
 
-    citems.add(item);
+    citems = [...citems, item];
 
     return Cart(
       customerId: customerId,
@@ -118,5 +120,11 @@ class Cart {
       orderdatetime: orderdatetime,
       totalPrice: totav,
     );
+  }
+
+  @override
+  String toString() {
+    super.toString();
+    return customerId.toString();
   }
 }

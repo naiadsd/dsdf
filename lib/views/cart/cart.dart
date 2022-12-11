@@ -1,9 +1,8 @@
 import 'package:badges/badges.dart';
-import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
-import 'package:dsd/views/components/clipper.dart';
+import 'package:dsd/views/cart/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -39,53 +38,129 @@ class _CartDataState extends ConsumerState<CartData> {
     final noOfItems = ref.watch(totalCartItemsProvider);
     return Column(
       children: [
-        ClipPath(
-          clipper: BottomClipper(),
-          child: Container(
-            width: size.width,
-            height: 300,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(left: appPadding, right: appPadding),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: spacer + 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: (() {
-                          Navigator.pop(context);
-                        }),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: textWhite,
+        Container(
+          width: size.width,
+          height: 120,
+          decoration: const BoxDecoration(
+            color: Colors.grey,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: appPadding - 5, right: appPadding - 5),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: spacer,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (() {
+                        Navigator.pop(context);
+                      }),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: textWhite,
+                      ),
+                    ),
+                    const Text(
+                      'Your Cart',
+                      style: TextStyle(
+                        color: textWhite,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Badge(
+                      badgeContent: Text(noOfItems.toString()),
+                      position: const BadgePosition(start: 30, bottom: 30),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.shopping_cart,
+                          color: Colors.white,
                         ),
                       ),
-                      Badge(
-                        badgeContent: Text(noOfItems.toString()),
-                        position: const BadgePosition(start: 30, bottom: 30),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.shopping_cart,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        Expanded(child: getCartItems()),
+        Expanded(
+            child: Stack(
+          children: [
+            Container(
+              child: getCartItems(),
+            ),
+            checkOutContainer(),
+          ],
+        )),
       ],
+    );
+  }
+
+  Widget checkOutContainer() {
+    var size = MediaQuery.of(context).size;
+    var sidepadding = size.width * 0.19;
+
+    final totalCartValue = ref.watch(totalCartValueProvider);
+    return Positioned(
+      bottom: 30,
+      left: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: sidepadding),
+        height: 120,
+        width: size.width,
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+          decoration: BoxDecoration(
+              color: primary, borderRadius: BorderRadius.circular(25)),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      //'\$ 100000.00',
+                      '\$ ${totalCartValue.toStringAsFixed(2)}',
+                      style: const TextStyle(color: textWhite, fontSize: 22),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                TextButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: secondary,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CartData()));
+                    },
+                    child: const Text(
+                      'Place Order',
+                      style: TextStyle(color: textWhite, fontSize: 16),
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -108,10 +183,10 @@ class _CartDataState extends ConsumerState<CartData> {
                     items.removeAt(index);
                   });
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('dismissed')));
+                      .showSnackBar(const SnackBar(content: Text('dismissed')));
                 }),
-                child: ListTile(
-                  title: Text('cart item...'),
+                child: const ListTile(
+                  title: CartItemContainer(),
                 ),
               );
             }));

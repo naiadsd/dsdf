@@ -46,7 +46,7 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
 
-      home: const RootApp(),
+      home: RootApp(),
     );
   }
 }

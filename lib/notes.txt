@@ -57,3 +57,12 @@ After doing this, pod install worked just fine and so did flutter run. Hopefully
 Referencing: https://stackoverflow.com/questions/53630136/using-cocoapods-libraries-in-flutter-ios-platform-specific-code
 
 Other notes, I am using XCode 12 and Flutter 1.22.2
+
+
+//For building apk 
+
+
+Steps
+
+
+flutter build apk --build-name=1.0.3 --build-number=1

@@ -1,3 +1,4 @@
+import 'package:dsd/views/invoice/invoice.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/customers/customers.dart';
 import 'package:dsd/views/home.dart';
@@ -29,7 +30,7 @@ class _RootAppState extends State<RootApp> {
         ListCustomer(),
         Home(),
         Settings(),
-        Home(),
+        InvoicePage(),
       ],
     );
   }

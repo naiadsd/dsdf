@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:dsd/db/customer/customer_db_constants.dart';
 import 'package:dsd/db/item/item_db_contants.dart';
+import 'package:dsd/db/promo/promo_constants.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/models/item.dart';
+import 'package:dsd/state/promo/model/promo.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,11 +24,13 @@ class DBProvier {
     final path = join(documentsDirectory.path, 'dsd.db');
 
     return await openDatabase(path, version: 1, onOpen: ((db) async {
+      await createPromoTable(db);
       await createCustomersTable(db);
       await createItemsTable(db);
     }));
   }
 
+/*customers logic Start*/
   createCustomer(Customer customer) async {
     final db = await database;
 
@@ -35,35 +39,10 @@ class DBProvier {
     return res;
   }
 
-  createItem(Item item) async {
+  createPromo(Promo promo) async {
     final db = await database;
-    final res = await db.insert(itemsTable, item.toJson());
-
+    final res = await db.insert(promoTable, promo.toJson());
     return res;
-  }
-
-  Future<List<Customer>> getAllCustomers() async {
-    final db = await database;
-    final res = await db.rawQuery("select * from $customerTable");
-
-    List<Customer> list =
-        res.isNotEmpty ? res.map((e) => Customer.fromJson(e)).toList() : [];
-
-    return list;
-  }
-
-  Future<Item> getItemById(int id) async {
-    final db = await database;
-    String whereString = 'id = ?';
-    String table = itemsTable;
-    List<dynamic> whereArguments = [id];
-    final res =
-        await db.query(table, where: whereString, whereArgs: whereArguments);
-
-    List<Item> items =
-        res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
-    Item c = items[0];
-    return c;
   }
 
   Future<List<Customer>> searchCustomer(String search) async {
@@ -81,6 +60,34 @@ class DBProvier {
     for (var element in customers) {
       await createCustomer(element);
     }
+  }
+
+  Future<int> deleteAllCustomers() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM $customerTable');
+
+    return res;
+  }
+
+/*customers logic End*/
+
+/* Item logic*/
+
+  createItem(Item item) async {
+    final db = await database;
+    final res = await db.insert(itemsTable, item.toJson());
+
+    return res;
+  }
+
+  Future<List<Customer>> getAllCustomers() async {
+    final db = await database;
+    final res = await db.rawQuery("select * from $customerTable");
+
+    List<Customer> list =
+        res.isNotEmpty ? res.map((e) => Customer.fromJson(e)).toList() : [];
+
+    return list;
   }
 
   storeAllItems(List<Item> items) async {
@@ -117,75 +124,98 @@ class DBProvier {
     return res;
   }
 
-  Future<int> deleteAllCustomers() async {
+  Future<Item> getItemById(int id) async {
     final db = await database;
-    final res = await db.rawDelete('DELETE FROM $customerTable');
+    String whereString = 'id = ?';
+    String table = itemsTable;
+    List<dynamic> whereArguments = [id];
+    final res =
+        await db.query(table, where: whereString, whereArgs: whereArguments);
 
-    return res;
+    List<Item> items =
+        res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
+    Item c = items[0];
+    return c;
   }
-}
 
-Future<void> createCustomersTable(Database db) async {
-  await db.execute('CREATE TABLE IF NOT EXISTS $customerTable ('
-      'id INTEGER PRIMARY KEY,'
-      '$billToAddressLineOne TEXT,'
-      '$accountNo TEXT,'
-      '$shipToAddressLineOne TEXT,'
-      '$prepaidTerms TEXT,'
-      '$shipToAddressLineTwo TEXT,'
-      '$serviceSequence TEXT,'
-      '$isInactive BOOLEAN,'
-      '$billFirstName TEXT,'
-      '$billLastName TEXT,'
-      '$shipToCity TEXT,'
-      '$shipToSate TEXT,'
-      '$billToAddressLineTwo TEXT,'
-      '$routeCode TEXT,'
-      '$billToZip TEXT,'
-      '$discountDays TEXT,'
-      '$serviceDays TEXT,'
-      '$billToCity TEXT,'
-      '$serviceFrequency TEXT,'
-      '$creditLimit TEXT,'
-      '$customerId TEXT,'
-      '$phone TEXT,'
-      '$codTerms TEXT,'
-      '$salesAccount TEXT,'
-      '$billToState TEXT,'
-      '$pricingLevel TEXT,'
-      '$discountPercentage TEXT,'
-      '$customerName TEXT,'
-      '$shipToZip TEXT,'
-      '$useStandardTerms TEXT,'
-      '$dueDays TEXT,'
-      '$soldhere TEXT,'
-      '$isPromoAvailable BOOLEAN'
-      ')');
-}
+/*Items logic End */
 
-Future<void> createItemsTable(Database db) async {
-  await db.execute('CREATE TABLE IF NOT EXISTS $itemsTable ('
-      'id INTEGER PRIMARY KEY,'
-      '$itemId TEXT,'
-      '$isItemInActive BOOLEAN,'
-      '$salePriceSeven NUMERIC,'
-      '$salePriceTwo NUMERIC,'
-      '$salePrice NUMERIC,'
-      '$glCOGSSalaryAccount TEXT,'
-      '$upcsku TEXT,'
-      '$weight TEXT,'
-      '$glInventoryAccount TEXT,'
-      '$salePriceFour NUMERIC,'
-      '$description TEXT,'
-      '$name TEXT,'
-      '$salePriceThree NUMERIC,'
-      '$salePriceEight NUMERIC,'
-      '$descriptionForSales NUMERIC,'
-      '$orderSeq INTEGER,'
-      '$salePriceFive NUMERIC,'
-      '$salePriceNine NUMERIC,'
-      '$salePriceTen NUMERIC,'
-      '$salePriceSix NUMERIC,'
-      '$reOrderQuantity TEXT'
-      ')');
+/* Creating tables */
+
+  Future<void> createPromoTable(Database db) async {
+    await db.execute('CREATE TABLE IF NOT EXISTS $promoTable ('
+        'id INTEGER PRIMARY KEY,'
+        '$itemPrefix TEXT,'
+        '$customerPrefix TEXT,'
+        '$startDate TEXT,'
+        '$endDate TEXT,'
+        '$promoId TEXT,'
+        '$price NUMERIC'
+        ')');
+  }
+
+  Future<void> createCustomersTable(Database db) async {
+    await db.execute('CREATE TABLE IF NOT EXISTS $customerTable ('
+        'id INTEGER PRIMARY KEY,'
+        '$billToAddressLineOne TEXT,'
+        '$accountNo TEXT,'
+        '$shipToAddressLineOne TEXT,'
+        '$prepaidTerms TEXT,'
+        '$shipToAddressLineTwo TEXT,'
+        '$serviceSequence TEXT,'
+        '$isInactive BOOLEAN,'
+        '$billFirstName TEXT,'
+        '$billLastName TEXT,'
+        '$shipToCity TEXT,'
+        '$shipToSate TEXT,'
+        '$billToAddressLineTwo TEXT,'
+        '$routeCode TEXT,'
+        '$billToZip TEXT,'
+        '$discountDays TEXT,'
+        '$serviceDays TEXT,'
+        '$billToCity TEXT,'
+        '$serviceFrequency TEXT,'
+        '$creditLimit TEXT,'
+        '$customerId TEXT,'
+        '$phone TEXT,'
+        '$codTerms TEXT,'
+        '$salesAccount TEXT,'
+        '$billToState TEXT,'
+        '$pricingLevel TEXT,'
+        '$discountPercentage TEXT,'
+        '$customerName TEXT,'
+        '$shipToZip TEXT,'
+        '$useStandardTerms TEXT,'
+        '$dueDays TEXT,'
+        '$soldhere TEXT,'
+        '$isPromoAvailable BOOLEAN'
+        ')');
+  }
+
+  Future<void> createItemsTable(Database db) async {
+    await db.execute('CREATE TABLE IF NOT EXISTS $itemsTable ('
+        'id INTEGER PRIMARY KEY,'
+        '$itemId TEXT,'
+        '$isItemInActive BOOLEAN,'
+        '$salePriceSeven NUMERIC,'
+        '$salePriceTwo NUMERIC,'
+        '$salePrice NUMERIC,'
+        '$glCOGSSalaryAccount TEXT,'
+        '$upcsku TEXT,'
+        '$weight TEXT,'
+        '$glInventoryAccount TEXT,'
+        '$salePriceFour NUMERIC,'
+        '$description TEXT,'
+        '$name TEXT,'
+        '$salePriceThree NUMERIC,'
+        '$salePriceEight NUMERIC,'
+        '$descriptionForSales NUMERIC,'
+        '$orderSeq INTEGER,'
+        '$salePriceFive NUMERIC,'
+        '$salePriceNine NUMERIC,'
+        '$salePriceTen NUMERIC,'
+        '$salePriceSix NUMERIC,'
+        '$reOrderQuantity TEXT'
+        ')');
+  }
 }

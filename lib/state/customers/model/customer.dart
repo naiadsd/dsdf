@@ -69,7 +69,7 @@ class Customer {
   late final bool isPromoAvailable;
 
   Customer.fromJson(Map<String, dynamic> json) {
-    print(json);
+    // print(json);
     id = json['id'];
     billToAddressLineOne = json['billToAddressLineOne'] ?? '';
     accountNo = json['accountNo'] ?? '';

@@ -8,7 +8,7 @@ class UserDetailService {
   const UserDetailService();
 
   Future<User> fetchUserDetails(String uuid) async {
-    print(uuid);
+    //print(uuid);
     final response = await http.get(Uri.parse(
         "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/user/userdetailsbyuuid/$uuid"));
     if (response.statusCode == 200) {

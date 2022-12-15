@@ -26,7 +26,7 @@ class SubmitButton extends ConsumerWidget {
           final userService = ref.read(userDetailsProvider.notifier);
           if (result == AuthResult.success) {
             final userId = ref.read(userIdProvider);
-            print('userID $userId');
+            //print('userID $userId');
             userService.fetchUserDetails(userId);
             //  Navigator.of(context).pushReplacement(
             //      MaterialPageRoute(builder: (context) => const Home()));

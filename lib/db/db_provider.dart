@@ -54,8 +54,11 @@ class DBProvier {
 
   Future<Item> getItemById(int id) async {
     final db = await database;
+    String whereString = 'id = ?';
+    String table = itemsTable;
+    List<dynamic> whereArguments = [id];
     final res =
-        await db.rawQuery('select * from $itemsTable where $itemId=$id');
+        await db.query(table, where: whereString, whereArgs: whereArguments);
 
     List<Item> items =
         res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
@@ -77,6 +80,12 @@ class DBProvier {
   storeAllCustomers(List<Customer> customers) async {
     for (var element in customers) {
       await createCustomer(element);
+    }
+  }
+
+  storeAllItems(List<Item> items) async {
+    for (var element in items) {
+      await createItem(element);
     }
   }
 

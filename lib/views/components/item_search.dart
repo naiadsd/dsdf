@@ -59,8 +59,11 @@ class _CustomSearchFieldState extends ConsumerState<ItemSearchField> {
               height: 38,
               alignment: Alignment.topCenter,
               child: TextField(
+                onChanged: ((value) {
+                  itemSearchPro.setSearchText(customerSearchConroller.text);
+                }),
                 controller: customerSearchConroller,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 cursorColor: textBlack,
                 decoration: InputDecoration(
                   hintText: widget.hintField,

@@ -48,27 +48,28 @@ class Item {
 
   Item.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    salePriceSeven = json['salePriceSeven'];
-    salePriceTwo = json['salePriceTwo'];
+    salePriceSeven = json['salePriceSeven'].toString();
+    salePriceTwo = json['salePriceTwo'].toString();
     itemId = json['itemId'];
-    salePrice = json['salePrice'];
+    salePrice = json['salePrice'].toString();
     isInActive = json['isInActive'];
     glCOGSSalaryAccount = json['glCOGSSalaryAccount'];
     upcsku = json['upcsku'];
     weight = json['weight'];
-    glInventoryAccount = json['glInventoryAccount'];
-    salePriceFour = json['salePriceFour'];
-    description = json['description'];
-    name = json['name'];
-    salePriceThree = json['salePriceThree'];
-    salePriceEight = json['salePriceEight'];
-    descriptionForSales = json['descriptionForSales'];
-    orderSeq = json['orderSeq'];
-    salePriceFive = json['salePriceFive'];
-    salePriceNine = json['salePriceNine'];
-    salePriceTen = json['salePriceTen'];
-    salePriceSix = json['salePriceSix'];
-    reOrderQuantity = json['reOrderQuantity'];
+
+    glInventoryAccount = json['glInventoryAccount'] as String;
+    salePriceFour = json['salePriceFour'].toString();
+    description = json['description'] as String;
+    name = json['name'] as String;
+    salePriceThree = json['salePriceThree'].toString();
+    salePriceEight = json['salePriceEight'].toString();
+    descriptionForSales = json['descriptionForSales'] as String;
+    orderSeq = json['orderSeq'] as int;
+    salePriceFive = json['salePriceFive'].toString();
+    salePriceNine = json['salePriceNine'].toString();
+    salePriceTen = json['salePriceTen'].toString();
+    salePriceSix = json['salePriceSix'].toString();
+    reOrderQuantity = json['reOrderQuantity'].toString();
   }
   Item.fromMap(Map<String, dynamic> json) {
     id = json['id'];

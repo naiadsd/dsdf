@@ -205,6 +205,7 @@ class ItemsState extends ConsumerState<Items> {
       data: (data) {
         List<Item> items = data.map((e) => e).toList();
         return ListView.builder(
+          //  addAutomaticKeepAlives: true,
           itemBuilder: ((context, index) {
             return ItemContainer(
               item: items[index],

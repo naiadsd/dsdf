@@ -1,6 +1,8 @@
 import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/customers/backend/customer_service.dart';
 import 'package:dsd/state/customers/model/customer.dart';
+import 'package:dsd/state/items/backend/item_service.dart';
+import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -45,7 +47,6 @@ class _SettingsState extends State<Settings> {
               onPressed: (() async {
                 List<Customer> customers = await fetchCustomersForSave(3, 2);
                 await DBProvier.db.storeAllCustomers(customers);
-                print('tapped');
               }),
               icon: Icon(Icons.store),
               label: Text('Store Customers'),
@@ -57,10 +58,33 @@ class _SettingsState extends State<Settings> {
               style: ButtonStyle(),
               onPressed: (() async {
                 List<Customer> customers = await DBProvier.db.getAllCustomers();
-                print(customers.length);
+                // print(customers.length);
               }),
               icon: Icon(Icons.store),
               label: Text('show Customers'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton.icon(
+              style: ButtonStyle(),
+              onPressed: (() async {
+                List<Item> items = await fetchItemsSave();
+                await DBProvier.db.storeAllItems(items);
+              }),
+              icon: Icon(Icons.store),
+              label: Text('Store Items'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton.icon(
+              style: ButtonStyle(),
+              onPressed: (() async {
+                List<Item> customers = await DBProvier.db.getAllItems();
+              }),
+              icon: Icon(Icons.store),
+              label: Text('show Items'),
             ),
           ],
         ),

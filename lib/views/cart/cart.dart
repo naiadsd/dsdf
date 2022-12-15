@@ -185,8 +185,8 @@ class _CartDataState extends ConsumerState<CartData> {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(const SnackBar(content: Text('dismissed')));
                 }),
-                child: const ListTile(
-                  title: CartItemContainer(),
+                child: ListTile(
+                  title: CartItemContainer(cartItem: items[index]),
                 ),
               );
             }));

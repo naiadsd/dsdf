@@ -3,6 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final userIdProvider = Provider<String>((ref) {
   final authProvider = ref.watch(authStateProvider);
-  print('asdsd${authProvider.userId}');
+  //print('asdsd${authProvider.userId}');
   return authProvider.userId ?? '';
 });

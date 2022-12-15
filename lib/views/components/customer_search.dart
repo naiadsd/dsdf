@@ -58,6 +58,10 @@ class _CustomSearchFieldState extends ConsumerState<CustomSearchField> {
               height: 38,
               alignment: Alignment.topCenter,
               child: TextField(
+                onChanged: (value) {
+                  customerSearchProvi
+                      .setSearchText(customerSearchConroller.text);
+                },
                 controller: customerSearchConroller,
                 style: TextStyle(fontSize: 15),
                 cursorColor: textBlack,
@@ -72,7 +76,7 @@ class _CustomSearchFieldState extends ConsumerState<CustomSearchField> {
               ),
             ),
           ),
-          SizedBox(width: 10.0),
+          const SizedBox(width: 10.0),
           Container(
             height: 40.0,
             width: 40.0,

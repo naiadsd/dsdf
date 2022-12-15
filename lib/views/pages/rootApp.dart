@@ -29,6 +29,7 @@ class _RootAppState extends State<RootApp> {
         ListCustomer(),
         Home(),
         Settings(),
+        Home(),
       ],
     );
   }

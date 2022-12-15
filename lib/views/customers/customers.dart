@@ -95,13 +95,6 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                         hintField: "Try 'Customer info",
                         backgroundColor: background,
                       ),
-                      const SizedBox(
-                        height: spacer - 30,
-                      ),
-                      const Text(
-                        'customers found.',
-                        style: const TextStyle(color: textWhite),
-                      )
                     ],
                   ),
                 ),
@@ -125,19 +118,9 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
         });
         return ListView.builder(
           itemBuilder: ((context, index) {
-            return InkWell(
-              child: CustomerItem(
-                customer: customers[index],
-              ),
-              onTap: () {
-                ref
-                    .watch(cartProvider.notifier)
-                    .createCart(customers[index].id, driverId);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: ((context) {
-                  return Items(customer: customers[index]);
-                })));
-              },
+            return CustomerItem(
+              customer: customers[index],
+              driverId: driverId,
             );
           }),
           itemCount: customers.length,
@@ -147,7 +130,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
         return Center(
             child: Padding(
           padding: const EdgeInsets.all(appPadding),
-          child: Text('Please check internet connection\n' + error.toString()),
+          child: Text('Please check internet connection\n$error'),
         ));
       },
       loading: (() => const Padding(

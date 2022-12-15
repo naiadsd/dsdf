@@ -26,7 +26,7 @@ class Authenticator {
 
       return AuthResult.success;
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return AuthResult.aborted;
     }
   }

@@ -10,17 +10,16 @@ final itemProvider = Provider<ItemService>(
 
 final itemDataProvider = FutureProvider<List<Item>>(
   (ref) {
-    return ref.watch(itemProvider).fetchItems();
+    return ref.watch(itemProvider).fetchAllItemsFromDB();
   },
 );
 
 final filterdItems = FutureProvider<List<Item>>(
   (ref) async {
     final searchText = ref.watch(itemSearchProvider);
+    var items = await ref.watch(itemProvider).fetchAllItemsFromDB();
 
     if (searchText.isNotEmpty) {
-      var items = await ref.watch(itemProvider).fetchItems();
-
       return items
           .where((element) =>
               element.itemId.contains(searchText) ||
@@ -28,7 +27,7 @@ final filterdItems = FutureProvider<List<Item>>(
               element.name.contains(searchText))
           .toList();
     } else {
-      return ref.watch(itemProvider).fetchItems();
+      return items;
     }
   },
 );

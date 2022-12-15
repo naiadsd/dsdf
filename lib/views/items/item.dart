@@ -2,6 +2,7 @@ import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/theme/colors.dart';
+import 'package:dsd/views/items/cart_value_text_field.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -50,6 +51,18 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   }
 
   final priceController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    final cartItemprovider = ref.read(cartProvider.notifier);
+    try {
+      itemsAdded = cartItemprovider.getItemQuantity(widget.item.id);
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -116,6 +129,9 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
               ],
             ),
           ),
+          const SizedBox(
+            height: 3,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -154,13 +170,36 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                 width: size.width * 0.3,
                 height: 42,
                 alignment: Alignment.center,
-                child: itemsAdded > 0 ? addCartItem() : addItemFirstTime(),
+                child: AnimatedSwitcher(
+                  duration: const Duration(seconds: 1),
+                  reverseDuration: const Duration(seconds: 1),
+                  child: itemsAdded > 0 ? addCartItem() : addItemFirstTime(),
+                ),
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  void _showCartQuantityEditior() async {
+    final res = await showDialog(
+        context: context,
+        builder: ((context) {
+          return CartEditior(
+            existingQuantity: itemsAdded,
+            reOrderQuantity: double.parse(widget.item.reOrderQuantity),
+          );
+        }));
+
+    //print(res);
+    if (res != null) {
+      setState(() {
+        itemsAdded = res;
+        priceController.text = res.toString();
+      });
+    }
   }
 
   Widget addItemFirstTime() {
@@ -261,10 +300,12 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
       cart.removeItem(widget.item.id);
     }
 
+    const itemPadding = 5.0;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: textWhite,
+        color: Colors.white70,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -273,7 +314,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         children: [
           itemsAdded == 1
               ? Container(
-                  padding: const EdgeInsets.only(left: 6, right: 5),
+                  padding: const EdgeInsets.all(itemPadding),
                   decoration: const BoxDecoration(
                     border: Border(
                         right: BorderSide(
@@ -290,7 +331,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                   ),
                 )
               : Container(
-                  padding: const EdgeInsets.only(left: 6, right: 5),
+                  padding: const EdgeInsets.all(itemPadding),
                   decoration: const BoxDecoration(
                     border: Border(
                         right: BorderSide(
@@ -308,34 +349,15 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                 ),
           Flexible(
             child: Container(
-              padding: const EdgeInsets.only(
-                left: 5.0,
-              ),
-              child: TextField(
-                textAlign: TextAlign.center,
-                controller: priceController,
-                decoration: InputDecoration(
-                  filled: true,
-                  border: const OutlineInputBorder(
-                      gapPadding: 2.0,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: false),
-                style: const TextStyle(
-                  color: textBlack,
-                ),
-                onChanged: (val) {
-                  onEditCart(val);
-                },
+              margin: const EdgeInsets.all(itemPadding),
+              child: InkWell(
+                onTap: _showCartQuantityEditior,
+                child: Text(itemsAdded.toString()),
               ),
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 6, left: 5),
+            padding: const EdgeInsets.all(itemPadding),
             decoration: const BoxDecoration(
               border: Border(
                   left: BorderSide(

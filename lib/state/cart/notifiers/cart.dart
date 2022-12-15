@@ -33,4 +33,17 @@ class CartState extends StateNotifier<Cart> {
   changeitemQuantity(int id, int quantity) {
     state = state.addItemQuantity(id, quantity);
   }
+
+  getItemQuantity(int id) {
+    List<CartItem> citems = state.items ?? [];
+    if (citems.isNotEmpty) {
+      return citems
+          .firstWhere(
+            (element) => element.itemId == id,
+          )
+          .quantity;
+    } else {
+      return 0.0;
+    }
+  }
 }

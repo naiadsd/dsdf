@@ -26,8 +26,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithEmailPassword(email, password);
     final userId = _authenticator.userId;
-    print('from auth');
-    print(result.toString());
+    //print('from auth');
+    //print(result.toString());
     if (result == AuthResult.success && userId != null) {
       state = AuthState(
         result: result,

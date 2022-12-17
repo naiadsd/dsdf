@@ -50,21 +50,20 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    ;
-    final _data = <String, dynamic>{};
-    _data['lastName'] = lastName;
-    _data['uuid'] = uuid;
-    _data['phoneNumber'] = phoneNumber;
-    _data['id'] = id;
-    _data['email'] = email;
-    _data['role'] = role;
-    _data['firstName'] = firstName;
-    _data['route'] = route;
-    _data['userId'] = userId;
-    _data['note'] = note;
-    _data['totalOrders'] = totalOrders;
-    _data['valueAdded'] = valueAdded;
-    return _data;
+    final data = <String, dynamic>{};
+    data['lastName'] = lastName;
+    data['uuid'] = uuid;
+    data['phoneNumber'] = phoneNumber;
+    data['id'] = id;
+    data['email'] = email;
+    data['role'] = role;
+    data['firstName'] = firstName;
+    data['route'] = route;
+    data['userId'] = userId;
+    data['note'] = note;
+    data['totalOrders'] = totalOrders;
+    data['valueAdded'] = valueAdded;
+    return data;
   }
 
   set setTotalOrders(int totalOrder) {

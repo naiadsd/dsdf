@@ -1,13 +1,9 @@
-import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/theme/colors.dart';
-import 'package:dsd/theme/padding.dart';
 import 'package:dsd/utils/constants.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Home extends ConsumerWidget {

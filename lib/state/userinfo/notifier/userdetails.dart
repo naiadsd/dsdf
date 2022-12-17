@@ -76,6 +76,8 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
     if (userInfo != null) {
       state = User.fromJson(json.decode(userInfo));
       state.route = routeN;
+      final userinfo = state.toJson();
+      prefs.setString('userInfo', json.encode(userinfo));
     }
   }
 }

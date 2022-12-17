@@ -8,6 +8,7 @@ class RouteDayP extends StateNotifier<int> {
   Future _init() async {
     pref = await SharedPreferences.getInstance();
     var routeCode = pref.getInt('routeday');
+    //  print('getting route day as $routeCode ');
     if (routeCode != null) {
       state = routeCode;
     }
@@ -21,5 +22,6 @@ class RouteDayP extends StateNotifier<int> {
     state = routeday;
     pref = await SharedPreferences.getInstance();
     pref.setInt('routeday', routeday);
+    // print('settin route day as $routeday ');
   }
 }

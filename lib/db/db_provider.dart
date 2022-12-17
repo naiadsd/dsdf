@@ -29,6 +29,39 @@ class DBProvier {
       await createItemsTable(db);
     }));
   }
+/*Promos logic start*/
+
+  createPromo(Promo promo) async {
+    final db = await database;
+    final res = await db.insert(promoTable, promo.toJson());
+    return res;
+  }
+
+  Future<List<Promo>> getAllPromos() async {
+    final db = await database;
+    final res = await db.rawQuery("select * from $promoTable");
+
+    List<Promo> list =
+        res.isNotEmpty ? res.map((e) => Promo.fromJson(e)).toList() : [];
+
+    return list;
+  }
+
+  storeAllPromos(List<Promo> promos) async {
+    await deleteAllPromos();
+    for (var element in promos) {
+      await createPromo(element);
+    }
+  }
+
+  Future<int> deleteAllPromos() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM $promoTable');
+
+    return res;
+  }
+
+/*promos logic ends*/
 
 /*customers logic Start*/
   createCustomer(Customer customer) async {
@@ -36,12 +69,6 @@ class DBProvier {
 
     final res = await db.insert(customerTable, customer.toJson());
 
-    return res;
-  }
-
-  createPromo(Promo promo) async {
-    final db = await database;
-    final res = await db.insert(promoTable, promo.toJson());
     return res;
   }
 
@@ -57,6 +84,7 @@ class DBProvier {
   }
 
   storeAllCustomers(List<Customer> customers) async {
+    await deleteAllCustomers();
     for (var element in customers) {
       await createCustomer(element);
     }
@@ -91,6 +119,7 @@ class DBProvier {
   }
 
   storeAllItems(List<Item> items) async {
+    await deleteAllItems();
     for (var element in items) {
       await createItem(element);
     }

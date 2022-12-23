@@ -22,7 +22,7 @@ class CustomerService {
   }
 
   Future<List<Customer>> fetchCustomersfromDB(int route, int day) async {
-    return DBProvier.db.getAllCustomers();
+    return await DBProvier.db.getAllCustomers();
   }
 
   Future<List<Customer>> fetchAllCustomers(int route, int day) async {

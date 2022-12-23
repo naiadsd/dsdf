@@ -1,6 +1,11 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:async';
+
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/items/models/item.dart';
+import 'package:dsd/state/promo/model/promo.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/items/cart_value_text_field.dart';
 
@@ -10,8 +15,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ItemContainer extends ConsumerStatefulWidget {
   final Item item;
   final String pricingLevel;
-  const ItemContainer(
-      {Key? key, required this.item, required this.pricingLevel})
+  Promo? promo;
+  ItemContainer(
+      {Key? key, required this.item, required this.pricingLevel, this.promo})
       : super(key: key);
 
   @override
@@ -21,7 +27,6 @@ class ItemContainer extends ConsumerStatefulWidget {
 class ItemContainerState extends ConsumerState<ItemContainer> {
   int itemsAdded = 0;
   double cartPrice = 0.0;
-
   String getPrice() {
     switch (widget.pricingLevel) {
       case "1":
@@ -51,15 +56,25 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   }
 
   final priceController = TextEditingController();
+  String? pid = '';
+  double pPrice = 0.0;
+
   @override
   void initState() {
     super.initState();
     final cartItemprovider = ref.read(cartProvider.notifier);
+
     try {
       itemsAdded = cartItemprovider.getItemQuantity(widget.item.id);
     } catch (e) {
       // ignore: avoid_print
       print(e.toString());
+    }
+    if (widget.promo != null) {
+      pid = widget.promo?.promoId;
+      pPrice = double.parse(widget.promo!.price);
+    } else {
+      pPrice = double.parse(getPrice());
     }
   }
 
@@ -178,6 +193,12 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
               ),
             ],
           ),
+          Container(
+            child: Text(
+              pPrice.toString(),
+              style: TextStyle(color: textWhite),
+            ),
+          )
         ],
       ),
     );
@@ -210,20 +231,19 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         itemsAdded++;
         priceController.text = itemsAdded.toString();
         cartPrice = cartPrice +
-            itemsAdded *
-                double.parse(getPrice()) *
-                double.parse(widget.item.reOrderQuantity);
+            itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
       });
 
       cart.addItem(CartItem(
         itemId: widget.item.id,
-        promoId: '1223',
-        promoPrice: double.parse(getPrice()),
+        promoId: pid ?? '',
+        promoPrice: pPrice,
         saleprice: double.parse(getPrice()),
         quantity: itemsAdded,
-        isPromoApplied: false,
+        isPromoApplied: widget.promo != null,
         reOrderQuantity: double.parse(widget.item.reOrderQuantity),
         totalPrice: cartPrice,
+        itemDescription: widget.item.description,
       ));
     }
 
@@ -249,10 +269,9 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         () {
           itemsAdded++;
           priceController.text = itemsAdded.toString();
-          cartPrice = cartPrice +
-              itemsAdded *
-                  double.parse(getPrice()) *
-                  double.parse(widget.item.reOrderQuantity);
+          print(cartPrice);
+          cartPrice =
+              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
         },
       );
 
@@ -264,26 +283,12 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         () {
           itemsAdded = itemsAdded - 1;
           priceController.text = itemsAdded.toString();
-          cartPrice = cartPrice +
-              itemsAdded *
-                  double.parse(getPrice()) *
-                  double.parse(widget.item.reOrderQuantity);
+          cartPrice =
+              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
         },
       );
 
       cart.changeitemQuantity(widget.item.id, itemsAdded);
-    }
-
-    onEditCart(String val) {
-      setState(() {
-        itemsAdded = int.parse(priceController.text);
-        priceController.text = itemsAdded.toString();
-
-        cartPrice = cartPrice +
-            itemsAdded *
-                double.parse(getPrice()) *
-                double.parse(widget.item.reOrderQuantity);
-      });
     }
 
     onRemoveFromCart() {
@@ -292,9 +297,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           itemsAdded = itemsAdded - 1;
           priceController.text = itemsAdded.toString();
           cartPrice = cartPrice +
-              itemsAdded *
-                  double.parse(getPrice()) *
-                  double.parse(widget.item.reOrderQuantity);
+              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
         },
       );
       cart.removeItem(widget.item.id);

@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'package:dsd/db/db_provider.dart';
+import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/views/invoice/api/pdf_api.dart';
-import 'package:dsd/views/invoice/invoice.dart';
-import 'package:dsd/views/invoice/model/customer.dart';
+
 import 'package:dsd/views/invoice/model/inovice.dart';
 import 'package:dsd/views/invoice/model/supplier.dart';
+
+import 'package:flutter/services.dart';
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -11,16 +15,22 @@ import 'package:pdf/widgets.dart';
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice) async {
     final pdf = Document();
+    final ByteData bytes =
+        await rootBundle.load('assets/images/invoice_logo.png');
 
+    final Customer customer =
+        await DBProvier.db.getCustomerById(invoice.custoemrId);
+
+    //print('get customer ${customer.customerId}');
     pdf.addPage(MultiPage(
       build: (context) => [
-        buildTitle(invoice),
+        // buildTitle(invoice),
         buildInvoice(invoice),
         Divider(),
         buildTotal(invoice),
       ],
       footer: (context) => buildFooter(invoice),
-      header: (context) => buildHeader(invoice),
+      header: (context) => buildHeader(invoice, bytes, customer),
     ));
 
     return PdfApi.saveDocument(name: 'myinovice.pdf', pdf: pdf);
@@ -31,17 +41,17 @@ class PdfInvoiceApi {
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Address', value: invoice.supplier.address),
+          buildSimpleText(title: 'Selling real, Goog ice cream.', value: ''),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+          buildSimpleText(title: 'NAIA DSD', value: ''),
         ],
       );
 
   static Widget buildTotal(Invoice invoice) {
     final netTotal = invoice.items
-        .map((item) => item.unitPrice * item.quantity)
+        .map((item) => item.saleprice * item.quantity)
         .reduce((item1, item2) => item1 + item2);
-    final vatPercent = invoice.items.first.vat;
+    final vatPercent = invoice.items.first.saleprice;
     final vat = netTotal * vatPercent;
     final total = netTotal + vat;
 
@@ -49,30 +59,39 @@ class PdfInvoiceApi {
       alignment: Alignment.centerRight,
       child: Row(
         children: [
-          Spacer(flex: 6),
           Expanded(
-            flex: 4,
+              flex: 4,
+              child: Container(
+                  child: Row(children: [
+                Text('Total Cases : ', style: addressTextStyle),
+                Text(
+                  '123',
+                ),
+              ]))),
+          Expanded(
+            flex: 6,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildText(
-                  title: 'Net total',
-                  value: (netTotal.toStringAsFixed(2)),
+                buildTextRow(
+                  title: 'Sub total',
+                  value: '\$ ${total.toStringAsFixed(2)}',
                   unite: true,
                 ),
-                buildText(
-                  title: 'Vat ${vatPercent * 100} %',
-                  value: (vat.toStringAsFixed(2)),
+                SizedBox(height: 4),
+                buildTextRow(
+                  title: 'Sales Tax ',
+                  value: '',
                   unite: true,
                 ),
                 Divider(),
-                buildText(
-                  title: 'Total amount due',
+                buildTextRow(
+                  title: 'Total',
                   titleStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
-                  value: (total.toStringAsFixed(2)),
+                  value: '\$ ${total.toStringAsFixed(2)}',
                   unite: true,
                 ),
                 SizedBox(height: 2 * PdfPageFormat.mm),
@@ -87,22 +106,20 @@ class PdfInvoiceApi {
     );
   }
 
-  static Widget buildHeader(Invoice invoice) => Column(
+  static Widget buildHeader(
+          Invoice invoice, ByteData bytes, Customer customer) =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 1 * PdfPageFormat.cm),
+          //SizedBox(height: 1 * PdfPageFormat.cm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildSupplierAddress(invoice.supplier),
-              Container(
-                height: 50,
-                width: 50,
-                child: BarcodeWidget(
-                  barcode: Barcode.qrCode(),
-                  data: invoice.info.number,
-                ),
-              ),
+              buildHeaderIcon(bytes),
+              buildOfficeAddress(),
+              buildInvoiceInfo(invoice.info),
+
+              //buildSupplierAddress(invoice.supplier),
             ],
           ),
           SizedBox(height: 1 * PdfPageFormat.cm),
@@ -110,19 +127,119 @@ class PdfInvoiceApi {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildCustomerAddress(invoice.customer),
-              buildInvoiceInfo(invoice.info),
+              buildCustomerSoldToAddress(customer),
+              buildCustomerShipToAddress(customer),
             ],
           ),
+          SizedBox(height: 1 * PdfPageFormat.cm),
+
+          buildCustomerInfor(customer),
+          buildCustomerInformation(
+            customer,
+          ),
+          SizedBox(height: 1 * PdfPageFormat.cm),
         ],
       );
+
+  static Image buildHeaderIcon(ByteData bytes) {
+    final Uint8List byteList = bytes.buffer.asUint8List();
+    return Image(
+        width: 80,
+        height: 80,
+        MemoryImage(
+          byteList,
+        ),
+        fit: BoxFit.fill);
+  }
+
+  static TextStyle addressTextStyle = TextStyle(fontWeight: FontWeight.bold);
+  static Widget buildOfficeAddress() => Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('736 Alfred Nobel Drive', style: addressTextStyle),
+            SizedBox(height: 1 * PdfPageFormat.mm),
+            Text('Hercules, CA 94547', style: addressTextStyle),
+            SizedBox(height: 1 * PdfPageFormat.mm),
+            Text('USA', style: addressTextStyle),
+            SizedBox(height: 1 * PdfPageFormat.mm),
+            Text('Voice: 510-724-2479', style: addressTextStyle),
+            SizedBox(height: 1 * PdfPageFormat.mm),
+            Text('Fax: 510-291-2849', style: addressTextStyle),
+            SizedBox(height: 1 * PdfPageFormat.mm),
+          ]);
   static Widget buildCustomerAddress(Customer customer) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(customer.address),
+          Text(customer.customerName,
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          customer.shipToAddressLineTwo.isNotEmpty
+              ? Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                )
+              : Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
         ],
       );
+
+  static Widget buildCustomerSoldToAddress(Customer customer) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('Sold To :',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+          SizedBox(height: 10),
+          Text(customer.customerName,
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          customer.shipToAddressLineTwo.isNotEmpty
+              ? Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                )
+              : Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+        ],
+      );
+  static Widget buildCustomerShipToAddress(Customer customer) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Ship To :',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+          SizedBox(height: 10),
+          Text(customer.customerName,
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          customer.shipToAddressLineTwo.isNotEmpty
+              ? Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                )
+              : Text(
+                  '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+        ],
+      );
+  static BoxDecoration borders =
+      BoxDecoration(border: Border.all(color: PdfColors.black));
 
   static Widget buildTitle(Invoice invoice) => Column(children: [
         Text('Invoice',
@@ -141,18 +258,15 @@ class PdfInvoiceApi {
       );
 
   static Widget buildInvoiceInfo(InvoiceInfo info) {
-    final paymentTerms = '${info.dueDate.difference(info.date).inDays} days';
     final titles = <String>[
+      'Inovice',
       'Invoice Number:',
       'Invoice Date:',
-      'Payment Terms:',
-      'Due Date:'
     ];
     final data = <String>[
+      '',
       info.number,
       info.date.toIso8601String(),
-      paymentTerms,
-      info.dueDate.toIso8601String(),
     ];
 
     return Column(
@@ -166,41 +280,125 @@ class PdfInvoiceApi {
     );
   }
 
+  static buildCustomerInfor(Customer customer) {
+    const paymentTerms = '30 days';
+    final headers = [
+      'Customer Id',
+      'Customer PO',
+      'Payment Terms',
+    ];
+    final data = [
+      [customer.customerId, '', paymentTerms]
+    ];
+    return Table.fromTextArray(
+        headers: headers,
+        data: data,
+        border: null,
+        headerStyle: TextStyle(fontWeight: FontWeight.bold),
+        headerDecoration: const BoxDecoration(color: PdfColors.grey200),
+        cellHeight: 25,
+        headerHeight: 20,
+        cellAlignments: {
+          0: Alignment.centerLeft,
+          1: Alignment.centerRight,
+          2: Alignment.centerRight,
+        });
+  }
+
+  static buildCustomerInformation(Customer customer) {
+    final headers = [
+      'Sales Rep Id',
+      'Shipping Method',
+      'Ship Date',
+      'Due Date'
+    ];
+    final data = [
+      [customer.customerId, '', '', 'Next 30 days']
+    ];
+    return Table.fromTextArray(
+        headers: headers,
+        data: data,
+        border: null,
+        headerStyle: TextStyle(fontWeight: FontWeight.bold),
+        headerDecoration: const BoxDecoration(color: PdfColors.grey200),
+        cellHeight: 25,
+        headerHeight: 20,
+        cellAlignments: {
+          0: Alignment.centerLeft,
+          1: Alignment.centerRight,
+          2: Alignment.centerRight,
+          3: Alignment.centerRight,
+        });
+  }
+
   static buildInvoice(Invoice invoice) {
     final headers = [
-      'Description',
-      'Date',
       'Quantity',
+      'Item',
+      'Description',
       'Unit Price',
-      'VAT',
-      'Total'
+      'Extension',
     ];
     final data = invoice.items.map((item) {
-      final total = item.unitPrice * item.quantity * (1 + item.vat);
+      final total = item.promoPrice * item.quantity * (1 + item.quantity);
 
       return [
-        item.description,
-        item.date,
         '${item.quantity}',
-        '\$ ${item.unitPrice}',
-        '${item.vat} %',
+        item.itemDescription,
+        '\$ ${item.saleprice}',
+        '${item.promoPrice} %',
         '\$ ${total.toStringAsFixed(2)}',
       ];
     }).toList();
     return Table.fromTextArray(
         headers: headers,
         data: data,
-        border: null,
+        // border: TableBorder(
+        //     bottom: BorderSide(
+        //   color: PdfColors.black,
+        //   width: 2,
+        // )),
+        cellDecoration: (index, data, rowNum) {
+          Border firstRowBorder = const Border(
+            bottom: BorderSide.none,
+            top: BorderSide.none,
+            left: BorderSide(
+              color: PdfColors.black,
+            ),
+            right: BorderSide(
+              color: PdfColors.black,
+            ),
+          );
+          Border lastRowBorder = const Border(
+            left: BorderSide.none,
+            right: BorderSide.none,
+            top: BorderSide(
+              color: PdfColors.black,
+            ),
+            bottom: BorderSide(
+              color: PdfColors.black,
+            ),
+          );
+
+          return BoxDecoration(border: firstRowBorder);
+        },
         headerStyle: TextStyle(fontWeight: FontWeight.bold),
-        headerDecoration: const BoxDecoration(color: PdfColors.grey300),
-        cellHeight: 30,
+        headerDecoration: const BoxDecoration(color: PdfColors.grey200),
+        cellHeight: 25,
+        headerHeight: 20,
+        headerAlignments: {
+          0: Alignment.center,
+          1: Alignment.center,
+          2: Alignment.center,
+          3: Alignment.center,
+          4: Alignment.center,
+        },
         cellAlignments: {
-          0: Alignment.centerLeft,
-          1: Alignment.centerRight,
-          2: Alignment.centerRight,
+          0: Alignment.centerRight,
+          1: Alignment.centerLeft,
+          2: Alignment.centerLeft,
           3: Alignment.centerRight,
           4: Alignment.centerRight,
-          5: Alignment.centerRight,
         });
   }
 
@@ -221,6 +419,36 @@ class PdfInvoiceApi {
     );
   }
 
+  static buildTextForCustomerInfo({
+    required String title,
+    required String value,
+    double width = double.infinity,
+    TextStyle? titleStyle,
+    bool unite = false,
+  }) {
+    final style = titleStyle ?? TextStyle(fontWeight: FontWeight.bold);
+
+    return Container(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(border: Border.all(width: 1)),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: style),
+                    Text(value, style: unite ? style : null),
+                  ])),
+        ],
+      ),
+    );
+  }
+
   static buildText({
     required String title,
     required String value,
@@ -232,9 +460,32 @@ class PdfInvoiceApi {
 
     return Container(
       width: width,
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(title, style: style)),
+          Text(title, style: style),
+          Text(value, style: unite ? style : null),
+        ],
+      ),
+    );
+  }
+
+  static buildTextRow({
+    required String title,
+    required String value,
+    double width = double.infinity,
+    TextStyle? titleStyle,
+    bool unite = false,
+  }) {
+    final style = titleStyle ?? TextStyle(fontWeight: FontWeight.bold);
+
+    return Container(
+      width: width,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: style),
           Text(value, style: unite ? style : null),
         ],
       ),

@@ -24,17 +24,15 @@ class LoginView extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Container(
-            //   color: Colors.transparent,
-            //   child: Image(
-            //     color: Colors.transparent,
-            //     colorBlendMode: BlendMode.darken,
-            //     height: 150,
-            //     filterQuality: FilterQuality.low,
-            //     image: AssetImage('images/dsdlogo.jpg'),
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.transparent,
+              ),
+              // child: Image.asset(
+              //   'assets/images/invoice_logo.png',
+              // ),
+            ),
             Text(
               'Hello Again..',
               style: GoogleFonts.bebasNeue(
@@ -118,8 +116,11 @@ class LoginView extends ConsumerWidget {
                 ),
                 onTap: () async {
                   final authProvider = ref.read(authStateProvider.notifier);
-                  await authProvider.loginWithEmailPassword(
-                      emailController.text, passwordController.text);
+                  await authProvider
+                      .loginWithEmailPassword(
+                          emailController.text, passwordController.text)
+                      .then((value) {})
+                      .catchError((e) {});
 
                   final userID = ref.read(userIdProvider);
                   final userDetailsPRovider =

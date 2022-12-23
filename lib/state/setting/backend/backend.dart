@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dsd/state/setting/model/settings.dart';
-import 'package:path/path.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> setLastSyncDateTime(DateTime dateTime) async {

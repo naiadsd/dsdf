@@ -2,10 +2,12 @@ import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 
 import 'package:dsd/views/home.dart';
+import 'package:dsd/views/login/login.dart';
 
 import 'package:dsd/views/login/login_view.dart';
 import 'package:dsd/views/orders/orders.dart';
 import 'package:dsd/views/pages/rootApp.dart';
+import 'package:dsd/views/splash/splash.dart';
 
 import 'package:flutter/material.dart';
 
@@ -46,7 +48,13 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
 
-      home: RootApp(),
+      home: Consumer(
+        builder: (context, ref, child) {
+          bool isAuthenticate = ref.watch(isLoggedInProvider);
+
+          return isAuthenticate ? RootApp() : Login();
+        },
+      ),
     );
   }
 }

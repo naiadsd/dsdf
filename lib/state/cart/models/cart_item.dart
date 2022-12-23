@@ -9,6 +9,7 @@ class CartItem {
   late double saleprice;
   late double totalPrice;
   late double reOrderQuantity;
+  late String itemDescription;
 
   CartItem({
     required this.itemId,
@@ -18,6 +19,7 @@ class CartItem {
     required this.promoPrice,
     required this.saleprice,
     required this.totalPrice,
+    required this.itemDescription,
     this.reOrderQuantity = 1,
   });
 
@@ -38,6 +40,6 @@ class CartItem {
   @override
   String toString() {
     super.toString();
-    return this.itemId.toString();
+    return '${this.itemId.toString()} ${this.promoId} ${this.promoPrice} ${this.saleprice}';
   }
 }

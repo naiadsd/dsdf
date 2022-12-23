@@ -1,16 +1,18 @@
-import 'package:dsd/views/invoice/model/customer.dart';
+import 'package:dsd/state/cart/models/cart_item.dart';
+import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/views/invoice/model/supplier.dart';
 
 class Invoice {
   final InvoiceInfo info;
-  final Supplier supplier;
-  final Customer customer;
-  final List<InvoiceItem> items;
+  //final Supplier supplier;
+  //final Customer customer;
+  final String custoemrId;
+  final List<CartItem> items;
 
   const Invoice({
     required this.info,
-    required this.supplier,
-    required this.customer,
+    // required this.supplier,
+    required this.custoemrId,
     required this.items,
   });
 }

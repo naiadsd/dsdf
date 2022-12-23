@@ -22,7 +22,7 @@ class CartState extends StateNotifier<Cart> {
   }
 
   addItem(CartItem item) {
-    //print(state.toString());
+    print(item.toString());
     state = state.addNewItem(item);
   }
 
@@ -32,6 +32,18 @@ class CartState extends StateNotifier<Cart> {
 
   changeitemQuantity(int id, int quantity) {
     state = state.addItemQuantity(id, quantity);
+  }
+
+  double getTotal() {
+    double result = 0.0;
+    if (state.items != null && state.items!.isNotEmpty) {
+      state.items?.forEach((element) {
+        result = result + element.totalPrice;
+      });
+      return result;
+    } else {
+      return result;
+    }
   }
 
   getItemQuantity(int id) {

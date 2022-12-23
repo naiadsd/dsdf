@@ -14,6 +14,7 @@ class CustomerItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print(customer.customerId);
     var size = MediaQuery.of(context).size;
     return InkWell(
       onTap: (() {
@@ -48,7 +49,7 @@ class CustomerItem extends ConsumerWidget {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        color: customer.isPromoAvailable
+                        color: customer.isPromoAvailable ?? false
                             ? Colors.green[400]
                             : secondary,
                         alignment: Alignment.center,
@@ -67,7 +68,7 @@ class CustomerItem extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        customer.customerName,
+                        '${customer.customerName} (${customer.customerId})',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -156,10 +157,24 @@ class CustomerItem extends ConsumerWidget {
             height: MediaQuery.of(context).size.height * 0.6,
             // color: Colors.red,
             margin: const EdgeInsets.all(appPadding),
+
             child: Column(
               children: [
                 Text(
                   customer.customerName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: secondary,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+                Text(
+                  customer.customerId,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -191,6 +206,7 @@ class CustomerItem extends ConsumerWidget {
 
     Widget continueButton = TextButton(
       onPressed: (() {
+        print('object');
         Navigator.of(context).pop();
         ref.watch(cartProvider.notifier).createCart(customer.id, driverId);
         Navigator.of(context).push(MaterialPageRoute(builder: ((context) {

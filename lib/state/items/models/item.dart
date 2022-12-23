@@ -64,7 +64,7 @@ class Item {
     salePriceThree = json['salePriceThree'].toString();
     salePriceEight = json['salePriceEight'].toString();
     descriptionForSales = json['descriptionForSales'] as String;
-    orderSeq = json['orderSeq'] as int;
+    orderSeq = double.parse(json['orderSeq'].toString()).toInt();
     salePriceFive = json['salePriceFive'].toString();
     salePriceNine = json['salePriceNine'].toString();
     salePriceTen = json['salePriceTen'].toString();

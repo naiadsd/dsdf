@@ -1,119 +1,212 @@
+import 'package:dsd/state/auth/models/auth_results.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/user_id_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
-import 'package:dsd/views/login/google_button.dart';
+import 'package:dsd/views/login/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Login extends ConsumerWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool isValidEmail(val) {
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return emailRegExp.hasMatch(val);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    final size = MediaQuery.of(context).size;
+
+    bool isLoggingIn = false;
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Consumer(builder: ((context, ref, child) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 150,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.transparent,
+                ),
+                // child: Image.asset(
+                //   'assets/images/invoice_logo.png',
+                // ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Login',
-                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Icon(
-                    Icons.stars,
-                    color: Colors.amber,
-                    size: 30,
-                  ),
-                ],
+              Text(
+                'Hello Again..',
+                style: GoogleFonts.bebasNeue(
+                  fontSize: 40,
+                ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'Welcome back....!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              DSInput(emailController, 'username or email'),
-              const SizedBox(
-                height: 20,
-              ),
-              DSInput(passwordController, 'Password'),
-              const SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                child: Container(
-                  width: size.width,
-                  height: 70,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700),
-                  ),
+              Text(
+                'welcome back to DSD',
+                style: GoogleFonts.bebasNeue(
+                  fontSize: 30,
+                  fontWeight: FontWeight.normal,
                 ),
-                onTap: () async {
-                  final authProvider = ref.read(authStateProvider.notifier);
-                  await authProvider.loginWithEmailPassword(
-                      emailController.text, passwordController.text);
-
-                  final userID = ref.read(userIdProvider);
-                  final userDetailsPRovider =
-                      ref.read(userDetailsProvider.notifier);
-                  userDetailsPRovider.fetchUserDetails(userID);
-                },
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Container(
-                alignment: Alignment.center,
-                height: 30,
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                child: const Text('or continue with '),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.center,
-                height: 70,
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      style: BorderStyle.solid,
-                      width: 2.0,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomFormField(
+                      hintText: 'Email',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter email';
+                        }
+                        if (!isValidEmail(value)) {
+                          return 'Invalid email.';
+                        }
+                        return null;
+                      },
                     ),
-                    borderRadius: BorderRadius.circular(30)),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomFormField(
+                      hintText: 'Password',
+                      isObScure: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter password.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: GestureDetector(
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   const SnackBar(content: Text('Processing Data')),
+                            // );
+
+                            print('valid data..');
+                            final authProvider =
+                                ref.read(authStateProvider.notifier);
+                            await authProvider
+                                .loginWithEmailPassword(emailController.text,
+                                    passwordController.text)
+                                .then((value) {
+                              print('got response');
+                              if (value == AuthResult.success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      child: const Text(
+                                        'login success Data',
+                                        style: TextStyle(color: Colors.green),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                final userID = ref.read(userIdProvider);
+                                final userDetailsPRovider =
+                                    ref.read(userDetailsProvider.notifier);
+                                userDetailsPRovider.fetchUserDetails(userID);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'In correct data...',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }).catchError((e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Error occured,Please contact admin.',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              );
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Center(child: Text('Or')),
+              Padding(
+                padding: const EdgeInsets.all(25.0),
                 child: GestureDetector(
-                  child: const GoogleButton(),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        FaIcon(FontAwesomeIcons.google, color: Colors.white),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Center(
+                          child: Text(
+                            'Sign In with Google',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   onTap: () async {
                     final authProvider = ref.read(authStateProvider.notifier);
                     await authProvider.loginWithGoogle();
@@ -126,46 +219,56 @@ class Login extends ConsumerWidget {
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        })),
       ),
     );
   }
 
-  Widget DSInput(TextEditingController emailController, String hint) {
-    return TextField(
-      obscureText: false,
-      textAlign: TextAlign.start,
-      style: const TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
+  AlertDialog alert = AlertDialog(
+    title: const Text('logging in..'),
+    content: const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text("Do you want to order for this customer?.."),
+    ),
+    actions: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
       ),
-      controller: emailController,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-        hintText: hint,
-        //   fillColor: Theme.of(context).backgroundColor,
-        filled: true,
-        errorStyle: const TextStyle(height: 0, color: Colors.transparent),
-        hintStyle: const TextStyle(
-          fontSize: 20,
-          color: Color(0xFF969A9D),
-          fontWeight: FontWeight.w300,
-        ),
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF707070), width: 0)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF707070), width: 0)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF707070), width: 0)),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red, width: 1.5),
-        ),
-      ),
-    );
+    ],
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+    contentPadding: const EdgeInsets.all(10),
+    elevation: 30,
+  );
+}
+
+// ignore: camel_case_extensions
+extension extString on String {
+  bool get isValidEmail {
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return emailRegExp.hasMatch(this);
+  }
+
+  bool get isValidName {
+    final nameRegExp =
+        RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
+    return nameRegExp.hasMatch(this);
+  }
+
+  bool get isValidPassword {
+    final passwordRegExp = RegExp(
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\><*~]).{8,}/pre>');
+    return passwordRegExp.hasMatch(this);
+  }
+
+  bool get isNotNull {
+    // ignore: unnecessary_null_comparison
+    return this != null;
+  }
+
+  bool get isValidPhone {
+    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
+    return phoneRegExp.hasMatch(this);
   }
 }

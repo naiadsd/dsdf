@@ -47,6 +47,7 @@ class Cart {
     double salePrice,
     bool isPromo,
     double reOrderQuantity,
+    String itemDescription,
   ) {
     items?.add(CartItem(
       itemId: id,
@@ -56,6 +57,7 @@ class Cart {
       totalPrice: quantity * reOrderQuantity * promoPrice,
       reOrderQuantity: reOrderQuantity,
       isPromoApplied: isPromo,
+      itemDescription: itemDescription,
     ));
 
     totalPrice = getCartTotal();

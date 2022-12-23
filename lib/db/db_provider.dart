@@ -33,18 +33,25 @@ class DBProvier {
 
   createPromo(Promo promo) async {
     final db = await database;
+
     final res = await db.insert(promoTable, promo.toJson());
     return res;
   }
 
   Future<List<Promo>> getAllPromos() async {
     final db = await database;
+
     final res = await db.rawQuery("select * from $promoTable");
 
     List<Promo> list =
         res.isNotEmpty ? res.map((e) => Promo.fromJson(e)).toList() : [];
 
     return list;
+  }
+
+  dropPromotable() async {
+    final db = await database;
+    db.execute('DROP TABLE IF EXISTS $promoTable');
   }
 
   storeAllPromos(List<Promo> promos) async {
@@ -67,9 +74,25 @@ class DBProvier {
   createCustomer(Customer customer) async {
     final db = await database;
 
+    if (customer.isPromoAvailable ?? false) {
+      print('promo customer is ' + customer.customerId);
+    }
     final res = await db.insert(customerTable, customer.toJson());
 
     return res;
+  }
+
+  Future<List<Promo>> getPromosForCustomer(String customerId) async {
+    String table = promoTable;
+    final db = await database;
+    String cutomerPrefix = customerId.substring(0, 4);
+    List<dynamic> whereArguments = [cutomerPrefix];
+
+    String whereString = '$customerPrefix = ?';
+    final res =
+        await db.query(table, where: whereString, whereArgs: whereArguments);
+    List<Promo> promos = res.map((e) => Promo.fromJson(e)).toList();
+    return promos;
   }
 
   Future<List<Customer>> searchCustomer(String search) async {
@@ -97,6 +120,19 @@ class DBProvier {
     return res;
   }
 
+  Future<Customer> getCustomerById(String custoemrId) async {
+    final db = await database;
+    String whereString = 'id = ?';
+    String table = customerTable;
+    List<dynamic> whereArguments = [custoemrId];
+    final res =
+        await db.query(table, where: whereString, whereArgs: whereArguments);
+
+    List<Customer> customers =
+        res.isNotEmpty ? res.map((e) => Customer.fromJson(e)).toList() : [];
+    Customer c = customers[0];
+    return c;
+  }
 /*customers logic End*/
 
 /* Item logic*/

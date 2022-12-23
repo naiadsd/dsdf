@@ -66,10 +66,11 @@ class Customer {
   late final String useStandardTerms;
   late final String dueDays;
   late final String soldhere;
-  late final bool isPromoAvailable;
+  bool? isPromoAvailable;
 
   Customer.fromJson(Map<String, dynamic> json) {
-    // print(json);
+    // if()
+    //  print(json);
     id = json['id'];
     billToAddressLineOne = json['billToAddressLineOne'] ?? '';
     accountNo = json['accountNo'] ?? '';
@@ -102,8 +103,8 @@ class Customer {
     useStandardTerms = json['useStandardTerms'] ?? '';
     dueDays = json['dueDays'] ?? '';
     soldhere = json['soldhere'] ?? '';
-    isPromoAvailable = false;
-    //json['isPromoAvailable'] ?? json['isPromoAvailable'] == 0
+    isPromoAvailable =
+        json['isPromoAvailable'].toString() == '1' ? true : false;
     //  ? false
     // : true;
   }

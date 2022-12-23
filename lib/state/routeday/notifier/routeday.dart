@@ -22,6 +22,5 @@ class RouteDayP extends StateNotifier<int> {
     state = routeday;
     pref = await SharedPreferences.getInstance();
     pref.setInt('routeday', routeday);
-    // print('settin route day as $routeday ');
   }
 }

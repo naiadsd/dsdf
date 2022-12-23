@@ -1,8 +1,12 @@
 import 'package:badges/badges.dart';
+import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/cart/cart_item.dart';
+import 'package:dsd/views/invoice/api/pdf_api.dart';
+import 'package:dsd/views/invoice/api/pdf_invoice_api.dart';
+import 'package:dsd/views/invoice/model/inovice.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -35,6 +39,7 @@ class _CartDataState extends ConsumerState<CartData> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
 
+    final cartVal = ref.watch(cartProvider.notifier).getTotal();
     final noOfItems = ref.watch(totalCartItemsProvider);
     return Column(
       children: [
@@ -95,7 +100,7 @@ class _CartDataState extends ConsumerState<CartData> {
             Container(
               child: getCartItems(),
             ),
-            checkOutContainer(),
+            if (cartVal > 0) checkOutContainer(),
           ],
         )),
       ],
@@ -140,22 +145,51 @@ class _CartDataState extends ConsumerState<CartData> {
                 const SizedBox(
                   width: 5,
                 ),
-                TextButton(
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: secondary,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CartData()));
-                    },
-                    child: const Text(
-                      'Place Order',
-                      style: TextStyle(color: textWhite, fontSize: 16),
-                    ))
+                Consumer(builder: ((context, ref, child) {
+                  return TextButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: secondary,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                      ),
+                      onPressed: () async {
+                        final date = DateTime.now();
+                        final dueDate = date.add(const Duration(days: 7));
+                        final cart = ref.read(cartProvider);
+                        final List<CartItem> itemsWithPromo = [];
+
+                        if (cart.items != null && cart.items!.isNotEmpty) {
+                          for (var element in cart.items!) {
+                            itemsWithPromo.add(element);
+                            if (element.isPromoApplied) {
+                              var ci = element;
+                              //ci.itemId = element.promoId;
+                              ci.saleprice = element.promoPrice;
+                              itemsWithPromo.add(ci);
+                            }
+                          }
+                        }
+
+                        final invoice = Invoice(
+                          custoemrId: cart.customerId.toString(),
+                          info: InvoiceInfo(
+                            date: date,
+                            dueDate: dueDate,
+                            description: 'My description...',
+                            number: '${DateTime.now().year}-9999',
+                          ),
+                          items: itemsWithPromo,
+                        );
+                        final pdfFile = await PdfInvoiceApi.generate(invoice);
+                        PdfApi.openFile(pdfFile);
+                        print('generate pdf here..');
+                      },
+                      child: const Text(
+                        'Place Order',
+                        style: TextStyle(color: textWhite, fontSize: 16),
+                      ));
+                }))
               ],
             ),
           ),

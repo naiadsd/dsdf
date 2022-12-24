@@ -28,8 +28,7 @@ class _LoginState extends State<Login> {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    bool isLoggingIn = false;
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -43,9 +42,10 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                 ),
-                // child: Image.asset(
-                //   'assets/images/invoice_logo.png',
-                // ),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  color: Colors.transparent,
+                ),
               ),
               Text(
                 'Hello Again..',
@@ -67,7 +67,7 @@ class _LoginState extends State<Login> {
                 height: 10,
               ),
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     CustomFormField(
@@ -79,6 +79,9 @@ class _LoginState extends State<Login> {
                         if (!isValidEmail(value)) {
                           return 'Invalid email.';
                         }
+                        setState(() {
+                          emailController.text = value;
+                        });
                         return null;
                       },
                     ),
@@ -92,6 +95,9 @@ class _LoginState extends State<Login> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter password.';
                         }
+                        setState(() {
+                          passwordController.text = value;
+                        });
                         return null;
                       },
                     ),
@@ -119,33 +125,31 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         onTap: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             // ScaffoldMessenger.of(context).showSnackBar(
                             //   const SnackBar(content: Text('Processing Data')),
                             // );
 
-                            print('valid data..');
                             final authProvider =
                                 ref.read(authStateProvider.notifier);
                             await authProvider
                                 .loginWithEmailPassword(emailController.text,
                                     passwordController.text)
                                 .then((value) {
-                              print('got response');
                               if (value == AuthResult.success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                      ),
-                                      child: const Text(
-                                        'login success Data',
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //     content: Container(
+                                //       decoration: const BoxDecoration(
+                                //         color: Colors.white,
+                                //       ),
+                                //       child: const Text(
+                                //         'login success ',
+                                //         style: TextStyle(color: Colors.green),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // );
                                 final userID = ref.read(userIdProvider);
                                 final userDetailsPRovider =
                                     ref.read(userDetailsProvider.notifier);
@@ -175,47 +179,6 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ],
-                ),
-              ),
-              const Center(child: Text('Or')),
-              Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: GestureDetector(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        FaIcon(FontAwesomeIcons.google, color: Colors.white),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Center(
-                          child: Text(
-                            'Sign In with Google',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () async {
-                    final authProvider = ref.read(authStateProvider.notifier);
-                    await authProvider.loginWithGoogle();
-
-                    final userID = ref.read(userIdProvider);
-                    final userDetailsPRovider =
-                        ref.read(userDetailsProvider.notifier);
-                    userDetailsPRovider.fetchUserDetails(userID);
-                  },
                 ),
               ),
             ],
@@ -272,3 +235,49 @@ extension extString on String {
     return phoneRegExp.hasMatch(this);
   }
 }
+
+
+/*
+
+Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: GestureDetector(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        FaIcon(FontAwesomeIcons.google, color: Colors.white),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Center(
+                          child: Text(
+                            'Sign In with Google',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () async {
+                    final authProvider = ref.read(authStateProvider.notifier);
+                    await authProvider.loginWithGoogle();
+
+                    final userID = ref.read(userIdProvider);
+                    final userDetailsPRovider =
+                        ref.read(userDetailsProvider.notifier);
+                    userDetailsPRovider.fetchUserDetails(userID);
+                  },
+                ),
+              ),
+
+              */

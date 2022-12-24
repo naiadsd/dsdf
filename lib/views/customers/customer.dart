@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
+import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
+import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -86,7 +90,7 @@ class CustomerItem extends ConsumerWidget {
                         children: [
                           customer.shipToAddressLineTwo.isNotEmpty
                               ? Text(
-                                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo},${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: grey,
@@ -123,7 +127,21 @@ class CustomerItem extends ConsumerWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              showConfirmationDailog(context, ref);
+                              ref
+                                  .read(isloadingProvider.notifier)
+                                  .turnOnLoading();
+                              LoadingScreen.instance()
+                                  .show(context: context, text: 'Hello world');
+
+                              Timer(const Duration(seconds: 30), () {
+                                print('execuredd');
+                                // ref
+                                //     .read(isloadingProvider.notifier)
+                                //     .turnOffLoading();
+                                LoadingScreen.instance().show(
+                                    context: context, text: 'been 30 minutes');
+                              });
+                              //showConfirmationDailog(context, ref);
                             },
                             child: const CircleAvatar(
                               backgroundColor: secondary,
@@ -206,7 +224,7 @@ class CustomerItem extends ConsumerWidget {
 
     Widget continueButton = TextButton(
       onPressed: (() {
-        print('object');
+        //  print('object');
         Navigator.of(context).pop();
         ref.watch(cartProvider.notifier).createCart(customer.id, driverId);
         Navigator.of(context).push(MaterialPageRoute(builder: ((context) {

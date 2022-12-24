@@ -1,5 +1,7 @@
 import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
+import 'package:dsd/state/search/loading.dart';
+import 'package:dsd/views/components/loading/loading_screen.dart';
 
 import 'package:dsd/views/home.dart';
 import 'package:dsd/views/login/login.dart';
@@ -50,6 +52,14 @@ class App extends ConsumerWidget {
 
       home: Consumer(
         builder: (context, ref, child) {
+          ref.listen<bool>(isloadingProvider, (_, isLoading) {
+            print(isLoading);
+            if (isLoading) {
+              LoadingScreen.instance().show(context: context);
+            } else {
+              LoadingScreen.instance().hide();
+            }
+          });
           bool isAuthenticate = ref.watch(isLoggedInProvider);
 
           return isAuthenticate ? RootApp() : Login();

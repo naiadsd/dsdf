@@ -1,3 +1,4 @@
+import 'package:dsd/state/data/data_service.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
@@ -215,10 +216,16 @@ class Home extends ConsumerWidget {
                                   margin: const EdgeInsets.all(4),
                                   child: Center(
                                     child: InkWell(
-                                      onTap: (() {
+                                      onTap: (() async {
+                                        int route = await ref
+                                            .read(userDetailsProvider.notifier)
+                                            .getRoute();
+                                        await fetchStoreDailyData(
+                                            route, index + 1);
+
                                         ref
                                             .watch(routeDayProvider.notifier)
-                                            .setRoute(index + 1);
+                                            .setRouteDay(index + 1);
                                       }),
                                       child: CircleAvatar(
                                         backgroundColor:
@@ -274,7 +281,12 @@ class Home extends ConsumerWidget {
                                   margin: const EdgeInsets.all(10),
                                   child: Center(
                                     child: InkWell(
-                                      onTap: (() {
+                                      onTap: (() async {
+                                        int route =
+                                            await ref.read(routeDayProvider);
+
+                                        await fetchStoreDailyData(
+                                            index + 1, route);
                                         ref
                                             .watch(userDetailsProvider.notifier)
                                             .setRoute(index + 1);

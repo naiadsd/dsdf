@@ -80,4 +80,15 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
       prefs.setString('userInfo', json.encode(userinfo));
     }
   }
+
+  Future<int> getRoute() async {
+    prefs = await SharedPreferences.getInstance();
+    var userInfo = prefs.getString('userInfo');
+
+    if (userInfo != null) {
+      state = User.fromJson(json.decode(userInfo));
+      return state.route ?? 1;
+    }
+    return 1;
+  }
 }

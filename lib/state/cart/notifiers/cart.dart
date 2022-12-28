@@ -4,11 +4,9 @@ import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CartState extends StateNotifier<Cart> {
-  //get stored cart from local database
-  Future _init() async {}
   final _authenticator = const Authenticator();
+
   CartState() : super(Cart.initial()) {
-    //
     if (_authenticator.isAlreadyLoggedIn) {}
     {}
   }
@@ -22,16 +20,15 @@ class CartState extends StateNotifier<Cart> {
   }
 
   addItem(CartItem item) {
-    print(item.toString());
     state = state.addNewItem(item);
   }
 
-  removeItem(int id) {
-    state = state.removeItem(id);
+  removeItem(String itemId) {
+    state = state.removeItem(itemId);
   }
 
-  changeitemQuantity(int id, int quantity) {
-    state = state.addItemQuantity(id, quantity);
+  changeitemQuantity(String itemId, int quantity) {
+    state = state.addItemQuantity(itemId, quantity);
   }
 
   double getTotal() {
@@ -46,11 +43,12 @@ class CartState extends StateNotifier<Cart> {
     }
   }
 
-  getItemQuantity(int id) {
+  getItemQuantity(String id) {
     List<CartItem> citems = state.items ?? [];
     if (citems.isNotEmpty) {
       return citems
           .firstWhere(
+            // ignore: unrelated_type_equality_checks
             (element) => element.itemId == id,
           )
           .quantity;

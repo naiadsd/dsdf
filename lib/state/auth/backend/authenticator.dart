@@ -20,14 +20,12 @@ class Authenticator {
 
   Future<AuthResult> loginWithEmailPassword(
       String email, String password) async {
-    print(password);
     try {
       final res = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
       return AuthResult.success;
     } catch (e) {
-      print(e.toString());
       return AuthResult.aborted;
     }
   }

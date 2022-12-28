@@ -24,10 +24,8 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
   final priceController = TextEditingController();
 
   getItem() async {
-    print(widget.cartItem.itemId);
     var i = await DBProvier.db.getItemById(widget.cartItem.itemId);
-    //print(i.toJson());
-    print(i.description);
+
     setState(() {
       item = i;
     });
@@ -44,7 +42,7 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
     var size = MediaQuery.of(context).size;
 
     return item == null
-        ? Text('loading...')
+        ? const Text('loading...')
         : Container(
             padding: const EdgeInsets.all(2),
             margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -122,7 +120,7 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '\$ ${widget.cartItem.promoPrice.toStringAsFixed(2)}',
+                            '\$ ${widget.cartItem.saleprice.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontSize: 15,
                               color: Colors.white,

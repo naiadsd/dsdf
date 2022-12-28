@@ -1,21 +1,42 @@
 import 'package:dsd/state/data/data_service.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
+import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/utils/constants.dart';
+import 'package:dsd/views/components/constants/strings.dart';
+import 'package:dsd/views/components/loading/loading_screen.dart';
+import 'package:dsd/views/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
 
+  switchDay(BuildContext c, WidgetRef ref, int value) async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+    LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
+    int route = await ref.read(userDetailsProvider.notifier).getRoute();
+    await fetchStoreDailyData(route, value);
+    ref.watch(routeDayProvider.notifier).setRouteDay(value);
+    ref.watch(isloadingProvider.notifier).turnOffLoading();
+  }
+
+  switchRoute(BuildContext c, WidgetRef ref, int value) async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+    LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
+
+    int routeDay = await ref.read(routeDayProvider);
+    await fetchStoreDailyData(value, routeDay);
+    ref.watch(userDetailsProvider.notifier).setRoute(value);
+    ref.watch(isloadingProvider.notifier).turnOffLoading();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
     final routeDay = ref.watch(routeDayProvider);
-    // ignore: unused_local_variable
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: background,
@@ -51,25 +72,28 @@ class Home extends ConsumerWidget {
                   ),
                   child: Column(
                     children: [
-                      const Center(
+                      Center(
                         child: CircleAvatar(
                           backgroundColor: secondary,
-                          radius: 60.0,
+                          radius: 40.0,
                           child: Text(
-                            'RR',
-                            style: TextStyle(
-                                fontSize: 34, fontWeight: FontWeight.bold),
+                            (userDetails.firstName != null &&
+                                    userDetails.lastName != null)
+                                ? '${userDetails.firstName!.substring(0, 1)}${userDetails.lastName!.substring(0, 1)}'
+                                : '',
+                            style: const TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Text(
                         '${userDetails.firstName} ${userDetails.lastName}',
                         style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 34,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -101,26 +125,21 @@ class Home extends ConsumerWidget {
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 12),
+                                  horizontal: 10,
+                                  vertical: 12,
+                                ),
                                 child: Column(
                                   children: [
                                     Text(
                                       '${userDetails.route}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: valueStyle,
                                     ),
                                     const SizedBox(
                                       height: 5,
                                     ),
                                     const Text(
                                       'Route',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
+                                      style: valueText,
                                     ),
                                   ],
                                 ),
@@ -130,23 +149,14 @@ class Home extends ConsumerWidget {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   children: [
-                                    Text(
-                                      "\$ ${userDetails.valueAdded}",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    Text("\$ ${userDetails.valueAdded}",
+                                        style: valueStyle),
                                     const SizedBox(
                                       height: 5,
                                     ),
                                     const Text(
                                       'Value Added',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
+                                      style: valueText,
                                     ),
                                   ],
                                 ),
@@ -158,21 +168,14 @@ class Home extends ConsumerWidget {
                                   children: [
                                     Text(
                                       '${userDetails.totalOrders}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: valueStyle,
                                     ),
                                     const SizedBox(
                                       height: 5,
                                     ),
                                     const Text(
                                       'Orders ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
+                                      style: valueText,
                                     ),
                                   ],
                                 ),
@@ -201,7 +204,7 @@ class Home extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 5,
+                            height: 8,
                           ),
                           Container(
                             height: 120,
@@ -211,32 +214,25 @@ class Home extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(30)),
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemBuilder: ((context, index) {
+                              itemBuilder: ((_, index) {
                                 return Container(
                                   margin: const EdgeInsets.all(4),
                                   child: Center(
                                     child: InkWell(
-                                      onTap: (() async {
-                                        int route = await ref
-                                            .read(userDetailsProvider.notifier)
-                                            .getRoute();
-                                        await fetchStoreDailyData(
-                                            route, index + 1);
-
-                                        ref
-                                            .watch(routeDayProvider.notifier)
-                                            .setRouteDay(index + 1);
-                                      }),
+                                      onTap: () async {
+                                        await switchDay(
+                                            context, ref, index + 2);
+                                      },
                                       child: CircleAvatar(
                                         backgroundColor:
                                             routeDay == days[index]["id"]
                                                 ? Colors.green
                                                 : secondary,
-                                        radius: 40.0,
+                                        radius: 28.0,
                                         child: Text(
                                           days[index]["day"].toString(),
                                           style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
@@ -266,7 +262,7 @@ class Home extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 5,
+                            height: 10,
                           ),
                           Container(
                             height: 120,
@@ -282,14 +278,8 @@ class Home extends ConsumerWidget {
                                   child: Center(
                                     child: InkWell(
                                       onTap: (() async {
-                                        int route =
-                                            await ref.read(routeDayProvider);
-
-                                        await fetchStoreDailyData(
-                                            index + 1, route);
-                                        ref
-                                            .watch(userDetailsProvider.notifier)
-                                            .setRoute(index + 1);
+                                        await switchRoute(
+                                            context, ref, index + 1);
                                       }),
                                       child: CircleAvatar(
                                         backgroundColor: userDetails.route ==
@@ -324,15 +314,6 @@ class Home extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  void switchRoute(BuildContext context, int currentRoute) {
-    showModalBottomSheet<int?>(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return MyBottomSheet();
-        });
   }
 
   Stack Dailynote(User userDetails) {
@@ -467,117 +448,3 @@ class MyBottomSheet extends StatelessWidget {
     );
   }
 }
-/*
-                 Padding(
-                    padding: const EdgeInsets.all(appPadding),
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Customers',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () async {
-                        context.go('/customers');
-                      },
-                    ),
-                  ),
-
-
-
-                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: secondary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Sign out',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () async {
-                        final authProvider =
-                            ref.read(authStateProvider.notifier);
-                        authProvider.logout();
-                      },
-                    ),
-                  ),
-
-
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Switch Route',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          onTap: () async {
-                            switchRoute(context, userDetails.route ?? 0);
-                          },
-                        ),
-                      ),
-                  
-                      GestureDetector(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          height: 42,
-                          decoration: BoxDecoration(
-                            color: secondary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Refresh Data',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          return context.go('/orders');
-                        },
-                      ),
-                    ],
-                  ),
-*/

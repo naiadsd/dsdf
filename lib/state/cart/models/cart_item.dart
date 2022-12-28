@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_this
 
 class CartItem {
-  late int itemId;
+  late String itemId;
   late int quantity;
   late bool isPromoApplied;
   late String promoId;
@@ -40,6 +40,6 @@ class CartItem {
   @override
   String toString() {
     super.toString();
-    return '${this.itemId.toString()} ${this.promoId} ${this.promoPrice} ${this.saleprice}';
+    return '${this.itemId.toString()} ${this.promoId} ${this.promoPrice} ${this.saleprice} ${this.totalPrice}';
   }
 }

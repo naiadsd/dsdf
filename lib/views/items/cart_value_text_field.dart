@@ -25,15 +25,13 @@ class _CartEditiorState extends State<CartEditior> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.text = widget.existingQuantity.toString();
   }
 
   void submit() {
     int val = int.parse(_controller.text);
-    //print(reOrderQuantity);
-    //print(val % widget.reOrderQuantity);
+
     if (val % widget.reOrderQuantity == 0) {
       Navigator.pop(context, int.parse(_controller.text));
     } else {

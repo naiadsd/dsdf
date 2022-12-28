@@ -40,7 +40,7 @@ class Cart {
   Cart.initial() : orderdatetime = DateTime.now();
 
   void addItem(
-    int id,
+    String id,
     int quantity,
     double promoPrice,
     String promoId,
@@ -63,14 +63,16 @@ class Cart {
     totalPrice = getCartTotal();
   }
 
-  Cart addItemQuantity(int id, int quantity) {
+  Cart addItemQuantity(String itemId, int quantity) {
     var citems = items;
 
     citems?.forEach((element) {
-      if (element.itemId == id) {
+      if (element.itemId == itemId) {
+        print(element.toString());
         element.quantity = quantity;
-        element.totalPrice =
-            quantity * element.reOrderQuantity * element.promoPrice;
+        element.totalPrice = quantity *
+            element.reOrderQuantity *
+            (element.isPromoApplied ? element.promoPrice : element.saleprice);
       }
     });
     double ct = getCartTotal();
@@ -83,10 +85,10 @@ class Cart {
     );
   }
 
-  Cart removeItem(int id) {
+  Cart removeItem(String itemID) {
     var citems = items;
 
-    citems?.removeWhere((element) => element.itemId == id);
+    citems?.removeWhere((element) => element.itemId == itemID);
     return Cart(
       customerId: customerId,
       driverID: driverID,
@@ -107,12 +109,14 @@ class Cart {
   Cart addNewItem(CartItem item) {
     List<CartItem> citems = items ?? [];
 
-    double totav = item.reOrderQuantity * item.quantity * item.promoPrice;
+    double totav = item.reOrderQuantity *
+        item.quantity *
+        (item.isPromoApplied ? item.promoPrice : item.saleprice);
     item.totalPrice = totav;
     if (citems.isNotEmpty) {
       totav = totav + getCartTotal();
     } else {}
-
+    print(item.toString());
     citems = [...citems, item];
 
     return Cart(
@@ -127,6 +131,6 @@ class Cart {
   @override
   String toString() {
     super.toString();
-    return customerId.toString();
+    return totalPrice.toString();
   }
 }

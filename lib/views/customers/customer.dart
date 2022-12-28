@@ -18,7 +18,6 @@ class CustomerItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(customer.customerId);
     var size = MediaQuery.of(context).size;
     return InkWell(
       onTap: (() {
@@ -127,21 +126,7 @@ class CustomerItem extends ConsumerWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              ref
-                                  .read(isloadingProvider.notifier)
-                                  .turnOnLoading();
-                              LoadingScreen.instance()
-                                  .show(context: context, text: 'Hello world');
-
-                              Timer(const Duration(seconds: 30), () {
-                                print('execuredd');
-                                // ref
-                                //     .read(isloadingProvider.notifier)
-                                //     .turnOffLoading();
-                                LoadingScreen.instance().show(
-                                    context: context, text: 'been 30 minutes');
-                              });
-                              //showConfirmationDailog(context, ref);
+                              showConfirmationDailog(context, ref);
                             },
                             child: const CircleAvatar(
                               backgroundColor: secondary,
@@ -224,7 +209,6 @@ class CustomerItem extends ConsumerWidget {
 
     Widget continueButton = TextButton(
       onPressed: (() {
-        //  print('object');
         Navigator.of(context).pop();
         ref.watch(cartProvider.notifier).createCart(customer.id, driverId);
         Navigator.of(context).push(MaterialPageRoute(builder: ((context) {

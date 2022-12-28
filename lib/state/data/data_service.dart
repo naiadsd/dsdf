@@ -9,7 +9,6 @@ import 'package:dsd/state/promo/service/promo_service.dart';
 
 Future<bool> fetchStoreDailyData(int route, int day) async {
   try {
-    print('daily data called');
     List<Promo> promos = await const PromoService().fetchPromos();
 
     List<Promo> promosToday = promos.where((e) {
@@ -17,10 +16,8 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
           DateTime.now().isBefore(e.endDate);
     }).toList();
 
-    print(promosToday[0].toJson());
-
     List<Customer> customers = await fetchCustomersForSave(route, day);
-    print('for route: $route day:$day , ${customers.length}');
+
     if (promosToday.isEmpty) {
     } else {
       await DBProvier.db.storeAllPromos(promosToday);
@@ -41,7 +38,6 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
     await DBProvier.db.storeAllItems(items);
     return true;
   } catch (e) {
-    print(e);
     return false;
   }
 }

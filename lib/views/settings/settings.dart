@@ -61,28 +61,26 @@ class _SettingsState extends State<Settings> {
                 height: 10,
               ),
               TextButton.icon(
-                style: ButtonStyle(),
+                style: const ButtonStyle(),
                 onPressed: (() async {
-                  List<Customer> customers =
-                      await DBProvier.db.getAllCustomers();
+                  await DBProvier.db.getAllCustomers();
 
                   await DBProvier.db.dropPromotable();
-                  // print(customers.length);
                 }),
-                icon: Icon(Icons.store),
-                label: Text('show Customers'),
+                icon: const Icon(Icons.store),
+                label: const Text('show Customers'),
               ),
               const SizedBox(
                 height: 10,
               ),
               TextButton.icon(
-                style: ButtonStyle(),
+                style: const ButtonStyle(),
                 onPressed: (() async {
                   List<Item> items = await fetchItemsSave();
                   await DBProvier.db.storeAllItems(items);
                 }),
-                icon: Icon(Icons.store),
-                label: Text('Store Items'),
+                icon: const Icon(Icons.store),
+                label: const Text('Store Items'),
               ),
               const SizedBox(
                 height: 10,
@@ -92,36 +90,34 @@ class _SettingsState extends State<Settings> {
                 onPressed: (() async {
                   List<Item> customers = await DBProvier.db.getAllItems();
                 }),
-                icon: Icon(Icons.store),
-                label: Text('show Items'),
+                icon: const Icon(Icons.store),
+                label: const Text('show Items'),
               ),
               const SizedBox(
                 height: 10,
               ),
               TextButton.icon(
-                style: ButtonStyle(),
+                style: const ButtonStyle(),
                 onPressed: (() async {
                   int routeday = await ref.watch(routeDayProvider);
                   int? day = ref.watch(userDetailsProvider).route;
-                  print('$day and $routeday');
-                  fetchStoreDailyData(routeday, day ?? 1)
-                      .then((value) => print(value))
-                      .catchError((e) => print(e));
+
+                  await fetchStoreDailyData(routeday, day ?? 1);
                 }),
-                icon: Icon(Icons.store),
-                label: Text('Fetch All  Items'),
+                icon: const Icon(Icons.store),
+                label: const Text('Fetch All  Items'),
               ),
               const SizedBox(
                 height: 10,
               ),
               TextButton.icon(
-                style: ButtonStyle(),
+                style: const ButtonStyle(),
                 onPressed: (() async {
                   var authProvider = ref.watch(authStateProvider.notifier);
                   await authProvider.logout();
                 }),
-                icon: Icon(Icons.store),
-                label: Text('Log out'),
+                icon: const Icon(Icons.store),
+                label: const Text('Log out'),
               ),
             ],
           ),

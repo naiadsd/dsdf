@@ -21,7 +21,6 @@ class PdfInvoiceApi {
     final Customer customer =
         await DBProvier.db.getCustomerById(invoice.custoemrId);
 
-    //print('get customer ${customer.customerId}');
     pdf.addPage(MultiPage(
       build: (context) => [
         // buildTitle(invoice),
@@ -75,7 +74,7 @@ class PdfInvoiceApi {
               children: [
                 buildTextRow(
                   title: 'Sub total',
-                  value: '\$ ${total.toStringAsFixed(2)}',
+                  value: '\$${invoice.total!.toStringAsFixed(2)}',
                   unite: true,
                 ),
                 SizedBox(height: 4),
@@ -91,7 +90,7 @@ class PdfInvoiceApi {
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
-                  value: '\$ ${total.toStringAsFixed(2)}',
+                  value: '\$${invoice.total!.toStringAsFixed(2)}',
                   unite: true,
                 ),
                 SizedBox(height: 2 * PdfPageFormat.mm),
@@ -340,14 +339,12 @@ class PdfInvoiceApi {
       'Extension',
     ];
     final data = invoice.items.map((item) {
-      final total = item.promoPrice * item.quantity * (1 + item.quantity);
-
       return [
-        '${item.quantity}',
+        item.quantity,
+        item.itemId,
         item.itemDescription,
-        '\$ ${item.saleprice}',
-        '${item.promoPrice} %',
-        '\$ ${total.toStringAsFixed(2)}',
+        '\$${item.saleprice.toStringAsFixed(2)}',
+        '\$${item.totalPrice.toStringAsFixed(2)}',
       ];
     }).toList();
     return Table.fromTextArray(

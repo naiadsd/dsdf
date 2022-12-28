@@ -34,7 +34,6 @@ class User {
         email = null;
 
   User.fromJson(Map<String, dynamic> json) {
-    //print(json);
     lastName = json['lastName'];
     uuid = json['uuid'];
     phoneNumber = json['phoneNumber'];

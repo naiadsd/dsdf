@@ -17,7 +17,6 @@ class Promo {
   late final String customerPrefix;
 
   Promo.fromJson(Map<String, dynamic> json) {
-    //print(json);
     id = json['id'].toString();
     startDate = DateTime.parse(json['startDate']);
     promoId = json['promoId'].toString();

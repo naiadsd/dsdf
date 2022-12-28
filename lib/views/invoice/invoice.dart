@@ -38,13 +38,11 @@ class _InvoicePageState extends State<InvoicePage> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Generate Invoice...'),
                 const SizedBox(
                   height: 10,
                 ),
                 ElevatedButton(
                     onPressed: (() async {
-                      print('file creating');
                       final pdfFile = await PdfInvoiceApi.generate(invoice);
                       PdfApi.openFile(pdfFile);
                     }),

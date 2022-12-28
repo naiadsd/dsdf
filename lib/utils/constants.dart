@@ -1,10 +1,10 @@
 const String assetImg = 'assets/images';
 
 var days = [
-  {
-    'day': 'Sun',
-    'id': 1,
-  },
+  // {
+  //   'day': 'Sun',
+  //   'id': 1,
+  // },
   {
     'day': 'Mon',
     'id': 2,

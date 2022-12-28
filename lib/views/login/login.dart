@@ -1,12 +1,13 @@
 import 'package:dsd/state/auth/models/auth_results.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
+import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/state/auth/providers/user_id_provider.dart';
+import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
+import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/login/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -126,10 +127,11 @@ class _LoginState extends State<Login> {
                         ),
                         onTap: () async {
                           if (formKey.currentState!.validate()) {
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //   const SnackBar(content: Text('Processing Data')),
-                            // );
-
+                            ref
+                                .read(isloadingProvider.notifier)
+                                .turnOnLoading();
+                            LoadingScreen.instance()
+                                .show(context: context, text: 'loggin you in');
                             final authProvider =
                                 ref.read(authStateProvider.notifier);
                             await authProvider
@@ -137,29 +139,30 @@ class _LoginState extends State<Login> {
                                     passwordController.text)
                                 .then((value) {
                               if (value == AuthResult.success) {
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(
-                                //     content: Container(
-                                //       decoration: const BoxDecoration(
-                                //         color: Colors.white,
-                                //       ),
-                                //       child: const Text(
-                                //         'login success ',
-                                //         style: TextStyle(color: Colors.green),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // );
                                 final userID = ref.read(userIdProvider);
                                 final userDetailsPRovider =
                                     ref.read(userDetailsProvider.notifier);
                                 userDetailsPRovider.fetchUserDetails(userID);
+                                ref
+                                    .read(isloadingProvider.notifier)
+                                    .turnOffLoading();
                               } else {
+                                ref
+                                    .read(isloadingProvider.notifier)
+                                    .turnOffLoading();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'In correct data...',
-                                      style: TextStyle(color: Colors.red),
+                                  SnackBar(
+                                    content: Container(
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 200,
+                                        minHeight: 80.0,
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Invalid credentials...',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );

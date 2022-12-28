@@ -116,6 +116,11 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
         setState(() {
           totoalNoOfCustomers = customers.length;
         });
+        if (customers.isEmpty) {
+          return const Center(
+            child: Text('no customers found in this route'),
+          );
+        }
         return ListView.builder(
           itemBuilder: ((context, index) {
             return CustomerItem(

@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Loading extends StateNotifier<bool> {
-  Loading() : super(true);
+  Loading() : super(false);
 
   void setRefresh() {
     state = !state;

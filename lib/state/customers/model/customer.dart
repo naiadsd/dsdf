@@ -69,8 +69,6 @@ class Customer {
   bool? isPromoAvailable;
 
   Customer.fromJson(Map<String, dynamic> json) {
-    // if()
-    //  print(json);
     id = json['id'];
     billToAddressLineOne = json['billToAddressLineOne'] ?? '';
     accountNo = json['accountNo'] ?? '';

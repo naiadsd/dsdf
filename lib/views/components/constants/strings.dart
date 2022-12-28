@@ -29,5 +29,11 @@ class Strings {
       'Are you sure that you want to log out of the app?';
   static const cancel = 'Cancel';
 
+  static const refreshCustomers =
+      'Local data will be refreshed based on your selection please wait';
+
+  static const generateInvoice =
+      'Please wait while we are generating your invoice...';
+
   const Strings._();
 }

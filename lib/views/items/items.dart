@@ -59,7 +59,7 @@ class _ItemsState extends State<Items> {
   Widget getBody() {
     return Consumer(builder: ((context, ref, child) {
       final noOfItems = ref.watch(totalCartItemsProvider);
-      final cartval = ref.read(cartProvider.notifier).getTotal();
+      final cartval = ref.watch(cartProvider.notifier).getTotal();
       var size = MediaQuery.of(context).size;
       return Stack(alignment: Alignment.topCenter, children: [
         Column(
@@ -203,8 +203,10 @@ class _ItemsState extends State<Items> {
   Widget checkOutContainer(WidgetRef ref) {
     var size = MediaQuery.of(context).size;
     var sidepadding = size.width * 0.19;
-    final cartval = ref.read(cartProvider.notifier).getTotal();
+    final cartval = ref.watch(cartProvider.notifier).getTotal();
+
     final totalCartValue = ref.watch(totalCartValueProvider);
+
     return Positioned(
       bottom: 30,
       left: 0,

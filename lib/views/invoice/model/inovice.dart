@@ -8,12 +8,14 @@ class Invoice {
   //final Customer customer;
   final String custoemrId;
   final List<CartItem> items;
+  double? total;
 
-  const Invoice({
+  Invoice({
     required this.info,
     // required this.supplier,
     required this.custoemrId,
     required this.items,
+    this.total = 0.0,
   });
 }
 

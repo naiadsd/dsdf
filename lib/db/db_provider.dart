@@ -74,9 +74,7 @@ class DBProvier {
   createCustomer(Customer customer) async {
     final db = await database;
 
-    if (customer.isPromoAvailable ?? false) {
-      print('promo customer is ' + customer.customerId);
-    }
+    if (customer.isPromoAvailable ?? false) {}
     final res = await db.insert(customerTable, customer.toJson());
 
     return res;
@@ -163,7 +161,8 @@ class DBProvier {
 
   Future<List<Item>> getAllItems() async {
     final db = await database;
-    final res = await db.rawQuery('select * from $itemsTable');
+    final res = await db.rawQuery(
+        "select * from $itemsTable where ($itemId not like '%%%%996' and $itemId not like '%%%%997' and $itemId not like '%%%%998' and $itemId not like '%%%%999' )");
     List<Item> items =
         res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
 
@@ -189,11 +188,11 @@ class DBProvier {
     return res;
   }
 
-  Future<Item> getItemById(int id) async {
+  Future<Item> getItemById(String itemId) async {
     final db = await database;
-    String whereString = 'id = ?';
+    String whereString = 'itemId = ?';
     String table = itemsTable;
-    List<dynamic> whereArguments = [id];
+    List<dynamic> whereArguments = [itemId];
     final res =
         await db.query(table, where: whereString, whereArgs: whereArguments);
 

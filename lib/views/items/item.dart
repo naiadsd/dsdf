@@ -65,7 +65,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
     final cartItemprovider = ref.read(cartProvider.notifier);
 
     try {
-      itemsAdded = cartItemprovider.getItemQuantity(widget.item.id);
+      itemsAdded = cartItemprovider.getItemQuantity(widget.item.itemId);
     } catch (e) {
       // ignore: avoid_print
       print(e.toString());
@@ -74,7 +74,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
       pid = widget.promo?.promoId;
       pPrice = double.parse(widget.promo!.price);
     } else {
-      pPrice = double.parse(getPrice());
+      //  pPrice = double.parse(getPrice());
     }
   }
 
@@ -193,11 +193,9 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
               ),
             ],
           ),
-          Container(
-            child: Text(
-              pPrice.toString(),
-              style: TextStyle(color: textWhite),
-            ),
+          Text(
+            pPrice.toString(),
+            style: const TextStyle(color: textWhite),
           )
         ],
       ),
@@ -214,7 +212,6 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           );
         }));
 
-    //print(res);
     if (res != null) {
       setState(() {
         itemsAdded = res;
@@ -228,14 +225,20 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
 
     addtoCartFirstTime() {
       setState(() {
-        itemsAdded++;
-        priceController.text = itemsAdded.toString();
-        cartPrice = cartPrice +
-            itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
+        try {
+          itemsAdded++;
+          priceController.text = itemsAdded.toString();
+          cartPrice = cartPrice +
+              itemsAdded *
+                  (widget.promo != null ? pPrice : double.parse(getPrice())) *
+                  double.parse(widget.item.reOrderQuantity);
+        } catch (e) {
+          print(e.toString());
+        }
       });
 
-      cart.addItem(CartItem(
-        itemId: widget.item.id,
+      CartItem i = CartItem(
+        itemId: widget.item.itemId,
         promoId: pid ?? '',
         promoPrice: pPrice,
         saleprice: double.parse(getPrice()),
@@ -244,7 +247,10 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         reOrderQuantity: double.parse(widget.item.reOrderQuantity),
         totalPrice: cartPrice,
         itemDescription: widget.item.description,
-      ));
+      );
+
+      // print(i.toString());
+      cart.addItem(i);
     }
 
     return OutlinedButton(
@@ -269,13 +275,14 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         () {
           itemsAdded++;
           priceController.text = itemsAdded.toString();
-          print(cartPrice);
-          cartPrice =
-              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
+
+          cartPrice = itemsAdded *
+              (widget.promo != null ? pPrice : double.parse(getPrice())) *
+              double.parse(widget.item.reOrderQuantity);
         },
       );
 
-      cart.changeitemQuantity(widget.item.id, itemsAdded);
+      cart.changeitemQuantity(widget.item.itemId, itemsAdded);
     }
 
     void decreaseCart() {
@@ -283,12 +290,13 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         () {
           itemsAdded = itemsAdded - 1;
           priceController.text = itemsAdded.toString();
-          cartPrice =
-              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
+          cartPrice = itemsAdded *
+              (widget.promo != null ? pPrice : double.parse(getPrice())) *
+              double.parse(widget.item.reOrderQuantity);
         },
       );
 
-      cart.changeitemQuantity(widget.item.id, itemsAdded);
+      cart.changeitemQuantity(widget.item.itemId, itemsAdded);
     }
 
     onRemoveFromCart() {
@@ -297,10 +305,12 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           itemsAdded = itemsAdded - 1;
           priceController.text = itemsAdded.toString();
           cartPrice = cartPrice +
-              itemsAdded * pPrice * double.parse(widget.item.reOrderQuantity);
+              itemsAdded *
+                  (widget.promo != null ? pPrice : double.parse(getPrice())) *
+                  double.parse(widget.item.reOrderQuantity);
         },
       );
-      cart.removeItem(widget.item.id);
+      cart.removeItem(widget.item.itemId);
     }
 
     const itemPadding = 5.0;

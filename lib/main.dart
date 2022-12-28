@@ -2,21 +2,15 @@ import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/views/components/loading/loading_screen.dart';
-
-import 'package:dsd/views/home.dart';
 import 'package:dsd/views/login/login.dart';
 
-import 'package:dsd/views/login/login_view.dart';
-import 'package:dsd/views/orders/orders.dart';
 import 'package:dsd/views/pages/rootApp.dart';
-import 'package:dsd/views/splash/splash.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,17 +46,25 @@ class App extends ConsumerWidget {
 
       home: Consumer(
         builder: (context, ref, child) {
-          ref.listen<bool>(isloadingProvider, (_, isLoading) {
-            print(isLoading);
-            if (isLoading) {
-              LoadingScreen.instance().show(context: context);
-            } else {
-              LoadingScreen.instance().hide();
-            }
-          });
+          ref.listen<bool>(
+            isloadingProvider,
+            (_, isLoading) {
+              if (isLoading) {
+                LoadingScreen.instance().show(
+                  context: context,
+                );
+              } else {
+                LoadingScreen.instance().hide();
+              }
+            },
+          );
           bool isAuthenticate = ref.watch(isLoggedInProvider);
 
-          return isAuthenticate ? RootApp() : Login();
+          if (isAuthenticate) {
+            return const RootApp();
+          } else {
+            return const Login();
+          }
         },
       ),
     );

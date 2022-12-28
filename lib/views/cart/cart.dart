@@ -1,12 +1,22 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:badges/badges.dart';
+import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
+import 'package:dsd/state/items/models/item.dart';
+import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/cart/cart_item.dart';
+import 'package:dsd/views/components/constants/strings.dart';
+import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/invoice/api/pdf_api.dart';
 import 'package:dsd/views/invoice/api/pdf_invoice_api.dart';
 import 'package:dsd/views/invoice/model/inovice.dart';
+import 'package:dsd/views/pages/rootApp.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,7 +30,6 @@ class CartData extends ConsumerStatefulWidget {
 class _CartDataState extends ConsumerState<CartData> {
   @override
   Widget build(BuildContext context) {
-    final cart = ref.watch(cartProvider);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       extendBodyBehindAppBar: true,
@@ -116,14 +125,14 @@ class _CartDataState extends ConsumerState<CartData> {
       bottom: 30,
       left: 0,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: sidepadding),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: sidepadding),
         height: 120,
         width: size.width,
         decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           decoration: BoxDecoration(
               color: primary, borderRadius: BorderRadius.circular(25)),
           child: Center(
@@ -154,36 +163,7 @@ class _CartDataState extends ConsumerState<CartData> {
                                 BorderRadius.all(Radius.circular(10))),
                       ),
                       onPressed: () async {
-                        final date = DateTime.now();
-                        final dueDate = date.add(const Duration(days: 7));
-                        final cart = ref.read(cartProvider);
-                        final List<CartItem> itemsWithPromo = [];
-
-                        if (cart.items != null && cart.items!.isNotEmpty) {
-                          for (var element in cart.items!) {
-                            itemsWithPromo.add(element);
-                            if (element.isPromoApplied) {
-                              var ci = element;
-                              //ci.itemId = element.promoId;
-                              ci.saleprice = element.promoPrice;
-                              itemsWithPromo.add(ci);
-                            }
-                          }
-                        }
-
-                        final invoice = Invoice(
-                          custoemrId: cart.customerId.toString(),
-                          info: InvoiceInfo(
-                            date: date,
-                            dueDate: dueDate,
-                            description: 'My description...',
-                            number: '${DateTime.now().year}-9999',
-                          ),
-                          items: itemsWithPromo,
-                        );
-                        final pdfFile = await PdfInvoiceApi.generate(invoice);
-                        PdfApi.openFile(pdfFile);
-                        print('generate pdf here..');
+                        showConfirmationDailog(context, ref);
                       },
                       child: const Text(
                         'Place Order',
@@ -198,12 +178,124 @@ class _CartDataState extends ConsumerState<CartData> {
     );
   }
 
+  generateInvoice() async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+
+    LoadingScreen.instance()
+        .show(context: context, text: Strings.generateInvoice);
+
+    Timer(
+      const Duration(
+        seconds: 1,
+      ),
+      () async {
+        final date = DateTime.now();
+        final dueDate = date.add(const Duration(days: 7));
+        final cart = ref.read(cartProvider);
+        final List<CartItem> itemsWithPromo = [];
+
+        if (cart.items != null && cart.items!.isNotEmpty) {
+          for (var element in cart.items!) {
+            element.totalPrice = element.quantity * element.saleprice;
+            itemsWithPromo.add(element);
+            if (element.isPromoApplied) {
+              String itemPrefix = element.itemId.substring(0, 4);
+
+              String itemId = '${itemPrefix}996';
+
+              Item? i = await DBProvier.db.getItemById(itemId);
+              print(element.toString());
+              if (i != null && i.id != null) {
+                itemsWithPromo.add(CartItem(
+                  itemId: i.itemId,
+                  promoId: i.itemId,
+                  promoPrice: element.promoPrice,
+                  saleprice: element.saleprice - element.promoPrice,
+                  totalPrice: element.quantity *
+                      (element.saleprice - element.promoPrice),
+                  itemDescription: i.description,
+                  quantity: element.quantity,
+                ));
+              }
+            }
+          }
+        }
+
+        final invoice = Invoice(
+          custoemrId: cart.customerId.toString(),
+          total: cart.totalPrice ?? 0.0,
+          info: InvoiceInfo(
+            date: date,
+            dueDate: dueDate,
+            description: 'My description...',
+            number: '${DateTime.now().year}-9999',
+          ),
+          items: itemsWithPromo,
+        );
+        final pdfFile = await PdfInvoiceApi.generate(invoice);
+        PdfApi.openFile(pdfFile);
+
+        ref.watch(isloadingProvider.notifier).turnOffLoading();
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return const RootApp();
+          },
+        ));
+      },
+    );
+  }
+
+  showConfirmationDailog(BuildContext context, WidgetRef ref) {
+    Widget cencelButton = TextButton(
+      onPressed: (() {
+        Navigator.of(context).pop();
+      }),
+      child: const Text('Cancel'),
+    );
+
+    Widget continueButton = TextButton(
+      onPressed: (() async {
+        Navigator.of(context).pop();
+        await generateInvoice();
+      }),
+      child: const Text('Continue'),
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text('Are you sure you want to complete order ?'),
+      // content: const Padding(
+      //   padding: EdgeInsets.all(8.0),
+      //   child: Text("Do you want to order for this customer?.."),
+      // ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [cencelButton, continueButton],
+        ),
+      ],
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      contentPadding: const EdgeInsets.all(10),
+      elevation: 30,
+    );
+
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return alert;
+        }));
+  }
+
   Widget getCartItems() {
     var items = ref.watch(cartProvider).items ?? [];
     final cartPro = ref.watch(cartProvider.notifier);
     return items.isEmpty
-        ? Container(
-            child: Text('no items in cart'),
+        ? Center(
+            // ignore: avoid_unnecessary_containers
+            child: Container(
+              child: const Text('no items in cart'),
+            ),
           )
         : ListView.builder(
             itemCount: items.length,

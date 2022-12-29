@@ -5,9 +5,11 @@ import 'dart:async';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/items/models/item.dart';
+import 'package:dsd/state/items/provider/item_provider.dart';
 import 'package:dsd/state/promo/model/promo.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/items/cart_value_text_field.dart';
+import 'package:dsd/views/items/styles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -107,11 +109,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
               widget.item.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: textWhite,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700,
-              ),
+              style: itemHeaderStyle,
             ),
           ),
           const Divider(
@@ -145,7 +143,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
             ),
           ),
           const SizedBox(
-            height: 3,
+            height: 1,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,31 +157,20 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                   children: [
                     Text(
                       '\$ ${getPrice()}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
+                      style: itemPriceStyle,
                     ),
-                    Text(
-                      'CS\\${widget.item.reOrderQuantity}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Text('CS\\${widget.item.reOrderQuantity}',
+                        style: itemPriceStyle),
                     Text(
                       '\$ ${cartPrice.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
+                      style: itemPriceStyle,
                     ),
                   ],
                 ),
               ),
               Container(
                 width: size.width * 0.3,
-                height: 42,
+                height: 35,
                 alignment: Alignment.center,
                 child: AnimatedSwitcher(
                   duration: const Duration(seconds: 1),
@@ -193,10 +180,10 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
               ),
             ],
           ),
-          Text(
-            pPrice.toString(),
-            style: const TextStyle(color: textWhite),
-          )
+          // Text(
+          //   pPrice.toString(),
+          //   style: const TextStyle(color: textWhite),
+          // )
         ],
       ),
     );
@@ -327,7 +314,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         children: [
           itemsAdded == 1
               ? Container(
-                  padding: const EdgeInsets.all(itemPadding),
+                  //padding: const EdgeInsets.all(itemPadding),
                   decoration: const BoxDecoration(
                     border: Border(
                         right: BorderSide(
@@ -370,7 +357,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(itemPadding),
+            //padding: const EdgeInsets.all(itemPadding),
             decoration: const BoxDecoration(
               border: Border(
                   left: BorderSide(

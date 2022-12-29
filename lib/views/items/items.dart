@@ -71,7 +71,7 @@ class _ItemsState extends State<Items> {
                   clipper: BottomClipper(),
                   child: Container(
                     width: size.width,
-                    height: 300,
+                    height: size.height * 0.28,
                     decoration: const BoxDecoration(
                       color: secondary,
                     ),
@@ -81,7 +81,7 @@ class _ItemsState extends State<Items> {
                       child: Column(
                         children: [
                           const SizedBox(
-                            height: spacer + 20,
+                            height: smallSpacer,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +111,7 @@ class _ItemsState extends State<Items> {
                             ],
                           ),
                           const SizedBox(
-                            height: spacer - 30,
+                            height: miniSpacer,
                           ),
                           Flexible(
                             child: Column(
@@ -131,7 +131,7 @@ class _ItemsState extends State<Items> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: spacer - 20,
+                                  height: miniSpacer,
                                 ),
                                 const ItemSearchField(
                                   hintField: 'Try ice cream',

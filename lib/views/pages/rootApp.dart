@@ -45,8 +45,10 @@ class _RootAppState extends State<RootApp> {
     ];
     return Container(
       width: size.width,
-      height: 100,
+      height: size.height * 0.12,
       decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
         color: textWhite,
         boxShadow: [
           BoxShadow(

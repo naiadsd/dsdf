@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:dsd/state/auth/providers/user_id_provider.dart';
-import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
@@ -11,7 +9,7 @@ import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/custom_heading.dart';
 import 'package:dsd/views/components/customer_search.dart';
 import 'package:dsd/views/customers/customer.dart';
-import 'package:dsd/views/items/items.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -54,7 +52,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
               clipper: BottomClipper(),
               child: Container(
                 width: size.width,
-                height: 300,
+                height: size.height * 0.3,
                 decoration: const BoxDecoration(
                   color: secondary,
                 ),
@@ -64,7 +62,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                   child: Column(
                     children: [
                       const SizedBox(
-                        height: spacer + 24,
+                        height: spacer,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +87,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                         ],
                       ),
                       const SizedBox(
-                        height: spacer,
+                        height: 15,
                       ),
                       const CustomSearchField(
                         hintField: "Try 'Customer info",

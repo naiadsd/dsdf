@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
-import 'package:dsd/state/search/loading.dart';
+
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
-import 'package:dsd/views/components/loading/loading_screen.dart';
+import 'package:dsd/views/customers/styles.dart';
+
 import 'package:dsd/views/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -70,18 +71,12 @@ class CustomerItem extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${customer.customerName} (${customer.customerId})',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: secondary,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text('${customer.customerName} (${customer.customerId})',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: customerName),
                       const Divider(
-                        height: 4,
+                        height: 3,
                         color: Colors.black26,
                       ),
                       Row(
@@ -97,10 +92,7 @@ class CustomerItem extends ConsumerWidget {
                                 )
                               : Text(
                                   '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: grey,
-                                  ),
+                                  style: customerAddress,
                                 ),
                         ],
                       ),
@@ -114,7 +106,7 @@ class CustomerItem extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: size.width * 0.5,
+                            width: size.width * 0.4,
                             child: const Text(
                               'sold here will come from an api every tume asdasd asdadasdasdasdasd ',
                               maxLines: 2,
@@ -133,7 +125,7 @@ class CustomerItem extends ConsumerWidget {
                               child: Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,
-                                size: 20,
+                                size: 15,
                               ),
                             ),
                           )

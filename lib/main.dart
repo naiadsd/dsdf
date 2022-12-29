@@ -31,13 +31,14 @@ class App extends ConsumerWidget {
     return MaterialApp(
       // title: 'DSD',
       darkTheme: ThemeData(
-        fontFamily: 'WorkSans',
+        // fontFamily: 'WorkSans',ios
+        fontFamily: 'Open Sans, sans-serif', //andrioid
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
         indicatorColor: Colors.blueGrey,
       ),
       theme: ThemeData(
-        fontFamily: 'WorkSans',
+        // fontFamily: 'WorkSans',
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),

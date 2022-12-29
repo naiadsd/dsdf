@@ -35,156 +35,158 @@ class _LoginState extends State<Login> {
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Consumer(builder: ((context, ref, child) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.transparent,
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.transparent,
+                  ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    color: Colors.transparent,
+                  ),
                 ),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  color: Colors.transparent,
+                Text(
+                  'Hello Again..',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                  ),
                 ),
-              ),
-              Text(
-                'Hello Again..',
-                style: GoogleFonts.bebasNeue(
-                  fontSize: 40,
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'welcome back to DSD',
-                style: GoogleFonts.bebasNeue(
-                  fontSize: 30,
-                  fontWeight: FontWeight.normal,
+                Text(
+                  'welcome back to DSD',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 30,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    CustomFormField(
-                      hintText: 'Email',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter email';
-                        }
-                        if (!isValidEmail(value)) {
-                          return 'Invalid email.';
-                        }
-                        setState(() {
-                          emailController.text = value;
-                        });
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    CustomFormField(
-                      hintText: 'Password',
-                      isObScure: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter password.';
-                        }
-                        setState(() {
-                          passwordController.text = value;
-                        });
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: GestureDetector(
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                const SizedBox(
+                  height: 10,
+                ),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      CustomFormField(
+                        hintText: 'Email',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter email';
+                          }
+                          if (!isValidEmail(value)) {
+                            return 'Invalid email.';
+                          }
+                          setState(() {
+                            emailController.text = value;
+                          });
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      CustomFormField(
+                        hintText: 'Password',
+                        isObScure: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter password.';
+                          }
+                          setState(() {
+                            passwordController.text = value;
+                          });
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        onTap: () async {
-                          if (formKey.currentState!.validate()) {
-                            ref
-                                .read(isloadingProvider.notifier)
-                                .turnOnLoading();
-                            LoadingScreen.instance()
-                                .show(context: context, text: 'loggin you in');
-                            final authProvider =
-                                ref.read(authStateProvider.notifier);
-                            await authProvider
-                                .loginWithEmailPassword(emailController.text,
-                                    passwordController.text)
-                                .then((value) {
-                              if (value == AuthResult.success) {
-                                final userID = ref.read(userIdProvider);
-                                final userDetailsPRovider =
-                                    ref.read(userDetailsProvider.notifier);
-                                userDetailsPRovider.fetchUserDetails(userID);
-                                ref
-                                    .read(isloadingProvider.notifier)
-                                    .turnOffLoading();
-                              } else {
-                                ref
-                                    .read(isloadingProvider.notifier)
-                                    .turnOffLoading();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Container(
-                                      constraints: const BoxConstraints(
-                                        maxHeight: 200,
-                                        minHeight: 80.0,
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Invalid credentials...',
-                                          style: TextStyle(color: Colors.red),
+                          onTap: () async {
+                            if (formKey.currentState!.validate()) {
+                              ref
+                                  .read(isloadingProvider.notifier)
+                                  .turnOnLoading();
+                              LoadingScreen.instance().show(
+                                  context: context, text: 'loggin you in');
+                              final authProvider =
+                                  ref.read(authStateProvider.notifier);
+                              await authProvider
+                                  .loginWithEmailPassword(emailController.text,
+                                      passwordController.text)
+                                  .then((value) {
+                                if (value == AuthResult.success) {
+                                  final userID = ref.read(userIdProvider);
+                                  final userDetailsPRovider =
+                                      ref.read(userDetailsProvider.notifier);
+                                  userDetailsPRovider.fetchUserDetails(userID);
+                                  ref
+                                      .read(isloadingProvider.notifier)
+                                      .turnOffLoading();
+                                } else {
+                                  ref
+                                      .read(isloadingProvider.notifier)
+                                      .turnOffLoading();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Container(
+                                        constraints: const BoxConstraints(
+                                          maxHeight: 200,
+                                          minHeight: 80.0,
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Invalid credentials...',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
                                         ),
                                       ),
                                     ),
+                                  );
+                                }
+                              }).catchError((e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Error occured,Please contact admin.',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 );
-                              }
-                            }).catchError((e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Error occured,Please contact admin.',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              );
-                            });
-                          }
-                        },
+                              });
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         })),
       ),

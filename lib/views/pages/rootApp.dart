@@ -3,6 +3,7 @@ import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/customers/customers.dart';
 import 'package:dsd/views/home.dart';
 import 'package:dsd/views/settings/settings.dart';
+import 'package:dsd/views/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -30,7 +31,7 @@ class _RootAppState extends State<RootApp> {
         ListCustomer(),
         Home(),
         Settings(),
-        InvoicePage(),
+        SplashScreen(),
       ],
     );
   }

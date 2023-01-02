@@ -106,10 +106,11 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(left: 10, right: 0),
-                      width: size.width * 0.8,
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      width: size.width * 0.9,
                       // color: Colors.white,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -190,6 +190,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   }
 
   void _showCartQuantityEditior() async {
+    final cart = ref.watch(cartProvider.notifier);
     final res = await showDialog(
         context: context,
         builder: ((context) {
@@ -203,7 +204,11 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
       setState(() {
         itemsAdded = res;
         priceController.text = res.toString();
+        cartPrice = itemsAdded *
+            (widget.promo != null ? pPrice : double.parse(getPrice())) *
+            double.parse(widget.item.reOrderQuantity);
       });
+      cart.changeitemQuantity(widget.item.itemId, itemsAdded);
     }
   }
 

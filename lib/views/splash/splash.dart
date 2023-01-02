@@ -20,13 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
 
-    Timer(
-        const Duration(seconds: 10),
-        () => Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) {
-                return RootApp();
-              },
-            )));
+    // Timer(
+    //   const Duration(seconds: 10),
+    //   () => Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) {
+    //         return const RootApp();
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   @override
@@ -46,12 +50,14 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         child: CarouselSlider(
           options: CarouselOptions(
-            height: size.height,
-            viewportFraction: 1.0,
+            height: size.height * 0.8,
+            viewportFraction: 0.8,
             // // enlargeCenterPage: true,
             enableInfiniteScroll: true,
             autoPlay: true,
-            autoPlayInterval: const Duration(microseconds: 1),
+            autoPlayInterval: Duration(
+              milliseconds: 1,
+            ),
             //autoPlayAnimationDuration: const Duration(microseconds: 3),
           ),
           items: images.map((e) {

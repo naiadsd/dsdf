@@ -331,7 +331,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                   ),
                 )
               : Container(
-                  padding: const EdgeInsets.all(itemPadding),
+                  //   padding: const EdgeInsets.all(itemPadding),
                   decoration: const BoxDecoration(
                     border: Border(
                         right: BorderSide(

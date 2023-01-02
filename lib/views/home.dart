@@ -206,41 +206,46 @@ class Home extends ConsumerWidget {
                           const SizedBox(
                             height: 8,
                           ),
-                          Container(
-                            height: 120,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: ((_, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(4),
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await switchDay(
-                                            context, ref, index + 2);
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor:
-                                            routeDay == days[index]["id"]
-                                                ? Colors.green
-                                                : secondary,
-                                        radius: 28.0,
-                                        child: Text(
-                                          days[index]["day"].toString(),
-                                          style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
+                          Center(
+                            child: Container(
+                              height: 100,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemBuilder: ((_, index) {
+                                  return Container(
+                                    margin: const EdgeInsets.all(4),
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          await switchDay(
+                                              context, ref, index + 2);
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor:
+                                              routeDay == days[index]["id"]
+                                                  ? Colors.green
+                                                  : secondary,
+                                          radius: 28.0,
+                                          child: Text(
+                                            days[index]["day"].toString(),
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
-                              itemCount: days.length,
+                                  );
+                                }),
+                                itemCount: days.length,
+                              ),
                             ),
                           ),
                         ]),
@@ -264,42 +269,47 @@ class Home extends ConsumerWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          Container(
-                            height: 120,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: ((context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: (() async {
-                                        await switchRoute(
-                                            context, ref, index + 1);
-                                      }),
-                                      child: CircleAvatar(
-                                        backgroundColor: userDetails.route ==
-                                                int.parse(routes[index]["route"]
-                                                    .toString())
-                                            ? Colors.green
-                                            : secondary,
-                                        radius: 40.0,
-                                        child: Text(
-                                          routes[index]["route"].toString(),
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                          Center(
+                            child: Container(
+                              height: 100,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: ((context, index) {
+                                  return Container(
+                                    margin: const EdgeInsets.all(5),
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: (() async {
+                                          await switchRoute(
+                                              context, ref, index + 1);
+                                        }),
+                                        child: CircleAvatar(
+                                          backgroundColor: userDetails.route ==
+                                                  int.parse(routes[index]
+                                                          ["route"]
+                                                      .toString())
+                                              ? Colors.green
+                                              : secondary,
+                                          radius: 28.0,
+                                          child: Text(
+                                            routes[index]["route"].toString(),
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
-                              itemCount: routes.length,
+                                  );
+                                }),
+                                itemCount: routes.length,
+                              ),
                             ),
                           ),
                           const SizedBox(

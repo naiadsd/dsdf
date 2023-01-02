@@ -54,13 +54,12 @@ class _CartDataState extends ConsumerState<CartData> {
       children: [
         Container(
           width: size.width,
-          height: 120,
+          height: 100,
           decoration: const BoxDecoration(
             color: Colors.grey,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: appPadding - 5, right: appPadding - 5),
+            padding: const EdgeInsets.only(left: miniSpacer, right: miniSpacer),
             child: Column(
               children: [
                 const SizedBox(
@@ -122,11 +121,11 @@ class _CartDataState extends ConsumerState<CartData> {
 
     final totalCartValue = ref.watch(totalCartValueProvider);
     return Positioned(
-      bottom: 30,
+      bottom: 5,
       left: 0,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: sidepadding),
-        height: 120,
+        height: 80,
         width: size.width,
         decoration: const BoxDecoration(
           color: Colors.transparent,
@@ -178,6 +177,11 @@ class _CartDataState extends ConsumerState<CartData> {
     );
   }
 
+  buildInvoideNumer() {
+    final DateTime now = DateTime.now();
+    return 'RR-${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}';
+  }
+
   generateInvoice() async {
     ref.watch(isloadingProvider.notifier).turnOnLoading();
 
@@ -223,6 +227,7 @@ class _CartDataState extends ConsumerState<CartData> {
 
         final invoice = Invoice(
           custoemrId: cart.customerId.toString(),
+          invoiceNumber: buildInvoideNumer(),
           total: cart.totalPrice ?? 0.0,
           info: InvoiceInfo(
             date: date,
@@ -237,11 +242,11 @@ class _CartDataState extends ConsumerState<CartData> {
 
         ref.watch(isloadingProvider.notifier).turnOffLoading();
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) {
-            return const RootApp();
-          },
-        ));
+        // Navigator.pushReplacement(context, MaterialPageRoute(
+        //   builder: (context) {
+        //     return const RootApp();
+        //   },
+        // ));
       },
     );
   }

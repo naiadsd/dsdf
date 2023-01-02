@@ -1,8 +1,9 @@
 import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
-import 'package:dsd/state/cart/provider/cart_provider.dart';
+
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/theme/colors.dart';
+import 'package:dsd/views/items/styles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,9 +46,9 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
         ? const Text('loading...')
         : Container(
             padding: const EdgeInsets.all(2),
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
             width: size.width,
-            height: size.width * 0.30,
+            height: size.width * 0.28,
             decoration: BoxDecoration(
               color: secondary,
               borderRadius: BorderRadius.circular(10.0),
@@ -65,20 +66,14 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-                  child: Text(
-                    item!.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: textWhite,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                  child: Text(item!.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: itemHeaderStyle),
                 ),
                 const Divider(
-                  height: 4,
-                  color: Colors.grey,
+                  height: 2,
+                  color: Colors.white,
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
@@ -107,7 +102,7 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 8,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,33 +115,17 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '\$ ${widget.cartItem.saleprice.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            'CS/${item!.reOrderQuantity}',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
+                              '\$ ${widget.cartItem.saleprice.toStringAsFixed(2)}',
+                              style: itemPriceStyle),
+                          Text('CS/${item!.reOrderQuantity}',
+                              style: itemPriceStyle),
                           Text(
                             '${widget.cartItem.quantity}',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
+                            style: itemPriceStyle,
                           ),
                           Text(
-                            '\$ ${widget.cartItem.totalPrice.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
+                              '\$ ${widget.cartItem.totalPrice.toStringAsFixed(2)}',
+                              style: itemPriceStyle),
                         ],
                       ),
                     ),
@@ -155,118 +134,5 @@ class CartItemContainerState extends ConsumerState<CartItemContainer> {
               ],
             ),
           );
-  }
-
-  Widget addItemFirstTime() {
-    final cart = ref.watch(cartProvider.notifier);
-
-    return OutlinedButton(
-      style: const ButtonStyle(
-        alignment: Alignment.center,
-      ),
-      onPressed: (() {}),
-      child: const Text(
-        "Add to Cart",
-        style: TextStyle(
-          color: primary,
-        ),
-      ),
-    );
-  }
-
-  Widget addCartItem() {
-    final cart = ref.watch(cartProvider.notifier);
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-      decoration: BoxDecoration(
-        color: textWhite,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          itemsAdded == 1
-              ? Container(
-                  padding: const EdgeInsets.only(left: 6, right: 5),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                        right: BorderSide(
-                      width: 1,
-                      color: Colors.black,
-                    )),
-                  ),
-                  child: InkWell(
-                    onTap: (() {}),
-                    child: const Icon(
-                      Icons.delete_outline,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
-              : Container(
-                  padding: const EdgeInsets.only(left: 6, right: 5),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                        right: BorderSide(
-                      width: 1,
-                      color: Colors.black,
-                    )),
-                  ),
-                  child: InkWell(
-                    onTap: (() {}),
-                    child: const Icon(
-                      Icons.remove,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.only(
-                left: 5.0,
-              ),
-              child: TextField(
-                textAlign: TextAlign.center,
-                controller: priceController,
-                decoration: InputDecoration(
-                  filled: true,
-                  border: const OutlineInputBorder(
-                      gapPadding: 2.0,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: false),
-                style: const TextStyle(
-                  color: textBlack,
-                ),
-                onChanged: (val) {},
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(right: 6, left: 5),
-            decoration: const BoxDecoration(
-              border: Border(
-                  left: BorderSide(
-                width: 1,
-                color: Colors.black,
-              )),
-            ),
-            child: InkWell(
-              onTap: (() {}),
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

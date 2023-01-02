@@ -26,6 +26,7 @@ final invoice = Invoice(
       description: 'My description...',
       number: '${DateTime.now().year}-9999',
     ),
+    invoiceNumber: '',
     items: []);
 
 class _InvoicePageState extends State<InvoicePage> {

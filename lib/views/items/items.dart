@@ -208,7 +208,7 @@ class _ItemsState extends State<Items> {
     final totalCartValue = ref.watch(totalCartValueProvider);
 
     return Positioned(
-      bottom: 30,
+      bottom: 5,
       left: 0,
       child: AnimatedSwitcher(
           duration: const Duration(seconds: 1),
@@ -216,8 +216,8 @@ class _ItemsState extends State<Items> {
           child: (cartval > 0)
               ? (Container(
                   padding: EdgeInsets.symmetric(
-                      vertical: 20, horizontal: sidepadding),
-                  height: 120,
+                      vertical: 10, horizontal: sidepadding),
+                  height: 85,
                   width: size.width,
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
@@ -265,7 +265,7 @@ class _ItemsState extends State<Items> {
                               child: const Text(
                                 'Check out',
                                 style:
-                                    TextStyle(color: textWhite, fontSize: 20),
+                                    TextStyle(color: textWhite, fontSize: 16),
                               ))
                         ],
                       ),

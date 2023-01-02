@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/views/invoice/api/pdf_api.dart';
+import 'package:dsd/views/invoice/invoice.dart';
 
 import 'package:dsd/views/invoice/model/inovice.dart';
 import 'package:dsd/views/invoice/model/supplier.dart';
@@ -32,7 +33,7 @@ class PdfInvoiceApi {
       header: (context) => buildHeader(invoice, bytes, customer),
     ));
 
-    return PdfApi.saveDocument(name: 'myinovice.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: '${invoice.invoiceNumber}.pdf', pdf: pdf);
   }
 
   static Widget buildFooter(Invoice invoice) => Column(
@@ -40,20 +41,16 @@ class PdfInvoiceApi {
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Selling real, Goog ice cream.', value: ''),
+          buildSimpleText(title: 'Selling real, Good ice cream.', value: ''),
           SizedBox(height: 1 * PdfPageFormat.mm),
           buildSimpleText(title: 'NAIA DSD', value: ''),
         ],
       );
 
   static Widget buildTotal(Invoice invoice) {
-    final netTotal = invoice.items
-        .map((item) => item.saleprice * item.quantity)
+    final totalItems = invoice.items
+        .map((item) => item.reOrderQuantity * item.quantity)
         .reduce((item1, item2) => item1 + item2);
-    final vatPercent = invoice.items.first.saleprice;
-    final vat = netTotal * vatPercent;
-    final total = netTotal + vat;
-
     return Container(
       alignment: Alignment.centerRight,
       child: Row(
@@ -64,7 +61,7 @@ class PdfInvoiceApi {
                   child: Row(children: [
                 Text('Total Cases : ', style: addressTextStyle),
                 Text(
-                  '123',
+                  totalItems.toString(),
                 ),
               ]))),
           Expanded(
@@ -116,7 +113,7 @@ class PdfInvoiceApi {
             children: [
               buildHeaderIcon(bytes),
               buildOfficeAddress(),
-              buildInvoiceInfo(invoice.info),
+              buildInvoiceInfo(invoice.info, invoice.invoiceNumber),
 
               //buildSupplierAddress(invoice.supplier),
             ],
@@ -133,9 +130,9 @@ class PdfInvoiceApi {
           SizedBox(height: 1 * PdfPageFormat.cm),
 
           buildCustomerInfor(customer),
-          buildCustomerInformation(
-            customer,
-          ),
+          // buildCustomerInformation(
+          //   customer,
+          // ),
           SizedBox(height: 1 * PdfPageFormat.cm),
         ],
       );
@@ -164,7 +161,7 @@ class PdfInvoiceApi {
             SizedBox(height: 1 * PdfPageFormat.mm),
             Text('Voice: 510-724-2479', style: addressTextStyle),
             SizedBox(height: 1 * PdfPageFormat.mm),
-            Text('Fax: 510-291-2849', style: addressTextStyle),
+            // Text('Fax: 510-291-2849', style: addressTextStyle),
             SizedBox(height: 1 * PdfPageFormat.mm),
           ]);
   static Widget buildCustomerAddress(Customer customer) => Column(
@@ -256,7 +253,7 @@ class PdfInvoiceApi {
         ],
       );
 
-  static Widget buildInvoiceInfo(InvoiceInfo info) {
+  static Widget buildInvoiceInfo(InvoiceInfo info, String invoiceNumber) {
     final titles = <String>[
       'Inovice',
       'Invoice Number:',
@@ -264,8 +261,8 @@ class PdfInvoiceApi {
     ];
     final data = <String>[
       '',
-      info.number,
-      info.date.toIso8601String(),
+      invoiceNumber,
+      info.date.toString(),
     ];
 
     return Column(
@@ -340,7 +337,7 @@ class PdfInvoiceApi {
     ];
     final data = invoice.items.map((item) {
       return [
-        item.quantity,
+        item.quantity * item.reOrderQuantity,
         item.itemId,
         item.itemDescription,
         '\$${item.saleprice.toStringAsFixed(2)}',

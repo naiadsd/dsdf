@@ -8,6 +8,8 @@ class Invoice {
   //final Customer customer;
   final String custoemrId;
   final List<CartItem> items;
+  final String invoiceNumber;
+
   double? total;
 
   Invoice({
@@ -16,6 +18,7 @@ class Invoice {
     required this.custoemrId,
     required this.items,
     this.total = 0.0,
+    required this.invoiceNumber,
   });
 }
 

@@ -202,7 +202,8 @@ class CustomerItem extends ConsumerWidget {
     Widget continueButton = TextButton(
       onPressed: (() {
         Navigator.of(context).pop();
-        ref.watch(cartProvider.notifier).createCart(customer.id, driverId);
+        ref.watch(cartProvider.notifier).createCart(customer.customerId,
+            driverId, customer.customerName, 'DRIVER NAME');
         Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
           return Items(customer: customer);
         })));

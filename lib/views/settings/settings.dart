@@ -51,7 +51,8 @@ class _SettingsState extends State<Settings> {
               TextButton.icon(
                 style: ButtonStyle(),
                 onPressed: (() async {
-                  List<Customer> customers = await fetchCustomersForSave(3, 2);
+                  List<Customer> customers = await fetchAllCustomers();
+                  print(customers.length);
                   await DBProvier.db.storeAllCustomers(customers);
                 }),
                 icon: Icon(Icons.store),

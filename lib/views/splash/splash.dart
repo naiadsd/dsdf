@@ -1,3 +1,5 @@
+import 'package:dsd/main.dart';
+import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/pages/rootApp.dart';
 import 'package:dsd/views/splash/splashImages.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +22,15 @@ class Splash extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: SizedBox(
-                height: 44.0,
+                height: 64.0,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.6,
                   padding: const EdgeInsets.symmetric(
-                    vertical: 4,
+                    vertical: 10,
+                    horizontal: 10,
                   ),
                   decoration: BoxDecoration(
-                      color: Colors.white38,
+                      color: secondary,
                       borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -38,16 +41,16 @@ class Splash extends StatelessWidget {
                           'Let' 's, start',
                           style: TextStyle(
                               fontSize: 20,
-                              color: Colors.blue,
+                              color: Colors.white,
                               fontFamily: 'Open Sans',
                               decoration: TextDecoration.none),
                         ),
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: ((context) {
-                                return const RootApp();
+                                return SplashDisplay();
                               }),
                             ),
                           );

@@ -24,6 +24,36 @@ void main() async {
   ));
 }
 
+class SplashDisplay extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: implement build
+    return Consumer(
+      builder: (context, ref, child) {
+        ref.listen<bool>(
+          isloadingProvider,
+          (_, isLoading) {
+            if (isLoading) {
+              LoadingScreen.instance().show(
+                context: context,
+              );
+            } else {
+              LoadingScreen.instance().hide();
+            }
+          },
+        );
+        bool isAuthenticate = ref.watch(isLoggedInProvider);
+
+        if (isAuthenticate) {
+          return const RootApp();
+        } else {
+          return const Login();
+        }
+      },
+    );
+  }
+}
+
 class App extends ConsumerWidget {
   const App({Key? key}) : super(key: key);
 
@@ -47,7 +77,9 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
 
-      home: Consumer(
+      home: const Splash(),
+
+      /*  Consumer(
         builder: (context, ref, child) {
           ref.listen<bool>(
             isloadingProvider,
@@ -64,12 +96,12 @@ class App extends ConsumerWidget {
           bool isAuthenticate = ref.watch(isLoggedInProvider);
 
           if (isAuthenticate) {
-            return const Splash();
+            return const RootApp();
           } else {
             return const Login();
           }
         },
-      ),
+      ),*/
     );
   }
 }

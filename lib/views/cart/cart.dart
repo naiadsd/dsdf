@@ -3,8 +3,10 @@ import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:dsd/db/db_provider.dart';
+import 'package:dsd/models/order.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
+import 'package:dsd/state/cart/provider/order_service.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/theme/colors.dart';
@@ -241,6 +243,8 @@ class _CartDataState extends ConsumerState<CartData> {
         PdfApi.openFile(pdfFile);
 
         ref.watch(isloadingProvider.notifier).turnOffLoading();
+        var isOrderCreated = await sendOrdertoServer(cart.toJson());
+        print(isOrderCreated);
         // ignore: use_build_context_synchronously
         // Navigator.pushReplacement(context, MaterialPageRoute(
         //   builder: (context) {

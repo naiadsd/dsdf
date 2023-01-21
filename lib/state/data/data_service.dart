@@ -1,5 +1,4 @@
 import 'package:dsd/db/db_provider.dart';
-import 'package:dsd/db/promo/promo_constants.dart';
 import 'package:dsd/state/customers/backend/customer_service.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/backend/item_service.dart';

@@ -2,15 +2,22 @@ import 'package:dsd/db/item/item_db_contants.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:intl/intl.dart';
 
 @immutable
 // ignore: must_be_immutable
 class Cart {
-  int? customerId;
+  //int? customerId;
   List<CartItem>? items;
   String? driverID;
   DateTime? orderdatetime;
   double? totalPrice;
+  String? orderId;
+  String? customerId;
+  String? note;
+  int? orderQty;
+  String? driverName;
+  String? customerName;
 
   Cart({
     required this.customerId,
@@ -18,6 +25,8 @@ class Cart {
     required this.driverID,
     required this.orderdatetime,
     this.totalPrice = 0.0,
+    String? customerName,
+    String? driverName,
   });
 
   double getCartTotal() {
@@ -32,9 +41,19 @@ class Cart {
     }
   }
 
-  Cart createCart(int cuId, String driverID) {
+  Cart createCart(
+    String cuId,
+    String driverID,
+    String customerName,
+    String driverName,
+  ) {
     return Cart(
-        customerId: cuId, driverID: driverID, orderdatetime: orderdatetime);
+      customerId: cuId,
+      driverID: driverID,
+      orderdatetime: orderdatetime,
+      customerName: customerName,
+      driverName: driverName,
+    );
   }
 
   Cart.initial() : orderdatetime = DateTime.now();
@@ -98,7 +117,7 @@ class Cart {
     );
   }
 
-  Cart copiedWithCustomer(int customerId) => Cart(
+  Cart copiedWithCustomer(String customerId) => Cart(
         customerId: customerId,
         driverID: driverID,
         orderdatetime: DateTime.now(),
@@ -131,6 +150,24 @@ class Cart {
       orderdatetime: orderdatetime,
       totalPrice: totav,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    var newDt = DateFormat.yMMMEd().format(DateTime.now());
+    _data['orderDate'] = newDt;
+    _data['customerId'] = customerId;
+    _data['driverID'] = driverID;
+    _data['toalPrice'] = totalPrice;
+    _data['CustomerName'] = customerName;
+    _data['orderId'] = orderId;
+    _data['orderQty'] = orderQty;
+    _data['driverName'] = driverName;
+    _data['note'] = note;
+    _data['date'] = DateFormat("yy-MM-dd").format(DateTime.now());
+    _data['time'] = orderdatetime;
+    _data['ItemCheckList'] = items?.map((e) => e.toJson()).toList();
+    return _data;
   }
 
   @override

@@ -120,7 +120,7 @@ class DBProvier {
 
   Future<Customer> getCustomerById(String custoemrId) async {
     final db = await database;
-    String whereString = 'id = ?';
+    String whereString = '$customerId = ?';
     String table = customerTable;
     List<dynamic> whereArguments = [custoemrId];
     final res =

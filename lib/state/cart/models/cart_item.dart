@@ -29,6 +29,20 @@ class CartItem {
         other is CartItem && other.itemId == itemId;
   }
 
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['itemId'] = itemId;
+    data['quantity'] = quantity;
+    data['promoId'] = promoId;
+    data['promoPrice'] = promoPrice;
+
+    data['totalPrice'] = totalPrice;
+    data['reOrderQuantity'] = reOrderQuantity;
+    data['saleprice'] = saleprice;
+    data['itemDescription'] = itemDescription;
+    return data;
+  }
+
   @override
   int get hashCode => Object.hashAll([itemId]);
 

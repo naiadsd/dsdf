@@ -7,6 +7,7 @@ Future<bool> sendOrdertoServer(Map<String, dynamic> order) async {
     final res = await http.post(url, body: order);
     return true;
   } catch (e) {
+    print(e.toString());
     return false;
   }
 }

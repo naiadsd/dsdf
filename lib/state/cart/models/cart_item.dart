@@ -36,9 +36,11 @@ class CartItem {
     data['promoId'] = promoId;
     data['promoPrice'] = promoPrice;
 
-    data['totalPrice'] = totalPrice;
+    data['totalPrice'] = totalPrice.toStringAsFixed(2);
+    ;
     data['reOrderQuantity'] = reOrderQuantity;
-    data['saleprice'] = saleprice;
+    data['saleprice'] = saleprice.toStringAsFixed(2);
+    ;
     data['itemDescription'] = itemDescription;
     return data;
   }

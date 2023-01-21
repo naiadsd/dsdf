@@ -158,7 +158,7 @@ class Cart {
     _data['orderDate'] = newDt;
     _data['customerId'] = customerId;
     _data['driverID'] = driverID;
-    _data['toalPrice'] = totalPrice;
+    _data['toalPrice'] = totalPrice?.toStringAsFixed(2);
     _data['CustomerName'] = customerName;
     _data['orderId'] = orderId;
     _data['orderQty'] = orderQty;

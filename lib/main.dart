@@ -5,6 +5,8 @@ import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/login/login.dart';
 
 import 'package:dsd/views/pages/rootApp.dart';
+import 'package:dsd/views/splash/splash.dart';
+import 'package:dsd/views/splash/splashImages.dart';
 
 import 'package:flutter/material.dart';
 
@@ -62,7 +64,7 @@ class App extends ConsumerWidget {
           bool isAuthenticate = ref.watch(isLoggedInProvider);
 
           if (isAuthenticate) {
-            return const RootApp();
+            return const Splash();
           } else {
             return const Login();
           }

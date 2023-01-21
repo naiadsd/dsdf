@@ -3,7 +3,7 @@ import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/customers/customers.dart';
 import 'package:dsd/views/home.dart';
 import 'package:dsd/views/settings/settings.dart';
-import 'package:dsd/views/splash/splash.dart';
+import 'package:dsd/views/splash/splashImages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,7 +31,7 @@ class _RootAppState extends State<RootApp> {
         ListCustomer(),
         Home(),
         Settings(),
-        SplashScreen(),
+        //SplashScreen(),
       ],
     );
   }
@@ -42,7 +42,7 @@ class _RootAppState extends State<RootApp> {
       "assets/images/home_icon.svg",
       "assets/images/play_icon.svg",
       "assets/images/rocket_icon.svg",
-      "assets/images/user_icon.svg",
+      // "assets/images/user_icon.svg",
     ];
     return Container(
       width: size.width,

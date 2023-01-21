@@ -37,4 +37,10 @@ class Promo {
     data['customer_prefix'] = customerPrefix;
     return data;
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return '${id}-${price}';
+  }
 }

@@ -51,7 +51,7 @@ class _ItemsState extends State<Items> {
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: getBody(),
+      body: SafeArea(child: getBody()),
       extendBody: true,
     );
   }
@@ -175,10 +175,15 @@ class _ItemsState extends State<Items> {
 
               for (var element in promos) {
                 if (element.itemPrefix == itemPrefix) {
+                  print(element.itemPrefix);
                   promo = element;
                 }
               }
             }
+            if (items[index].itemId == '1002013') {
+              print(promo.toString());
+            }
+
             return ItemContainer(
               promo: promo,
               item: items[index],

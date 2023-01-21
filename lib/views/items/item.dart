@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/items/models/item.dart';
-import 'package:dsd/state/items/provider/item_provider.dart';
 import 'package:dsd/state/promo/model/promo.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/views/items/cart_value_text_field.dart';
@@ -214,7 +213,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
 
   Widget addItemFirstTime() {
     final cart = ref.watch(cartProvider.notifier);
-
+    print(widget.promo.toString());
     addtoCartFirstTime() {
       setState(() {
         try {

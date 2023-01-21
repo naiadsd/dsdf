@@ -107,18 +107,23 @@ class Cart {
       );
 
   Cart addNewItem(CartItem item) {
+    //print(item.toString());
     List<CartItem> citems = items ?? [];
 
     double totav = item.reOrderQuantity *
         item.quantity *
         (item.isPromoApplied ? item.promoPrice : item.saleprice);
+
     item.totalPrice = totav;
+
     if (citems.isNotEmpty) {
       totav = totav + getCartTotal();
     } else {}
-    print(item.toString());
     citems = [...citems, item];
+    //citems.add(item);
+    //print(item.toString());
 
+    //print(citems.length);
     return Cart(
       customerId: customerId,
       driverID: driverID,

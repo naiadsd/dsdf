@@ -30,17 +30,15 @@ class CartItem {
   }
 
   Map<String, dynamic> toJson() {
+    // print(this.toString());
     final data = <String, dynamic>{};
     data['itemId'] = itemId;
     data['quantity'] = quantity;
     data['promoId'] = promoId;
     data['promoPrice'] = promoPrice;
-
     data['totalPrice'] = totalPrice.toStringAsFixed(2);
-    ;
     data['reOrderQuantity'] = reOrderQuantity;
     data['saleprice'] = saleprice.toStringAsFixed(2);
-    ;
     data['itemDescription'] = itemDescription;
     return data;
   }

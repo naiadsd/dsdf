@@ -187,7 +187,7 @@ class _ItemsState extends State<Items> {
             return ItemContainer(
               promo: promo,
               item: items[index],
-              pricingLevel: widget.customer.pricingLevel,
+              pricingLevel: widget.customer.pricingLevel.toString(),
             );
           }),
           itemCount: items.length,

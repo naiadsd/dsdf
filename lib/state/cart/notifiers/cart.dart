@@ -36,6 +36,14 @@ class CartState extends StateNotifier<Cart> {
     state = state.addItemQuantity(itemId, quantity);
   }
 
+  setDetails(String invoiceNumber, String customerName, double orderQuantity,
+      String drivername) {
+    state.orderId = invoiceNumber;
+    state.customerName = customerName;
+    state.orderQty = orderQuantity;
+    state.driverName = drivername;
+  }
+
   double getTotal() {
     double result = 0.0;
     if (state.items != null && state.items!.isNotEmpty) {
@@ -53,7 +61,6 @@ class CartState extends StateNotifier<Cart> {
     if (citems.isNotEmpty) {
       return citems
           .firstWhere(
-            // ignore: unrelated_type_equality_checks
             (element) => element.itemId == id,
           )
           .quantity;

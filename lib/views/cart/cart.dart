@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:badges/badges.dart';
@@ -7,8 +8,10 @@ import 'package:dsd/models/order.dart';
 import 'package:dsd/state/cart/models/cart_item.dart';
 import 'package:dsd/state/cart/provider/cart_provider.dart';
 import 'package:dsd/state/cart/provider/order_service.dart';
+import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/search/loading.dart';
+import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/cart/cart_item.dart';
@@ -190,6 +193,8 @@ class _CartDataState extends ConsumerState<CartData> {
     LoadingScreen.instance()
         .show(context: context, text: Strings.generateInvoice);
 
+    final cartP = ref.read(cartProvider.notifier);
+
     Timer(
       const Duration(
         seconds: 1,
@@ -198,6 +203,7 @@ class _CartDataState extends ConsumerState<CartData> {
         final date = DateTime.now();
         final dueDate = date.add(const Duration(days: 7));
         final cart = ref.read(cartProvider);
+
         final List<CartItem> itemsWithPromo = [];
 
         if (cart.items != null && cart.items!.isNotEmpty) {
@@ -210,7 +216,7 @@ class _CartDataState extends ConsumerState<CartData> {
               String itemId = '${itemPrefix}996';
 
               Item? i = await DBProvier.db.getItemById(itemId);
-              print(element.toString());
+
               if (i != null && i.id != null) {
                 itemsWithPromo.add(CartItem(
                   itemId: i.itemId,
@@ -227,9 +233,10 @@ class _CartDataState extends ConsumerState<CartData> {
           }
         }
 
+        var invoiceNumber = buildInvoideNumer();
         final invoice = Invoice(
           custoemrId: cart.customerId.toString(),
-          invoiceNumber: buildInvoideNumer(),
+          invoiceNumber: invoiceNumber,
           total: cart.totalPrice ?? 0.0,
           info: InvoiceInfo(
             date: date,
@@ -239,18 +246,34 @@ class _CartDataState extends ConsumerState<CartData> {
           ),
           items: itemsWithPromo,
         );
-        final pdfFile = await PdfInvoiceApi.generate(invoice);
-        PdfApi.openFile(pdfFile);
+        final Customer customer =
+            await DBProvier.db.getCustomerById(invoice.custoemrId);
+        final totalItems = invoice.items
+            .map((item) => item.reOrderQuantity * item.quantity)
+            .reduce((item1, item2) => item1 + item2);
+        final userDetails = ref.watch(userDetailsProvider);
+        String driverName = "${userDetails.firstName} ${userDetails.lastName}";
+        cartP.setDetails(
+            invoiceNumber, customer.customerName, totalItems, driverName);
+        //print(jsonEncode(cart.toJson()));
+        var isOrderCreated = await sendOrdertoServer((cart.toJson()));
+        if (isOrderCreated) {
+          final pdfFile = await PdfInvoiceApi.generate(invoice);
 
-        ref.watch(isloadingProvider.notifier).turnOffLoading();
-        var isOrderCreated = await sendOrdertoServer(cart.toJson());
-        print(isOrderCreated);
-        // ignore: use_build_context_synchronously
-        // Navigator.pushReplacement(context, MaterialPageRoute(
-        //   builder: (context) {
-        //     return const RootApp();
-        //   },
-        // ));
+          PdfApi.openFile(pdfFile);
+          ref.watch(isloadingProvider.notifier).turnOffLoading();
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) {
+              return const RootApp();
+            },
+          ));
+        } else {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Error occued,Please try again')),
+          );
+        }
       },
     );
   }

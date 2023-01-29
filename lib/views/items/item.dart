@@ -28,7 +28,7 @@ class ItemContainer extends ConsumerStatefulWidget {
 class ItemContainerState extends ConsumerState<ItemContainer> {
   int itemsAdded = 0;
   double cartPrice = 0.0;
-  String getPrice() {
+  double getPrice() {
     switch (widget.pricingLevel) {
       case "1":
         return widget.item.salePrice;
@@ -64,7 +64,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   void initState() {
     super.initState();
     final cartItemprovider = ref.read(cartProvider.notifier);
-
+    //print(cartItemprovider.state.toString());
     try {
       itemsAdded = cartItemprovider.getItemQuantity(widget.item.itemId);
     } catch (e) {
@@ -204,7 +204,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         itemsAdded = res;
         priceController.text = res.toString();
         cartPrice = itemsAdded *
-            (widget.promo != null ? pPrice : double.parse(getPrice())) *
+            (widget.promo != null ? pPrice : getPrice()) *
             double.parse(widget.item.reOrderQuantity);
       });
       cart.changeitemQuantity(widget.item.itemId, itemsAdded);
@@ -221,7 +221,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           priceController.text = itemsAdded.toString();
           cartPrice = cartPrice +
               itemsAdded *
-                  (widget.promo != null ? pPrice : double.parse(getPrice())) *
+                  (widget.promo != null ? pPrice : getPrice()) *
                   double.parse(widget.item.reOrderQuantity);
         } catch (e) {
           print(e.toString());
@@ -232,7 +232,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         itemId: widget.item.itemId,
         promoId: pid ?? '',
         promoPrice: pPrice,
-        saleprice: double.parse(getPrice()),
+        saleprice: getPrice(),
         quantity: itemsAdded,
         isPromoApplied: widget.promo != null,
         reOrderQuantity: double.parse(widget.item.reOrderQuantity),
@@ -268,7 +268,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           priceController.text = itemsAdded.toString();
 
           cartPrice = itemsAdded *
-              (widget.promo != null ? pPrice : double.parse(getPrice())) *
+              (widget.promo != null ? pPrice : getPrice()) *
               double.parse(widget.item.reOrderQuantity);
         },
       );
@@ -282,7 +282,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           itemsAdded = itemsAdded - 1;
           priceController.text = itemsAdded.toString();
           cartPrice = itemsAdded *
-              (widget.promo != null ? pPrice : double.parse(getPrice())) *
+              (widget.promo != null ? pPrice : getPrice()) *
               double.parse(widget.item.reOrderQuantity);
         },
       );
@@ -297,7 +297,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           priceController.text = itemsAdded.toString();
           cartPrice = cartPrice +
               itemsAdded *
-                  (widget.promo != null ? pPrice : double.parse(getPrice())) *
+                  (widget.promo != null ? pPrice : getPrice()) *
                   double.parse(widget.item.reOrderQuantity);
         },
       );

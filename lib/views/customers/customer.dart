@@ -82,18 +82,12 @@ class CustomerItem extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          customer.shipToAddressLineTwo.isNotEmpty
-                              ? Text(
-                                  '${customer.shipToAddressLineOne}\n${customer.shipToAddressLineTwo},${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: grey,
-                                  ),
-                                )
-                              : Text(
-                                  '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
-                                  style: customerAddress,
-                                ),
+                          Text(
+                            '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                            style: customerAddress,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                       // SizedBox
@@ -107,11 +101,11 @@ class CustomerItem extends ConsumerWidget {
                         children: [
                           SizedBox(
                             width: size.width * 0.4,
-                            child: const Text(
-                              'sold here will come from an api every tume asdasd asdadasdasdasdasd ',
+                            child: Text(
+                              customer.soldhere,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                               ),
                             ),
@@ -202,8 +196,10 @@ class CustomerItem extends ConsumerWidget {
     Widget continueButton = TextButton(
       onPressed: (() {
         Navigator.of(context).pop();
-        ref.watch(cartProvider.notifier).createCart(customer.customerId,
-            driverId, customer.customerName, 'DRIVER NAME');
+
+        ref.read(cartProvider.notifier).createCart(
+            customer.customerId, driverId, customer.customerName, '');
+
         Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
           return Items(customer: customer);
         })));

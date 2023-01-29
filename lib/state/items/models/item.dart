@@ -24,51 +24,58 @@ class Item {
     required this.reOrderQuantity,
   });
   late final int id;
-  late final String salePriceSeven;
-  late final String salePriceTwo;
+  late final double salePriceSeven;
+  late final double salePriceTwo;
   late final String itemId;
-  late final String salePrice;
+  late final double salePrice;
   late final String isInActive;
   late final String glCOGSSalaryAccount;
   late final String upcsku;
   late final String weight;
   late final String glInventoryAccount;
-  late final String salePriceFour;
+  late final double salePriceFour;
   late final String description;
   late final String name;
-  late final String salePriceThree;
-  late final String salePriceEight;
+  late final double salePriceThree;
+  late final double salePriceEight;
   late final String descriptionForSales;
   late final int orderSeq;
-  late final String salePriceFive;
-  late final String salePriceNine;
-  late final String salePriceTen;
-  late final String salePriceSix;
+  late final double salePriceFive;
+  late final double salePriceNine;
+  late final double salePriceTen;
+  late final double salePriceSix;
   late final String reOrderQuantity;
 
   Item.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    salePriceSeven = json['salePriceSeven'].toString();
-    salePriceTwo = json['salePriceTwo'].toString();
+    salePriceSeven = json['salePriceSeven'] as double;
+    salePriceTwo = json['salePriceTwo'] as double;
     itemId = json['itemId'];
-    salePrice = json['salePrice'].toString();
+    salePrice = json['salePrice'] as double;
     isInActive = json['isInActive'];
     glCOGSSalaryAccount = json['glCOGSSalaryAccount'];
     upcsku = json['upcsku'];
     weight = json['weight'];
 
     glInventoryAccount = json['glInventoryAccount'] as String;
-    salePriceFour = json['salePriceFour'].toString();
+    salePriceFour = json['salePriceFour'] as double;
+
     description = json['description'] as String;
     name = json['name'] as String;
-    salePriceThree = json['salePriceThree'].toString();
-    salePriceEight = json['salePriceEight'].toString();
+    salePriceThree = json['salePriceThree'] as double;
+
+    salePriceEight = json['salePriceEight'] as double;
+
     descriptionForSales = json['descriptionForSales'] as String;
-    orderSeq = double.parse(json['orderSeq'].toString()).toInt();
-    salePriceFive = json['salePriceFive'].toString();
-    salePriceNine = json['salePriceNine'].toString();
-    salePriceTen = json['salePriceTen'].toString();
-    salePriceSix = json['salePriceSix'].toString();
+    orderSeq = json['orderSeq'] as int;
+    salePriceFive = json['salePriceFive'] as double;
+
+    salePriceNine = json['salePriceNine'] as double;
+
+    salePriceTen = json['salePriceTen'] as double;
+
+    salePriceSix = json['salePriceSix'] as double;
+
     reOrderQuantity = json['reOrderQuantity'].toString();
   }
   Item.fromMap(Map<String, dynamic> json) {

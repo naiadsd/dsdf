@@ -32,11 +32,16 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
         e.isPromoAvailable = hasPromo;
       }
     }
+
     await DBProvier.db.storeAllCustomers(customers);
-    List<Item> items = await fetchItemsSave();
-    await DBProvier.db.storeAllItems(items);
+    //print('items sored..');
+    //List<Item> items = await fetchItemsSave();
+    //print('items fetched');
+    //await DBProvier.db.storeAllItems(items);
     return true;
   } catch (e) {
+    print('error occured');
+    print(e);
     return false;
   }
 }

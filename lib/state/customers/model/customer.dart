@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Customer {
   Customer({
     required this.id,
@@ -38,10 +40,10 @@ class Customer {
   late final String billToAddressLineOne;
   late final String accountNo;
   late final String shipToAddressLineOne;
-  late final String prepaidTerms;
+  late final bool prepaidTerms;
   late final String shipToAddressLineTwo;
   late final String serviceSequence;
-  late final String isInactive;
+  late final bool isInactive;
   late final String billFirstName;
   late final String billLastName;
   late final String shipToCity;
@@ -53,18 +55,18 @@ class Customer {
   late final String serviceDays;
   late final String billToCity;
   late final String serviceFrequency;
-  late final String creditLimit;
+  late final double creditLimit;
   late final String customerId;
   late final String phone;
-  late final String CODTerms;
+  late final bool CODTerms;
   late final String salesAccount;
   late final String billToState;
-  late final String pricingLevel;
-  late final String discountPercentage;
+  late final int pricingLevel;
+  late final double discountPercentage;
   late final String customerName;
   late final String shipToZip;
-  late final String useStandardTerms;
-  late final String dueDays;
+  late final bool useStandardTerms;
+  late final int dueDays;
   late final String soldhere;
   bool? isPromoAvailable;
 
@@ -73,10 +75,10 @@ class Customer {
     billToAddressLineOne = json['billToAddressLineOne'] ?? '';
     accountNo = json['accountNo'] ?? '';
     shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
-    prepaidTerms = json['prepaidTerms'] ?? '';
+    prepaidTerms = json['prepaidTerms'] ?? false;
     shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
     serviceSequence = json['serviceSequence'] ?? '';
-    isInactive = json['isInactive'] ?? '';
+    isInactive = json['isInactive'] ?? false;
     billFirstName = json['billFirstName'] ?? '';
     billLastName = json['billLastName'] ?? '';
     shipToCity = json['shipToCity'] ?? '';
@@ -88,23 +90,94 @@ class Customer {
     serviceDays = json['serviceDays'] ?? '';
     billToCity = json['billToCity'] ?? '';
     serviceFrequency = json['serviceFrequency'] ?? '';
-    creditLimit = json['creditLimit'] ?? '';
+    creditLimit = json['creditLimit'].toDouble() ?? 0.0;
     customerId = json['customerId'] ?? '';
     phone = json['phone'] ?? '';
-    CODTerms = json['CODTerms'] ?? '';
+    CODTerms = json['CODTerms'] ?? false;
     salesAccount = json['salesAccount'] ?? '';
     billToState = json['billToState'] ?? '';
-    pricingLevel = json['pricingLevel'] ?? '';
-    discountPercentage = json['discountPercentage'] ?? '';
+    pricingLevel = json['pricingLevel'] ?? 0;
+    discountPercentage = json['discountPercentage'].toDouble() ?? 0.0;
     customerName = json['customerName'] ?? '';
     shipToZip = json['shipToZip'] ?? '';
-    useStandardTerms = json['useStandardTerms'] ?? '';
-    dueDays = json['dueDays'] ?? '';
+    useStandardTerms = json['useStandardTerms'] ?? false;
+    dueDays = json['dueDays'] ?? 0;
     soldhere = json['soldhere'] ?? '';
-    isPromoAvailable =
-        json['isPromoAvailable'].toString() == '1' ? true : false;
-    //  ? false
-    // : true;
+    isPromoAvailable = json['isPromoAvailable'] ?? false;
+  }
+
+  Customer.fromJsonDB(Map<String, dynamic> json) {
+    //print(json['creditLimit'].runtimeType);
+
+    id = json['id'] as int;
+
+    billToAddressLineOne = json['billToAddressLineOne'] ?? '';
+    accountNo = json['accountNo'].toString() ?? '';
+    shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
+    prepaidTerms = json['prepaidTerms'] == 0 ? false : true;
+    shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
+    serviceSequence = json['serviceSequence'] ?? '';
+    isInactive = json['isInactive'] == 0 ? false : true;
+    billFirstName = json['billFirstName'] ?? '';
+    billLastName = json['billLastName'] ?? '';
+    shipToCity = json['shipToCity'] ?? '';
+    shipToSate = json['shipToSate'] ?? '';
+    billToAddressLineTwo = json['billToAddressLineTwo'] ?? '';
+    routeCode = json['routeCode'].toString() ?? '';
+    billToZip = json['billToZip'].toString() ?? '';
+    discountDays = json['discountDays'] ?? '';
+    serviceDays = json['serviceDays'] ?? '';
+    billToCity = json['billToCity'] ?? '';
+    serviceFrequency = json['serviceFrequency'] ?? '';
+    creditLimit = json['creditLimit'] as double ?? 0.0;
+    customerId = json['customerId'].toString() ?? '';
+    phone = json['phone'].toString() ?? '';
+    CODTerms = json['CODTerms'] == '0' ? false : true;
+    salesAccount = json['salesAccount'].toString() ?? '';
+    billToState = json['billToState'] ?? '';
+    pricingLevel = json['pricingLevel'] as int ?? 0;
+    discountPercentage = json['discountPercentage'].toDouble() ?? 0.0;
+    customerName = json['customerName'] ?? '';
+    shipToZip = json['shipToZip'].toString() ?? '';
+    useStandardTerms = json['useStandardTerms'] == 0 ? false : true;
+    dueDays = json['dueDays'] as int ?? 0;
+    soldhere = json['soldhere'] ?? '';
+    isPromoAvailable = json['isPromoAvailable'] == 1 ? true : false;
+  }
+  Customer.fromJsonDBsdf(Map<String, dynamic> json) {
+    id = json['id'] as int;
+    billToAddressLineOne = json['billToAddressLineOne'] ?? '';
+    accountNo = json['accountNo'].toString() ?? '';
+    shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
+    prepaidTerms = json['prepaidTerms'] == '0' ? false : true;
+    shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
+    serviceSequence = json['serviceSequence'] ?? '';
+    isInactive = json['isInactive'] == '0' ? false : true;
+    billFirstName = json['billFirstName'] ?? '';
+    billLastName = json['billLastName'] ?? '';
+    shipToCity = json['shipToCity'] ?? '';
+    shipToSate = json['shipToSate'] ?? '';
+    billToAddressLineTwo = json['billToAddressLineTwo'] ?? '';
+    routeCode = json['routeCode'].toString() ?? '';
+    billToZip = json['billToZip'].toString() ?? '';
+    discountDays = json['discountDays'] ?? '';
+    serviceDays = json['serviceDays'] ?? '';
+    billToCity = json['billToCity'] ?? '';
+    serviceFrequency = json['serviceFrequency'] ?? '';
+    creditLimit = json['creditLimit'].toDouble() ?? 0.0;
+    customerId = json['customerId'] ?? '';
+    phone = json['phone'].toString() ?? '';
+    CODTerms = json['CODTerms'] == '0' ? false : true;
+    salesAccount = json['salesAccount'] ?? '';
+    billToState = json['billToState'] ?? '';
+    pricingLevel = json['pricingLevel'] as int ?? 0;
+    discountPercentage = json['discountPercentage'].toDouble() ?? 0.0;
+    customerName = json['customerName'] ?? '';
+    shipToZip = json['shipToZip'].toString() ?? '';
+    useStandardTerms = json['useStandardTerms'] == '0' ? false : true;
+    dueDays = json['dueDays'] as int ?? 0;
+    soldhere = json['soldhere'] ?? '';
+    isPromoAvailable = json['isPromoAvailable'] == '0' ? false : true;
   }
 
   Map<String, dynamic> toJson() {

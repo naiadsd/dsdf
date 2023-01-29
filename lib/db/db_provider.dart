@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dsd/db/customer/customer_db_constants.dart';
@@ -147,7 +148,7 @@ class DBProvier {
     final res = await db.rawQuery("select * from $customerTable");
 
     List<Customer> list =
-        res.isNotEmpty ? res.map((e) => Customer.fromJson(e)).toList() : [];
+        res.isNotEmpty ? res.map((e) => Customer.fromJsonDB((e))).toList() : [];
 
     return list;
   }

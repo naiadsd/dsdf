@@ -28,6 +28,7 @@ class Home extends ConsumerWidget {
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
 
     int routeDay = await ref.read(routeDayProvider);
+
     await fetchStoreDailyData(value, routeDay);
     ref.watch(userDetailsProvider.notifier).setRoute(value);
     ref.watch(isloadingProvider.notifier).turnOffLoading();

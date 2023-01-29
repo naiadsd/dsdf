@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 @immutable
 // ignore: must_be_immutable
 class Cart {
-  //int? customerId;
   List<CartItem>? items;
   String? driverID;
   DateTime? orderdatetime;
@@ -15,18 +14,21 @@ class Cart {
   String? orderId;
   String? customerId;
   String? note;
-  int? orderQty;
+  double? orderQty;
   String? driverName;
   String? customerName;
 
   Cart({
-    required this.customerId,
     this.items = const [],
     required this.driverID,
     required this.orderdatetime,
     this.totalPrice = 0.0,
-    String? customerName,
+    String? orderId,
+    required this.customerId,
+    String? note,
+    double? orderQty,
     String? driverName,
+    String? customerName,
   });
 
   double getCartTotal() {
@@ -101,6 +103,7 @@ class Cart {
       driverID: driverID,
       orderdatetime: orderdatetime,
       totalPrice: ct,
+      driverName: driverName,
     );
   }
 
@@ -114,6 +117,7 @@ class Cart {
       orderdatetime: orderdatetime,
       items: citems,
       totalPrice: getCartTotal(),
+      driverName: driverName,
     );
   }
 
@@ -123,8 +127,23 @@ class Cart {
         orderdatetime: DateTime.now(),
         items: items,
         totalPrice: totalPrice,
+        driverName: driverName,
       );
 
+  Cart copyWithInvoiceNumber(String invoiceNumber) {
+    orderId = invoiceNumber;
+    return this;
+  }
+
+  Cart copiedWithInvoceNumber(String invoiceNumber) => Cart(
+        customerId: customerId,
+        driverID: driverID,
+        orderdatetime: orderdatetime,
+        items: items,
+        totalPrice: totalPrice,
+        orderId: invoiceNumber,
+        driverName: driverName,
+      );
   Cart addNewItem(CartItem item) {
     //print(item.toString());
     List<CartItem> citems = items ?? [];
@@ -139,22 +158,24 @@ class Cart {
       totav = totav + getCartTotal();
     } else {}
     citems = [...citems, item];
-    //citems.add(item);
-    //print(item.toString());
 
-    //print(citems.length);
     return Cart(
       customerId: customerId,
       driverID: driverID,
       items: citems,
       orderdatetime: orderdatetime,
       totalPrice: totav,
+      driverName: driverName,
     );
   }
 
   Map<String, dynamic> toJson() {
+    //print('cart');
+    // print(this.toString());
     final _data = <String, dynamic>{};
     var newDt = DateFormat.yMMMEd().format(DateTime.now());
+    var time = DateFormat.Hm().format(DateTime.now());
+
     _data['orderDate'] = newDt;
     _data['customerId'] = customerId;
     _data['driverID'] = driverID;
@@ -163,16 +184,16 @@ class Cart {
     _data['orderId'] = orderId;
     _data['orderQty'] = orderQty;
     _data['driverName'] = driverName;
-    _data['note'] = note;
+    _data['note'] = note ?? 'notes';
     _data['date'] = DateFormat("yy-MM-dd").format(DateTime.now());
-    _data['time'] = orderdatetime;
+    _data['time'] = time;
     _data['ItemCheckList'] = items?.map((e) => e.toJson()).toList();
-    return _data;
+    return {'order': _data};
   }
 
   @override
   String toString() {
     super.toString();
-    return totalPrice.toString();
+    return "${totalPrice.toString()} $note $customerName $driverName $driverID";
   }
 }

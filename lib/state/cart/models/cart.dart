@@ -14,7 +14,7 @@ class Cart {
   String? orderId;
   String? customerId;
   String? note;
-  double? orderQty;
+  int? orderQty;
   String? driverName;
   String? customerName;
 
@@ -67,7 +67,7 @@ class Cart {
     String promoId,
     double salePrice,
     bool isPromo,
-    double reOrderQuantity,
+    int reOrderQuantity,
     String itemDescription,
   ) {
     items?.add(CartItem(

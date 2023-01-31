@@ -36,7 +36,7 @@ class CartState extends StateNotifier<Cart> {
     state = state.addItemQuantity(itemId, quantity);
   }
 
-  setDetails(String invoiceNumber, String customerName, double orderQuantity,
+  setDetails(String invoiceNumber, String customerName, int orderQuantity,
       String drivername) {
     state.orderId = invoiceNumber;
     state.customerName = customerName;

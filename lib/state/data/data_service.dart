@@ -20,7 +20,6 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
     if (promosToday.isEmpty) {
     } else {
       await DBProvier.db.storeAllPromos(promosToday);
-
       for (var e in customers) {
         String customerId = e.customerId;
         //AND-03-SF
@@ -32,16 +31,11 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
         e.isPromoAvailable = hasPromo;
       }
     }
-
     await DBProvier.db.storeAllCustomers(customers);
-    //print('items sored..');
-    //List<Item> items = await fetchItemsSave();
-    //print('items fetched');
-    //await DBProvier.db.storeAllItems(items);
+    List<Item> items = await fetchItemsSave();
+    await DBProvier.db.storeAllItems(items);
     return true;
   } catch (e) {
-    print('error occured');
-    print(e);
     return false;
   }
 }

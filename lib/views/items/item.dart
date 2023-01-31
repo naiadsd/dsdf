@@ -195,7 +195,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         builder: ((context) {
           return CartEditior(
             existingQuantity: itemsAdded,
-            reOrderQuantity: double.parse(widget.item.reOrderQuantity),
+            reOrderQuantity: widget.item.reOrderQuantity,
           );
         }));
 
@@ -205,7 +205,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         priceController.text = res.toString();
         cartPrice = itemsAdded *
             (widget.promo != null ? pPrice : getPrice()) *
-            double.parse(widget.item.reOrderQuantity);
+            widget.item.reOrderQuantity;
       });
       cart.changeitemQuantity(widget.item.itemId, itemsAdded);
     }
@@ -222,7 +222,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           cartPrice = cartPrice +
               itemsAdded *
                   (widget.promo != null ? pPrice : getPrice()) *
-                  double.parse(widget.item.reOrderQuantity);
+                  widget.item.reOrderQuantity;
         } catch (e) {
           print(e.toString());
         }
@@ -235,7 +235,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         saleprice: getPrice(),
         quantity: itemsAdded,
         isPromoApplied: widget.promo != null,
-        reOrderQuantity: double.parse(widget.item.reOrderQuantity),
+        reOrderQuantity: widget.item.reOrderQuantity,
         totalPrice: cartPrice,
         itemDescription: widget.item.description,
       );
@@ -269,7 +269,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
 
           cartPrice = itemsAdded *
               (widget.promo != null ? pPrice : getPrice()) *
-              double.parse(widget.item.reOrderQuantity);
+              widget.item.reOrderQuantity;
         },
       );
 
@@ -283,7 +283,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           priceController.text = itemsAdded.toString();
           cartPrice = itemsAdded *
               (widget.promo != null ? pPrice : getPrice()) *
-              double.parse(widget.item.reOrderQuantity);
+              widget.item.reOrderQuantity;
         },
       );
 
@@ -298,7 +298,7 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
           cartPrice = cartPrice +
               itemsAdded *
                   (widget.promo != null ? pPrice : getPrice()) *
-                  double.parse(widget.item.reOrderQuantity);
+                  widget.item.reOrderQuantity;
         },
       );
       cart.removeItem(widget.item.itemId);

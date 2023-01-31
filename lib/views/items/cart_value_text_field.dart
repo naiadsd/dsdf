@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CartEditior extends StatefulWidget {
   final int existingQuantity;
-  final double reOrderQuantity;
+  final int reOrderQuantity;
   const CartEditior(
       {Key? key, required this.existingQuantity, required this.reOrderQuantity})
       : super(key: key);

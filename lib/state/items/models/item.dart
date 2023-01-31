@@ -24,60 +24,54 @@ class Item {
     required this.reOrderQuantity,
   });
   late final int id;
-  late final double salePriceSeven;
-  late final double salePriceTwo;
   late final String itemId;
+  late final String descriptionForSales;
+  late final String name;
   late final double salePrice;
-  late final String isInActive;
+  late final double salePriceTwo;
+  late final double salePriceThree;
+  late final double salePriceFour;
+  late final double salePriceFive;
+  late final double salePriceSix;
+  late final double salePriceSeven;
+  late final double salePriceEight;
+  late final double salePriceNine;
+  late final double salePriceTen;
+  late final bool isInActive;
   late final String glCOGSSalaryAccount;
   late final String upcsku;
   late final String weight;
   late final String glInventoryAccount;
-  late final double salePriceFour;
   late final String description;
-  late final String name;
-  late final double salePriceThree;
-  late final double salePriceEight;
-  late final String descriptionForSales;
   late final int orderSeq;
-  late final double salePriceFive;
-  late final double salePriceNine;
-  late final double salePriceTen;
-  late final double salePriceSix;
-  late final String reOrderQuantity;
+  late final int reOrderQuantity;
 
   Item.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    salePriceSeven = json['salePriceSeven'] as double;
-    salePriceTwo = json['salePriceTwo'] as double;
+    print(json);
+    id = json['id'] as int;
+    name = json['name'] as String;
+    descriptionForSales = json['descriptionForSales'] as String;
+    description = json['description'] as String;
     itemId = json['itemId'];
-    salePrice = json['salePrice'] as double;
+    salePrice = json['salePrice'].toDouble();
+    salePriceTwo = json['salePriceTwo'].toDouble();
+    salePriceThree = json['salePriceThree'].toDouble();
+    salePriceFour = json['salePriceFour'].toDouble();
+    salePriceFive = json['salePriceFive'].toDouble();
+    salePriceSix = json['salePriceSix'].toDouble();
+    salePriceSeven = json['salePriceSeven'].toDouble();
+    salePriceEight = json['salePriceEight'].toDouble();
+    salePriceNine = json['salePriceNine'].toDouble();
+    salePriceTen = json['salePriceTen'].toDouble();
     isInActive = json['isInActive'];
     glCOGSSalaryAccount = json['glCOGSSalaryAccount'];
-    upcsku = json['upcsku'];
-    weight = json['weight'];
-
-    glInventoryAccount = json['glInventoryAccount'] as String;
-    salePriceFour = json['salePriceFour'] as double;
-
-    description = json['description'] as String;
-    name = json['name'] as String;
-    salePriceThree = json['salePriceThree'] as double;
-
-    salePriceEight = json['salePriceEight'] as double;
-
-    descriptionForSales = json['descriptionForSales'] as String;
+    upcsku = json['upcsku'].toString();
+    weight = json['weight'].toString();
+    glInventoryAccount = json['glInventoryAccount'].toString();
     orderSeq = json['orderSeq'] as int;
-    salePriceFive = json['salePriceFive'] as double;
-
-    salePriceNine = json['salePriceNine'] as double;
-
-    salePriceTen = json['salePriceTen'] as double;
-
-    salePriceSix = json['salePriceSix'] as double;
-
-    reOrderQuantity = json['reOrderQuantity'].toString();
+    reOrderQuantity = json['reOrderQuantity'] as int;
   }
+
   Item.fromMap(Map<String, dynamic> json) {
     id = json['id'];
     salePriceSeven = json['salePriceSeven'];

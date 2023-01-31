@@ -8,7 +8,7 @@ class CartItem {
   late double promoPrice;
   late double saleprice;
   late double totalPrice;
-  late double reOrderQuantity;
+  late int reOrderQuantity;
   late String itemDescription;
 
   CartItem({

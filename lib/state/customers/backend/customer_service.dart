@@ -58,6 +58,20 @@ Future<List<Customer>> fetchAllCustomers() async {
   }
 }
 
+/* monday start from 1 */
+Future<List<Customer>> fetchCustomersForRouteAndDay(int route, int day) async {
+  String url = customersForDayAndRoute(route, day);
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> map = json.decode(response.body);
+    List<dynamic> customers = map["data"];
+
+    return decodeCustomersSave(json.encode(customers));
+  } else {
+    throw Exception('Unable to fetch customers');
+  }
+}
+
 Future<List<Customer>> fetchCustomersForSave(int route, int day) async {
   final response = await http.get(Uri.parse(
       "https://us-central1-gelaterianaia-a3f12.cloudfunctions.net/app/customer/getcustomersbyrouteday/$route/$day"));

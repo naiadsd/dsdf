@@ -18,7 +18,7 @@ class Strings {
   static const person = 'person';
   static const people = 'people';
   static const likedThis = 'liked this';
-
+  static const refreshItems = 'Please wait while we refresh items for you';
   static const delete = 'Delete';
   static const areYouSureYouWantToDeleteThis =
       'Are you sure you want to delete this';

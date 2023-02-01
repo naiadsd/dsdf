@@ -128,7 +128,7 @@ class DBProvier {
         await db.query(table, where: whereString, whereArgs: whereArguments);
 
     List<Customer> customers =
-        res.isNotEmpty ? res.map((e) => Customer.fromJson(e)).toList() : [];
+        res.isNotEmpty ? res.map((e) => Customer.fromJsonDB(e)).toList() : [];
     Customer c = customers[0];
     return c;
   }
@@ -198,7 +198,7 @@ class DBProvier {
         await db.query(table, where: whereString, whereArgs: whereArguments);
 
     List<Item> items =
-        res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
+        res.isNotEmpty ? res.map((e) => Item.fromJsonDB(e)).toList() : [];
     Item c = items[0];
     return c;
   }

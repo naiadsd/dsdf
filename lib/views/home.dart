@@ -34,6 +34,13 @@ class Home extends ConsumerWidget {
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
 
+  refreshItems(BuildContext c, WidgetRef ref) async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+    LoadingScreen.instance().show(context: c, text: Strings.refreshItems);
+    await fetchAndStoreItems();
+    ref.watch(isloadingProvider.notifier).turnOffLoading();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
@@ -318,6 +325,31 @@ class Home extends ConsumerWidget {
                           ),
                         ]),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 12),
+                    child: InkWell(
+                      onTap: (() async {
+                        await refreshItems(context, ref);
+                      }),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            color: secondary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Text(
+                          "Refresh Items",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
                 ],
               ),
             ],
@@ -332,7 +364,7 @@ class Home extends ConsumerWidget {
       children: <Widget>[
         Container(
           width: double.infinity,
-          height: 150,
+          height: 100,
           margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400, width: 0.5),

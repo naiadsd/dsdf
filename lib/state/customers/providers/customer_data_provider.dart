@@ -7,9 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final customerDataProvider = FutureProvider<List<Customer>>((ref) async {
   final searchText = ref.watch(customerSerachProvider);
-  print('trying to get customers from db');
   var customers = await ref.watch(customerProvider).fetchCustomersfromDB();
-  print('got customers from db');
+
   if (searchText.isNotEmpty) {
     return customers
         .where((element) => (element.customerName.contains(searchText) ||

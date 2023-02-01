@@ -46,8 +46,33 @@ class Item {
   late final int orderSeq;
   late final int reOrderQuantity;
 
+  Item.fromJsonDB(Map<String, dynamic> json) {
+    // print(json);
+    id = json['id'];
+    name = json['name'];
+    descriptionForSales = json['descriptionForSales'];
+    description = json['description'];
+    itemId = json['itemId'];
+    salePrice = double.parse(json['salePrice'].toString());
+    salePriceTwo = double.parse(json['salePriceTwo'].toString());
+    salePriceThree = double.parse(json['salePriceThree'].toString());
+    salePriceFour = double.parse(json['salePriceFour'].toString());
+    salePriceFive = double.parse(json['salePriceFive'].toString());
+    salePriceSix = double.parse(json['salePriceSix'].toString());
+    salePriceSeven = double.parse(json['salePriceSeven'].toString());
+    salePriceEight = double.parse(json['salePriceEight'].toString());
+    salePriceNine = double.parse(json['salePriceNine'].toString());
+    salePriceTen = double.parse(json['salePriceTen'].toString());
+    isInActive = json['isInActive'] == '0' ? false : true;
+    glCOGSSalaryAccount = json['glCOGSSalaryAccount'].toString();
+    upcsku = json['upcsku'].toString();
+    weight = json['weight'].toString();
+    glInventoryAccount = json['glInventoryAccount'].toString();
+    orderSeq = int.parse(json['orderSeq'].toString());
+    reOrderQuantity = int.parse(json['reOrderQuantity'].toString());
+  }
+
   Item.fromJson(Map<String, dynamic> json) {
-    print(json);
     id = json['id'] as int;
     name = json['name'] as String;
     descriptionForSales = json['descriptionForSales'] as String;

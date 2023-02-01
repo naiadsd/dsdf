@@ -165,7 +165,7 @@ class DBProvier {
     final res = await db.rawQuery(
         "select * from $itemsTable where ($itemId not like '%%%%996' and $itemId not like '%%%%997' and $itemId not like '%%%%998' and $itemId not like '%%%%999' )");
     List<Item> items =
-        res.isNotEmpty ? res.map((e) => Item.fromJson(e)).toList() : [];
+        res.isNotEmpty ? res.map((e) => Item.fromJsonDB(e)).toList() : [];
 
     return items;
   }

@@ -107,47 +107,10 @@ class Customer {
   }
 
   Customer.fromJsonDB(Map<String, dynamic> json) {
-    //print(json['creditLimit'].runtimeType);
+    id = json['id'];
 
-    id = json['id'] as int;
-
-    billToAddressLineOne = json['billToAddressLineOne'] ?? '';
-    accountNo = json['accountNo'].toString() ?? '';
-    shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
-    prepaidTerms = json['prepaidTerms'] == 0 ? false : true;
-    shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
-    serviceSequence = json['serviceSequence'] ?? '';
-    isInactive = json['isInactive'] == 0 ? false : true;
-    billFirstName = json['billFirstName'] ?? '';
-    billLastName = json['billLastName'] ?? '';
-    shipToCity = json['shipToCity'] ?? '';
-    shipToSate = json['shipToSate'] ?? '';
-    billToAddressLineTwo = json['billToAddressLineTwo'] ?? '';
-    routeCode = json['routeCode'].toString() ?? '';
-    billToZip = json['billToZip'].toString() ?? '';
-    discountDays = json['discountDays'] ?? '';
-    serviceDays = json['serviceDays'] ?? '';
-    billToCity = json['billToCity'] ?? '';
-    serviceFrequency = json['serviceFrequency'] ?? '';
-    creditLimit = json['creditLimit'] as double ?? 0.0;
-    customerId = json['customerId'].toString() ?? '';
-    phone = json['phone'].toString() ?? '';
-    CODTerms = json['CODTerms'] == '0' ? false : true;
-    salesAccount = json['salesAccount'].toString() ?? '';
-    billToState = json['billToState'] ?? '';
-    pricingLevel = json['pricingLevel'] as int ?? 0;
-    discountPercentage = json['discountPercentage'].toDouble() ?? 0.0;
-    customerName = json['customerName'] ?? '';
-    shipToZip = json['shipToZip'].toString() ?? '';
-    useStandardTerms = json['useStandardTerms'] == 0 ? false : true;
-    dueDays = json['dueDays'] as int ?? 0;
-    soldhere = json['soldhere'] ?? '';
-    isPromoAvailable = json['isPromoAvailable'] == 1 ? true : false;
-  }
-  Customer.fromJsonDBsdf(Map<String, dynamic> json) {
-    id = json['id'] as int;
-    billToAddressLineOne = json['billToAddressLineOne'] ?? '';
-    accountNo = json['accountNo'].toString() ?? '';
+    billToAddressLineOne = json['billToAddressLineOne'].toString();
+    accountNo = json['accountNo'].toString();
     shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
     prepaidTerms = json['prepaidTerms'] == '0' ? false : true;
     shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
@@ -156,28 +119,28 @@ class Customer {
     billFirstName = json['billFirstName'] ?? '';
     billLastName = json['billLastName'] ?? '';
     shipToCity = json['shipToCity'] ?? '';
-    shipToSate = json['shipToSate'] ?? '';
+    shipToSate = json['shipToSate'].toString();
     billToAddressLineTwo = json['billToAddressLineTwo'] ?? '';
-    routeCode = json['routeCode'].toString() ?? '';
-    billToZip = json['billToZip'].toString() ?? '';
-    discountDays = json['discountDays'] ?? '';
-    serviceDays = json['serviceDays'] ?? '';
+    routeCode = json['routeCode'].toString();
+    billToZip = json['billToZip'].toString();
+    discountDays = json['discountDays'].toString();
+    serviceDays = json['serviceDays'].toString();
     billToCity = json['billToCity'] ?? '';
-    serviceFrequency = json['serviceFrequency'] ?? '';
-    creditLimit = json['creditLimit'].toDouble() ?? 0.0;
-    customerId = json['customerId'] ?? '';
-    phone = json['phone'].toString() ?? '';
+    serviceFrequency = json['serviceFrequency'].toString();
+    creditLimit = double.parse(json['creditLimit']);
+    customerId = json['customerId'].toString();
+    phone = json['phone'].toString();
     CODTerms = json['CODTerms'] == '0' ? false : true;
-    salesAccount = json['salesAccount'] ?? '';
-    billToState = json['billToState'] ?? '';
-    pricingLevel = json['pricingLevel'] as int ?? 0;
-    discountPercentage = json['discountPercentage'].toDouble() ?? 0.0;
+    salesAccount = json['salesAccount'].toString();
+    billToState = json['billToState'];
+    pricingLevel = int.parse(json['pricingLevel']);
+    discountPercentage = double.parse(json['discountPercentage']);
     customerName = json['customerName'] ?? '';
-    shipToZip = json['shipToZip'].toString() ?? '';
+    shipToZip = json['shipToZip'].toString();
     useStandardTerms = json['useStandardTerms'] == '0' ? false : true;
-    dueDays = json['dueDays'] as int ?? 0;
+    dueDays = int.parse(json['dueDays']);
     soldhere = json['soldhere'] ?? '';
-    isPromoAvailable = json['isPromoAvailable'] == '0' ? false : true;
+    isPromoAvailable = json['isPromoAvailable'] == '1' ? true : false;
   }
 
   Map<String, dynamic> toJson() {

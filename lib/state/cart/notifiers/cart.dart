@@ -65,7 +65,7 @@ class CartState extends StateNotifier<Cart> {
           )
           .quantity;
     } else {
-      return 0.0;
+      return 0;
     }
   }
 }

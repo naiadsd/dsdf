@@ -34,6 +34,7 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
     await DBProvier.db.storeAllCustomers(customers);
     List<Item> items = await fetchItemsSave();
     await DBProvier.db.storeAllItems(items);
+
     return true;
   } catch (e) {
     return false;

@@ -37,7 +37,7 @@ Future<List<Item>> fetchItemsSave() async {
       List<dynamic> items = map["items"];
 
       List<Item> c = decodeItems(json.encode(items));
-      print('items got');
+
       return c;
     } else {
       throw Exception('Unable to fetch items from api');

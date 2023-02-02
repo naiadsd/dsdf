@@ -15,8 +15,8 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
           DateTime.now().isBefore(e.endDate);
     }).toList();
 
-    List<Customer> customers = await fetchCustomersForSave(route, day);
-
+    List<Customer> customers = await fetchCustomersForRouteAndDay(route, day);
+    print('${customers.length}  fetched ');
     if (promosToday.isEmpty) {
     } else {
       await DBProvier.db.storeAllPromos(promosToday);
@@ -32,8 +32,6 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
       }
     }
     await DBProvier.db.storeAllCustomers(customers);
-    List<Item> items = await fetchItemsSave();
-    await DBProvier.db.storeAllItems(items);
 
     return true;
   } catch (e) {

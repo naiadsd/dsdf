@@ -19,14 +19,14 @@ class ItemService {
     }
   }
 
-  Future<List<Item>> fetchAllItemsFromDB() async {
-    return DBProvier.db.getAllItems();
-  }
-
   List<Item> decodeItems(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<Item>((json) => Item.fromMap(json)).toList();
   }
+}
+
+Future<List<Item>> fetchAllItemsFromDB() async {
+  return DBProvier.db.getAllItems();
 }
 
 Future<List<Item>> fetchItemsSave() async {

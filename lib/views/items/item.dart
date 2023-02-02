@@ -30,25 +30,25 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   double cartPrice = 0.0;
   double getPrice() {
     switch (widget.pricingLevel) {
-      case 1:
+      case 0:
         return widget.item.salePrice;
-      case 2:
+      case 1:
         return widget.item.salePriceTwo;
-      case 3:
+      case 2:
         return widget.item.salePriceThree;
-      case 4:
+      case 3:
         return widget.item.salePriceFour;
-      case 5:
+      case 4:
         return widget.item.salePriceFive;
-      case 6:
+      case 5:
         return widget.item.salePriceSix;
-      case 7:
+      case 6:
         return widget.item.salePriceSeven;
-      case 8:
+      case 7:
         return widget.item.salePriceEight;
-      case 9:
+      case 8:
         return widget.item.salePriceNine;
-      case 10:
+      case 9:
         return widget.item.salePriceTen;
 
       default:

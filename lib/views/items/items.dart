@@ -157,52 +157,35 @@ class _ItemsState extends State<Items> {
 
   Widget getItems(WidgetRef ref, List<Promo> promos) {
     var items = ref.watch(filterdItems);
-    //   List<Promo> currentPromos = promos;
+    var totalNoOfItems = ref.watch(itemsLengthProvider);
+
+    if (totalNoOfItems == 0) {
+      return const Center(
+        child: Text('no items found'),
+      );
+    }
     return Expanded(
-        child: items.when(
-      data: (data) {
-        List<Item> items = data.map((e) => e).toList();
-
-        return ListView.builder(
-          //  addAutomaticKeepAlives: true,
-
+      child: ListView.builder(
           itemBuilder: ((context, index) {
-            // ignore: avoid_init_to_null
             var promo = null;
-
             if (promos.isNotEmpty) {
-              String itemPrefix = items[index].itemId.substring(0, 4);
+              String itemPrefix = items![index].itemId.substring(0, 4);
 
               for (var element in promos) {
                 if (element.itemPrefix == itemPrefix) {
-                  print(element.itemPrefix);
                   promo = element;
                 }
               }
             }
-            if (items[index].itemId == '1002013') {
-              print(promo.toString());
-            }
-
             return ItemContainer(
               promo: promo,
-              item: items[index],
+              item: items![index],
               pricingLevel: widget.customer.pricingLevel,
             );
           }),
-          itemCount: items.length,
-        );
-      },
-      error: (error, stackTrace) {
-        return Text(error.toString());
-      },
-      loading: (() => const Padding(
-            padding: EdgeInsets.only(top: 30.0),
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )),
-    ));
+          itemCount: items?.length),
+    );
+    //   List<Promo> currentPromos = promos;
   }
 
   Widget checkOutContainer(WidgetRef ref) {

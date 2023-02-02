@@ -47,34 +47,42 @@ class CustomerItem extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: size.width * 0.23,
-                  height: size.width * 0.23,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        color: customer.isPromoAvailable ?? false
-                            ? Colors.green[400]
-                            : secondary,
-                        alignment: Alignment.center,
-                        child: Text(
-                          customer.customerName[0],
-                          style: const TextStyle(
-                              color: textWhite,
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )),
+                Center(
+                  child: SizedBox(
+                    width: size.width * 0.23,
+                    height: size.width * 0.23,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          color: customer.isPromoAvailable ?? false
+                              ? Colors.green[400]
+                              : secondary,
+                          alignment: Alignment.center,
+                          child: Text(
+                            customer.customerName[0],
+                            style: const TextStyle(
+                                color: textWhite,
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                  ),
                 ),
                 const SizedBox(width: miniSpacer + 5),
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Text('${customer.customerName} (${customer.customerId})',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: customerName),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       const Divider(
                         height: 3,
                         color: Colors.black26,
@@ -89,12 +97,6 @@ class CustomerItem extends ConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
-                      ),
-                      // SizedBox
-                      //(height: 5),
-                      const Divider(
-                        height: 4,
-                        color: Colors.black26,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,6 +150,8 @@ class CustomerItem extends ConsumerWidget {
             margin: const EdgeInsets.all(appPadding),
 
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   customer.customerName,
@@ -178,6 +182,134 @@ class CustomerItem extends ConsumerWidget {
                 const Divider(
                   height: 4,
                   color: Colors.black26,
+                ),
+                const Text(
+                  'Shipping Address',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${customer.shipToAddressLineOne}\n${customer.shipToCity} \n${customer.shipToSate} - ${customer.shipToZip}',
+                      style: customerAddress,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Billing Address',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${customer.billToAddressLineOne}\n${customer.billToCity} \n${customer.billToState} - ${customer.billToZip}',
+                      style: customerAddress,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Sold here',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  customer.soldhere == "" ? "NA" : customer.soldhere,
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Text(
+                  'Information',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Name : ${customer.billFirstName} - ${customer.billLastName}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Pricing level : ${customer.pricingLevel} ",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Has Promos ? : ${customer.isPromoAvailable}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Credit Limit : \$${customer.creditLimit} ",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Account number: ${customer.accountNo == '' ? 'NA' : customer.accountNo}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Phone number : ${customer.phone} ",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Sales Account: ${customer.salesAccount == '' ? 'NA' : customer.salesAccount}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Service days : ${customer.serviceDays} ",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Service Frequency : ${customer.serviceFrequency == '' ? 'NA' : customer.serviceFrequency}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "Service Sequence : ${customer.serviceSequence == '' ? 'NA' : customer.serviceSequence}",
+                  style: customerAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

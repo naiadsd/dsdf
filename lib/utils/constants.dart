@@ -7,25 +7,25 @@ var days = [
   // },
   {
     'day': 'Mon',
-    'id': 2,
+    'id': 1,
   },
   {
     'day': 'Tue',
-    'id': 3,
+    'id': 2,
   },
   {
     'day': 'Wed',
-    'id': 4,
+    'id': 3,
   },
   {
     'day': 'Thu',
-    'id': 5,
+    'id': 4,
   },
   {
     'day': 'Fri',
-    'id': 6,
+    'id': 5,
   },
-  // {
+  // {s
   //   'day': 'Sat',
   //   'id': 7,
   // },
@@ -43,4 +43,7 @@ var routes = [
   {
     'route': '4',
   },
+  {
+    'route': '5',
+  }
 ];

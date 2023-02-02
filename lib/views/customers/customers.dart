@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/theme/colors.dart';
@@ -21,8 +18,6 @@ class ListCustomer extends ConsumerStatefulWidget {
 }
 
 class _ListCustomerState extends ConsumerState<ListCustomer> {
-  int totoalNoOfCustomers = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +37,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
   Widget getBody() {
     var size = MediaQuery.of(context).size;
     final userDetails = ref.watch(userDetailsProvider);
-
+    final totalCustoemrs = ref.watch(customerStateProvider).totalRecords;
     return Column(
       children: [
         Stack(
@@ -71,7 +66,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                             title:
                                 '${userDetails.firstName} ${userDetails.lastName}',
                             subTitle:
-                                "Let's start orders for route ${userDetails.route}",
+                                "Let's start orders for route ${userDetails.route}, total customers $totalCustoemrs",
                             color: textWhite,
                           ),
                           SizedBox(
@@ -106,13 +101,34 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
   }
 
   Widget getCustomers(String driverId) {
-    var customers = ref.watch(customerDataProvider);
+    var customers = ref.watch(customersProvider);
+    var totoalNoOfCustomers = ref.watch(customerStateProvider).totalRecords;
+    if (totoalNoOfCustomers == 0) {
+      return const Center(
+        child: Text('no customers found in this route'),
+      );
+    }
+    return Expanded(
+        child: ListView.builder(
+      itemBuilder: ((context, index) {
+        return CustomerItem(
+          customer: customers![index],
+          driverId: driverId,
+        );
+      }),
+      itemCount: customers?.length,
+    ));
+  }
+/*
+  Widget getCustomersDep(String driverId) {
+    var customers = ref.watch(customerStateProvider).customers;
+
     return Expanded(
         child: customers.when(
       data: (data) {
         List<Customer> customers = data.map((e) => e).toList();
         setState(() {
-          totoalNoOfCustomers = customers.length;
+          totoalNoOfCustomers = ref.watch(customerStateProvider).totalRecords;
         });
         if (customers.isEmpty) {
           return const Center(
@@ -143,5 +159,5 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
             ),
           )),
     ));
-  }
+  }*/
 }

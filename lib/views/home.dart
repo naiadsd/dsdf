@@ -1,3 +1,6 @@
+import 'package:dsd/state/auth/providers/auth_state_provider.dart';
+import 'package:dsd/state/customers/backend/customer_service.dart';
+import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/data/data_service.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/search/loading.dart';
@@ -19,6 +22,9 @@ class Home extends ConsumerWidget {
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
     int route = await ref.read(userDetailsProvider.notifier).getRoute();
     await fetchStoreDailyData(route, value);
+
+    final customerDataProvider = ref.watch(customerStateProvider.notifier);
+    await customerDataProvider.fetchFromDB();
     ref.watch(routeDayProvider.notifier).setRouteDay(value);
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
@@ -27,9 +33,11 @@ class Home extends ConsumerWidget {
     ref.watch(isloadingProvider.notifier).turnOnLoading();
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
 
-    int routeDay = await ref.read(routeDayProvider);
+    int route = await ref.read(routeDayProvider);
 
-    await fetchStoreDailyData(value, routeDay);
+    await fetchStoreDailyData(route, value);
+    final customerDataProvider = ref.watch(customerStateProvider.notifier);
+    await customerDataProvider.fetchFromDB();
     ref.watch(userDetailsProvider.notifier).setRoute(value);
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
@@ -81,16 +89,21 @@ class Home extends ConsumerWidget {
                   child: Column(
                     children: [
                       Center(
-                        child: CircleAvatar(
-                          backgroundColor: secondary,
-                          radius: 40.0,
-                          child: Text(
-                            (userDetails.firstName != null &&
-                                    userDetails.lastName != null)
-                                ? '${userDetails.firstName!.substring(0, 1)}${userDetails.lastName!.substring(0, 1)}'
-                                : '',
-                            style: const TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
+                        child: InkWell(
+                          onTap: () {
+                            showlogoutAlert(context, ref);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: secondary,
+                            radius: 40.0,
+                            child: Text(
+                              (userDetails.firstName != null &&
+                                      userDetails.lastName != null)
+                                  ? '${userDetails.firstName!.substring(0, 1)}${userDetails.lastName!.substring(0, 1)}'
+                                  : '',
+                              style: const TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -233,7 +246,7 @@ class Home extends ConsumerWidget {
                                       child: InkWell(
                                         onTap: () async {
                                           await switchDay(
-                                              context, ref, index + 2);
+                                              context, ref, index + 1);
                                         },
                                         child: CircleAvatar(
                                           backgroundColor:
@@ -359,48 +372,89 @@ class Home extends ConsumerWidget {
     );
   }
 
-  Stack Dailynote(User userDetails) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          width: double.infinity,
-          height: 100,
-          margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade400, width: 0.5),
-            borderRadius: BorderRadius.circular(15),
-            shape: BoxShape.rectangle,
-          ),
-          child: Center(
-            child: Padding(
-                padding: const EdgeInsets.only(top: 10.0, left: 8),
-                child: Text(
-                  '${userDetails.note}',
-                  style: const TextStyle(
-                    color: Colors.white60,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                  ),
-                )),
-          ),
-        ),
-        Positioned(
-            left: 35,
-            top: 8,
-            child: Container(
-              color: Colors.transparent,
-              child: const Text(
-                ' note of the day',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )),
-      ],
+  showlogoutAlert(BuildContext context, WidgetRef ref) {
+    Widget cencelButton = TextButton(
+      onPressed: (() {
+        Navigator.of(context).pop();
+      }),
+      child: const Text('Cancel'),
     );
+
+    Widget logOut = TextButton(
+      onPressed: (() {
+        Navigator.of(context).pop();
+        ref.read(authStateProvider.notifier).logout();
+      }),
+      child: const Text('Logout'),
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text('Do you want to logout from the App?'),
+      content: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text(""),
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [cencelButton, logOut],
+        ),
+      ],
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      contentPadding: const EdgeInsets.all(10),
+      elevation: 30,
+    );
+
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return alert;
+        }));
   }
+}
+
+Stack Dailynote(User userDetails) {
+  return Stack(
+    children: <Widget>[
+      Container(
+        width: double.infinity,
+        height: 100,
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade400, width: 0.5),
+          borderRadius: BorderRadius.circular(15),
+          shape: BoxShape.rectangle,
+        ),
+        child: Center(
+          child: Padding(
+              padding: const EdgeInsets.only(top: 10.0, left: 8),
+              child: Text(
+                '${userDetails.note}',
+                style: const TextStyle(
+                  color: Colors.white60,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              )),
+        ),
+      ),
+      Positioned(
+          left: 35,
+          top: 8,
+          child: Container(
+            color: Colors.transparent,
+            child: const Text(
+              ' note of the day',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )),
+    ],
+  );
 }
 
 class MyBottomSheet extends StatelessWidget {

@@ -75,7 +75,6 @@ class DBProvier {
   createCustomer(Customer customer) async {
     final db = await database;
 
-    if (customer.isPromoAvailable ?? false) {}
     final res = await db.insert(customerTable, customer.toJson());
 
     return res;
@@ -190,6 +189,8 @@ class DBProvier {
   }
 
   Future<Item> getItemById(String itemId) async {
+    print('item id is');
+    print(itemId);
     final db = await database;
     String whereString = 'itemId = ?';
     String table = itemsTable;
@@ -201,6 +202,12 @@ class DBProvier {
         res.isNotEmpty ? res.map((e) => Item.fromJsonDB(e)).toList() : [];
     Item c = items[0];
     return c;
+  }
+
+  Future<void> clearData() async {
+    await deleteAllCustomers();
+    await deleteAllPromos();
+    await deleteAllCustomers();
   }
 
 /*Items logic End */

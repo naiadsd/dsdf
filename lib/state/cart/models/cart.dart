@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 // ignore: must_be_immutable
 class Cart {
   List<CartItem>? items;
-  String? driverID;
+  String driverID;
   DateTime? orderdatetime;
   double? totalPrice;
   String? orderId;
@@ -58,7 +58,9 @@ class Cart {
     );
   }
 
-  Cart.initial() : orderdatetime = DateTime.now();
+  Cart.initial()
+      : orderdatetime = DateTime.now(),
+        driverID = "0";
 
   void addItem(
     String id,

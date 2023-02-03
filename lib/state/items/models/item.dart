@@ -63,7 +63,7 @@ class Item {
     salePriceEight = double.parse(json['salePriceEight'].toString());
     salePriceNine = double.parse(json['salePriceNine'].toString());
     salePriceTen = double.parse(json['salePriceTen'].toString());
-    isInActive = json['isInActive'] == '0' ? false : true;
+    isInActive = json['isInActive'] == 0 ? false : true;
     glCOGSSalaryAccount = json['glCOGSSalaryAccount'].toString();
     upcsku = json['upcsku'].toString();
     weight = json['weight'].toString();

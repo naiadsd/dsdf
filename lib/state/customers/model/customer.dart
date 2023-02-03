@@ -112,10 +112,10 @@ class Customer {
     billToAddressLineOne = json['billToAddressLineOne'].toString();
     accountNo = json['accountNo'].toString();
     shipToAddressLineOne = json['shipToAddressLineOne'] ?? '';
-    prepaidTerms = json['prepaidTerms'] == '0' ? false : true;
+    prepaidTerms = json['prepaidTerms'] == 0 ? false : true;
     shipToAddressLineTwo = json['shipToAddressLineTwo'] ?? '';
     serviceSequence = json['serviceSequence'] ?? '';
-    isInactive = json['isInactive'] == '0' ? false : true;
+    isInactive = json['isInactive'] == 0 ? false : true;
     billFirstName = json['billFirstName'] ?? '';
     billLastName = json['billLastName'] ?? '';
     shipToCity = json['shipToCity'] ?? '';
@@ -130,17 +130,17 @@ class Customer {
     creditLimit = double.parse(json['creditLimit']);
     customerId = json['customerId'].toString();
     phone = json['phone'].toString();
-    CODTerms = json['CODTerms'] == '0' ? false : true;
+    CODTerms = json['CODTerms'] == 0 ? false : true;
     salesAccount = json['salesAccount'].toString();
     billToState = json['billToState'];
     pricingLevel = int.parse(json['pricingLevel']);
     discountPercentage = double.parse(json['discountPercentage']);
     customerName = json['customerName'] ?? '';
     shipToZip = json['shipToZip'].toString();
-    useStandardTerms = json['useStandardTerms'] == '0' ? false : true;
+    useStandardTerms = json['useStandardTerms'] == 0 ? false : true;
     dueDays = int.parse(json['dueDays']);
     soldhere = json['soldhere'] ?? '';
-    isPromoAvailable = json['isPromoAvailable'] == '1' ? true : false;
+    isPromoAvailable = json['isPromoAvailable'] == 1 ? true : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -177,7 +177,7 @@ class Customer {
     _data['useStandardTerms'] = useStandardTerms;
     _data['dueDays'] = dueDays;
     _data['soldhere'] = soldhere;
-    _data['isPromoAvailable'] = isPromoAvailable;
+    _data['isPromoAvailable'] = isPromoAvailable == true ? '1' : '0';
     return _data;
   }
 }

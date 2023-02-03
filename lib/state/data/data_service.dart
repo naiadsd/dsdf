@@ -6,7 +6,7 @@ import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/promo/model/promo.dart';
 import 'package:dsd/state/promo/service/promo_service.dart';
 
-Future<bool> fetchStoreDailyData(int route, int day) async {
+Future<bool> fetchAndStoreCustomers(int route, int day) async {
   try {
     List<Promo> promos = await const PromoService().fetchPromos();
 
@@ -16,7 +16,7 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
     }).toList();
 
     List<Customer> customers = await fetchCustomersForRouteAndDay(route, day);
-    print('${customers.length}  fetched ');
+    print('${promosToday.length} promo fetched ');
     if (promosToday.isEmpty) {
     } else {
       await DBProvier.db.storeAllPromos(promosToday);
@@ -28,6 +28,9 @@ Future<bool> fetchStoreDailyData(int route, int day) async {
         bool hasPromo = promosToday.any((element) {
           return (element.customerPrefix == cutomerPrefix);
         });
+        if (hasPromo) {
+          print(e.customerId);
+        }
         e.isPromoAvailable = hasPromo;
       }
     }

@@ -39,7 +39,7 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
         email: null,
         role: null,
         firstName: null,
-        route: null,
+        route: 1,
         userId: _authenticator.userId,
         note: null,
         totalOrders: null,
@@ -67,6 +67,12 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
       totalOrders: result.totalOrders,
       valueAdded: result.valueAdded,
     );
+  }
+
+  void setUserTotals(int? to, double? totalAmount) {
+    state.totalOrders = to ?? state.totalOrders;
+    state.valueAdded = totalAmount ?? state.valueAdded;
+    prefs.setString('userInfo', json.encode(state));
   }
 
   void setRoute(int routeN) async {

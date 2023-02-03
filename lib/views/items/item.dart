@@ -64,7 +64,8 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
   void initState() {
     super.initState();
     final cartItemprovider = ref.read(cartProvider.notifier);
-    //print(cartItemprovider.state.toString());
+    // print('promo id printing');
+    //print(widget.promo!.id.toString());
     try {
       itemsAdded = cartItemprovider.getItemQuantity(widget.item.itemId);
     } catch (e) {
@@ -72,9 +73,12 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
       print('getting error on init');
       print(e.toString());
     }
+    // ignore: unnecessary_null_comparison
     if (widget.promo != null) {
       pid = widget.promo?.promoId;
       pPrice = double.parse(widget.promo!.price);
+      print('from item 79');
+      print('$pid and $pPrice');
     } else {
       //  pPrice = double.parse(getPrice());
     }
@@ -214,7 +218,6 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
 
   Widget addItemFirstTime() {
     final cart = ref.watch(cartProvider.notifier);
-
     addtoCartFirstTime() {
       setState(() {
         try {
@@ -242,7 +245,6 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
         itemDescription: widget.item.description,
       );
 
-      // print(i.toString());
       cart.addItem(i);
     }
 

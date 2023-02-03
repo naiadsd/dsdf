@@ -1,5 +1,6 @@
+import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
-import 'package:dsd/state/customers/backend/customer_service.dart';
+
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/data/data_service.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
@@ -21,7 +22,7 @@ class Home extends ConsumerWidget {
     ref.watch(isloadingProvider.notifier).turnOnLoading();
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
     int route = await ref.read(userDetailsProvider.notifier).getRoute();
-    await fetchStoreDailyData(route, value);
+    await fetchAndStoreCustomers(route, value);
 
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
@@ -35,7 +36,7 @@ class Home extends ConsumerWidget {
 
     int route = await ref.read(routeDayProvider);
 
-    await fetchStoreDailyData(route, value);
+    await fetchAndStoreCustomers(route, value);
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
     ref.watch(userDetailsProvider.notifier).setRoute(value);
@@ -381,8 +382,9 @@ class Home extends ConsumerWidget {
     );
 
     Widget logOut = TextButton(
-      onPressed: (() {
+      onPressed: (() async {
         Navigator.of(context).pop();
+        await DBProvier.db.clearData();
         ref.read(authStateProvider.notifier).logout();
       }),
       child: const Text('Logout'),

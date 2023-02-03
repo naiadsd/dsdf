@@ -11,6 +11,7 @@ import 'package:dsd/state/cart/provider/order_service.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/search/loading.dart';
+import 'package:dsd/state/userinfo/backend/userdetailservice.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/theme/padding.dart';
@@ -262,6 +263,16 @@ class _CartDataState extends ConsumerState<CartData> {
 
           PdfApi.openFile(pdfFile);
           ref.watch(isloadingProvider.notifier).turnOffLoading();
+          // ignore: use_build_context_synchronously
+          if (cart.driverID != null) {
+            var uid = cart.driverID;
+            const userSerevice = UserDetailService();
+            final result = await userSerevice.fetchUserDetails(uid!);
+
+            final userDetails = ref.watch(userDetailsProvider.notifier);
+            userDetails.setUserTotals(result.totalOrders, result.valueAdded);
+          }
+
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(
             builder: (context) {

@@ -174,6 +174,7 @@ class _ItemsState extends State<Items> {
               for (var element in promos) {
                 if (element.itemPrefix == itemPrefix) {
                   promo = element;
+                  print('has promo for ${promo.toString()}');
                 }
               }
             }

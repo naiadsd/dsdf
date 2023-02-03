@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -56,17 +57,16 @@ class _SettingsState extends State<Settings> {
                   await DBProvier.db.storeAllCustomers(customers);
                 }),
                 icon: Icon(Icons.store),
-                label: Text('Store Customers'),
+                label: Text('Store asda'),
               ),
               const SizedBox(
                 height: 10,
               ),
               TextButton.icon(
                 style: const ButtonStyle(),
-                onPressed: (() async {
-                  await DBProvier.db.getAllCustomers();
-
-                  await DBProvier.db.dropPromotable();
+                onPressed: (() {
+                  var day = DateTime.now().weekday;
+                  print('Day is $day');
                 }),
                 icon: const Icon(Icons.store),
                 label: const Text('show Customers'),
@@ -103,7 +103,7 @@ class _SettingsState extends State<Settings> {
                   int routeday = await ref.watch(routeDayProvider);
                   int? day = ref.watch(userDetailsProvider).route;
 
-                  await fetchStoreDailyData(routeday, day ?? 1);
+                  await fetchAndStoreCustomers(routeday, day ?? 1);
                 }),
                 icon: const Icon(Icons.store),
                 label: const Text('Fetch All  Items'),

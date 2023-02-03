@@ -36,7 +36,9 @@ class CartData extends ConsumerStatefulWidget {
 class _CartDataState extends ConsumerState<CartData> {
   @override
   Widget build(BuildContext context) {
+    GlobalKey scaffoldcart = GlobalKey();
     return Scaffold(
+      key: scaffoldcart,
       backgroundColor: Colors.grey.shade100,
       extendBodyBehindAppBar: true,
       extendBody: true,

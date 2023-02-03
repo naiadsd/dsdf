@@ -8,10 +8,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // ignore: must_be_immutable
 class ItemStateNotifier extends StateNotifier<ItemState> {
   ItemStateNotifier() : super(ItemState.unknown()) {
-    _fetchItem();
+    print('item state has been changed from item_notifer init');
+    fetchItem();
   }
 
-  Future<bool> _fetchItem() async {
+  Future<bool> fetchItem() async {
+    print('item state has been changed from item_notifer');
     try {
       List<Item> itemsInDB = await fetchAllItemsFromDB();
       state = state.loadState(itemsInDB);

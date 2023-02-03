@@ -41,7 +41,9 @@ class _ItemsState extends State<Items> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey scaffoldis = GlobalKey();
     return Scaffold(
+      key: scaffoldis,
       backgroundColor: Colors.grey.shade300,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(

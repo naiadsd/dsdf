@@ -2,9 +2,6 @@ import 'package:dsd/state/auth/models/auth_results.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/state/auth/providers/user_id_provider.dart';
-import 'package:dsd/state/customers/backend/customer_service.dart';
-import 'package:dsd/state/data/data_service.dart';
-import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/views/components/loading/loading_screen.dart';
@@ -141,18 +138,12 @@ class _LoginState extends State<Login> {
                               await authProvider
                                   .loginWithEmailPassword(emailController.text,
                                       passwordController.text)
-                                  .then((value) async {
+                                  .then((value) {
                                 if (value == AuthResult.success) {
                                   final userID = ref.read(userIdProvider);
                                   final userDetailsPRovider =
                                       ref.read(userDetailsProvider.notifier);
-                                  await userDetailsPRovider
-                                      .fetchUserDetails(userID);
-                                  final userDetails =
-                                      ref.read(userDetailsProvider);
-                                  final routeDay = ref.read(routeDayProvider);
-                                  await fetchAndStoreCustomers(
-                                      userDetails.route, routeDay);
+                                  userDetailsPRovider.fetchUserDetails(userID);
 
                                   ref
                                       .read(isloadingProvider.notifier)

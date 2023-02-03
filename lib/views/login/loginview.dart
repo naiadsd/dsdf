@@ -8,10 +8,11 @@ class LoginView extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginView({Key? key}) : super(key: key);
-
+  GlobalKey scaffoldkodf = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldkodf,
       appBar: AppBar(
         title: const Text('Login'),
         centerTitle: true,

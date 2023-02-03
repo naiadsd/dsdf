@@ -5,6 +5,7 @@ import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/custom_heading.dart';
 import 'package:dsd/views/components/customer_search.dart';
+import 'package:dsd/views/components/noresults_found.dart';
 import 'package:dsd/views/customers/customer.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,9 @@ class ListCustomer extends ConsumerStatefulWidget {
 class _ListCustomerState extends ConsumerState<ListCustomer> {
   @override
   Widget build(BuildContext context) {
+    GlobalKey scaffoldc = GlobalKey();
     return Scaffold(
+      key: scaffoldc,
       backgroundColor: background,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -105,7 +108,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
     var totoalNoOfCustomers = ref.watch(customerStateProvider).totalRecords;
     if (totoalNoOfCustomers == 0) {
       return const Center(
-        child: Text('no customers found in this route'),
+        child: NoSearchResultFound(),
       );
     }
     return Expanded(

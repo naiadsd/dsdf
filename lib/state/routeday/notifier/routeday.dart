@@ -10,8 +10,6 @@ class RouteDayP extends StateNotifier<int> {
 
     if (routeCode != null) {
       state = routeCode;
-    } else {
-      state = DateTime.now().weekday;
     }
   }
 

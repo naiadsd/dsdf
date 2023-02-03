@@ -46,7 +46,6 @@ Future<bool> fetchAndStoreItems() async {
   try {
     List<Item> items = await fetchItemsSave();
     await DBProvier.db.storeAllItems(items);
-
     return true;
   } catch (e) {
     return false;

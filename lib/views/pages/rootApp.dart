@@ -16,9 +16,11 @@ class RootApp extends StatefulWidget {
 
 class _RootAppState extends State<RootApp> {
   int pageIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       bottomNavigationBar: getBottomNavBar(),
       body: getBody(),
     );

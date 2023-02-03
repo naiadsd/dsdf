@@ -39,7 +39,7 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
         email: null,
         role: null,
         firstName: null,
-        route: 1,
+        route: null,
         userId: _authenticator.userId,
         note: null,
         totalOrders: null,

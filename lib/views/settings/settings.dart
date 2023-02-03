@@ -24,7 +24,9 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
+    GlobalKey scsett = GlobalKey();
     return Scaffold(
+      key: scsett,
       backgroundColor: background,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -32,7 +34,7 @@ class _SettingsState extends State<Settings> {
         child: AppBar(
           actions: [],
           elevation: 0,
-          title: Text(
+          title: const Text(
             'Settings',
             style: TextStyle(color: secondary),
           ),

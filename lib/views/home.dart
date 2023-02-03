@@ -3,6 +3,7 @@ import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 
 import 'package:dsd/state/customers/providers/customer_data_provider.dart';
 import 'package:dsd/state/data/data_service.dart';
+import 'package:dsd/state/items/provider/item_provider.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
@@ -14,6 +15,7 @@ import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
@@ -47,6 +49,8 @@ class Home extends ConsumerWidget {
     ref.watch(isloadingProvider.notifier).turnOnLoading();
     LoadingScreen.instance().show(context: c, text: Strings.refreshItems);
     await fetchAndStoreItems();
+    final itemsProvider = ref.read(itemStaeProvider.notifier);
+    await itemsProvider.fetchItem();
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
 
@@ -54,8 +58,9 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
     final routeDay = ref.watch(routeDayProvider);
-
+    GlobalKey scaffoldh = GlobalKey();
     return Scaffold(
+      key: scaffoldh,
       backgroundColor: background,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -361,7 +366,7 @@ class Home extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                 ],
@@ -385,6 +390,8 @@ class Home extends ConsumerWidget {
       onPressed: (() async {
         Navigator.of(context).pop();
         await DBProvier.db.clearData();
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.clear();
         ref.read(authStateProvider.notifier).logout();
       }),
       child: const Text('Logout'),

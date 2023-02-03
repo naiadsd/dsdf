@@ -43,7 +43,7 @@ class SplashDisplay extends ConsumerWidget {
           },
         );
         bool isAuthenticate = ref.watch(isLoggedInProvider);
-
+        print('it came here..');
         if (isAuthenticate) {
           return const RootApp();
         } else {

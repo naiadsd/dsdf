@@ -8,7 +8,7 @@ class User {
   String? email;
   String? role;
   String? firstName;
-  late int route;
+  int? route;
   String? userId;
   String? note;
   int? totalOrders;
@@ -22,7 +22,7 @@ class User {
     required this.email,
     required this.role,
     required this.firstName,
-    this.route = 1,
+    required this.route,
     required this.userId,
     required this.note,
     required this.totalOrders,
@@ -31,8 +31,7 @@ class User {
 
   User.unknown()
       : id = 0,
-        email = null,
-        route = 1;
+        email = null;
 
   User.fromJson(Map<String, dynamic> json) {
     lastName = json['lastName'];

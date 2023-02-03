@@ -18,7 +18,9 @@ class LoginView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    GlobalKey scaffoldvh = GlobalKey();
     return Scaffold(
+      key: scaffoldvh,
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Column(

@@ -1,5 +1,7 @@
 import 'package:dsd/firebase_options.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
+import 'package:dsd/state/connectivity/connectivity_notifier.dart';
+import 'package:dsd/state/connectivity/connectivity_provider.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/login/login.dart';
@@ -42,8 +44,17 @@ class SplashDisplay extends ConsumerWidget {
             }
           },
         );
+        ref.listen<ConnectivityStatus>(connectivityStatusProviders, (_, next) {
+          if (next != ConnectivityStatus.isConnected) {
+            ref.watch(isloadingProvider.notifier).turnOnLoading();
+            LoadingScreen.instance()
+                .show(text: 'No Internet connection', context: context);
+          } else {
+            LoadingScreen.instance().hide();
+          }
+        });
         bool isAuthenticate = ref.watch(isLoggedInProvider);
-        print('it came here..');
+
         if (isAuthenticate) {
           return const RootApp();
         } else {

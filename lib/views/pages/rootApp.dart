@@ -42,8 +42,8 @@ class _RootAppState extends State<RootApp> {
     var size = MediaQuery.of(context).size;
     List bottomItems = [
       "assets/images/home_icon.svg",
-      "assets/images/play_icon.svg",
-      "assets/images/rocket_icon.svg",
+      //"assets/images/settings_icon.png",
+      "assets/images/settings.svg",
       // "assets/images/user_icon.svg",
     ];
     return Container(
@@ -71,7 +71,7 @@ class _RootAppState extends State<RootApp> {
               const EdgeInsets.only(left: 40, right: 40, bottom: 10, top: 30),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(bottomItems.length, (index) {
                 return InkWell(
                   onTap: (() {
@@ -86,6 +86,7 @@ class _RootAppState extends State<RootApp> {
                       ),
                       const SizedBox(
                         height: 15.0,
+                        width: 20,
                       ),
                       (pageIndex == index
                           ? (AnimatedContainer(

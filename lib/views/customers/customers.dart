@@ -5,6 +5,7 @@ import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/custom_heading.dart';
 import 'package:dsd/views/components/customer_search.dart';
+import 'package:dsd/views/components/no_resultsfound.dart';
 import 'package:dsd/views/components/noresults_found.dart';
 import 'package:dsd/views/customers/customer.dart';
 
@@ -107,9 +108,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
     var customers = ref.watch(customersProvider);
     var totoalNoOfCustomers = ref.watch(customerStateProvider).totalRecords;
     if (totoalNoOfCustomers == 0) {
-      return const Center(
-        child: NoSearchResultFound(),
-      );
+      return Text('no data found'); //noResultsFound(context);
     }
     return Expanded(
         child: ListView.builder(

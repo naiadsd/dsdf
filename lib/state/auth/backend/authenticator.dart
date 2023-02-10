@@ -10,6 +10,7 @@ class Authenticator {
 
   bool get isAlreadyLoggedIn => userId != null;
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
+  String? get userEmail => FirebaseAuth.instance.currentUser?.email;
   String get displayName =>
       FirebaseAuth.instance.currentUser?.displayName ?? '';
   String? get email => FirebaseAuth.instance.currentUser?.email ?? '';

@@ -108,7 +108,7 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
     var customers = ref.watch(customersProvider);
     var totoalNoOfCustomers = ref.watch(customerStateProvider).totalRecords;
     if (totoalNoOfCustomers == 0) {
-      return Text('no data found'); //noResultsFound(context);
+      return noResultsFound(context);
     }
     return Expanded(
         child: ListView.builder(

@@ -263,7 +263,7 @@ class _CartDataState extends ConsumerState<CartData> {
         if (isOrderCreated) {
           final pdfFile = await PdfInvoiceApi.generate(invoice);
 
-          PdfApi.openFile(pdfFile);
+          await PdfApi.openFile(pdfFile);
           ref.watch(isloadingProvider.notifier).turnOffLoading();
           // ignore: use_build_context_synchronously
           if (cart.driverID != null) {
@@ -278,7 +278,9 @@ class _CartDataState extends ConsumerState<CartData> {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(
             builder: (context) {
-              return const RootApp();
+              return RootApp(
+                startIndex: 0,
+              );
             },
           ));
         } else {

@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RootApp extends StatefulWidget {
-  const RootApp({super.key});
+  RootApp({Key? key, required this.startIndex}) : super(key: key);
+  int startIndex;
 
   @override
   State<RootApp> createState() => _RootAppState();
@@ -17,6 +18,14 @@ class RootApp extends StatefulWidget {
 class _RootAppState extends State<RootApp> {
   int pageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageIndex = widget.startIndex;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,5 +126,6 @@ class _RootAppState extends State<RootApp> {
     setState(() {
       pageIndex = index;
     });
+    widget.startIndex = index;
   }
 }

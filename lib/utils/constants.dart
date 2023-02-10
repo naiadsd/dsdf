@@ -6,6 +6,10 @@ var days = [
   //   'id': 1,
   // },
   {
+    'day': 'All',
+    'id': 0,
+  },
+  {
     'day': 'Mon',
     'id': 1,
   },
@@ -25,12 +29,16 @@ var days = [
     'day': 'Fri',
     'id': 5,
   },
+
   // {s
   //   'day': 'Sat',
   //   'id': 7,
   // },
 ];
 var routes = [
+  {
+    'route': '0',
+  },
   {
     'route': '1',
   },

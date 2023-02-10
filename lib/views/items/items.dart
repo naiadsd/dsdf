@@ -10,6 +10,7 @@ import 'package:dsd/theme/padding.dart';
 import 'package:dsd/views/cart/cart.dart';
 import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/item_search.dart';
+import 'package:dsd/views/components/no_resultsfound.dart';
 import 'package:dsd/views/items/item.dart';
 import 'package:flutter/material.dart';
 
@@ -162,9 +163,7 @@ class _ItemsState extends State<Items> {
     var totalNoOfItems = ref.watch(itemsLengthProvider);
 
     if (totalNoOfItems == 0) {
-      return const Center(
-        child: Text('no items found'),
-      );
+      return noResultsFound(context);
     }
     return Expanded(
       child: ListView.builder(

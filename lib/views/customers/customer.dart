@@ -318,14 +318,14 @@ class CustomerItem extends ConsumerWidget {
   }
 
   showConfirmationDailog(BuildContext context, WidgetRef ref) {
-    Widget cencelButton = TextButton(
-      onPressed: (() {
+    Widget cencelButton = FloatingActionButton.extended(
+      label: const Text('Cancel'), // <-- Text
+      backgroundColor: Colors.black,
+      onPressed: () {
         Navigator.of(context).pop();
-      }),
-      child: const Text('Cancel'),
+      },
     );
-
-    Widget continueButton = TextButton(
+    Widget continueButton = FloatingActionButton.extended(
       onPressed: (() {
         Navigator.of(context).pop();
 
@@ -336,7 +336,7 @@ class CustomerItem extends ConsumerWidget {
           return Items(customer: customer);
         })));
       }),
-      child: const Text('Continue'),
+      label: const Text('Continue'),
     );
 
     AlertDialog alert = AlertDialog(

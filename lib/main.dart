@@ -1,8 +1,11 @@
 import 'package:dsd/firebase_options.dart';
+import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
+import 'package:dsd/state/auth/providers/user_id_provider.dart';
 import 'package:dsd/state/connectivity/connectivity_notifier.dart';
 import 'package:dsd/state/connectivity/connectivity_provider.dart';
 import 'package:dsd/state/search/loading.dart';
+import 'package:dsd/state/userinfo/provider/userdetails.dart';
 import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/login/login.dart';
 
@@ -27,6 +30,11 @@ void main() async {
 }
 
 class SplashDisplay extends ConsumerWidget {
+  forceLogout(WidgetRef ref) {
+    var l = ref.read(userDetailsProvider);
+    if (l.email == null) ref.read(authStateProvider.notifier).logout();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: implement build
@@ -56,7 +64,10 @@ class SplashDisplay extends ConsumerWidget {
         bool isAuthenticate = ref.watch(isLoggedInProvider);
 
         if (isAuthenticate) {
-          return const RootApp();
+          //forceLogout(ref);
+          return RootApp(
+            startIndex: 0,
+          );
         } else {
           return const Login();
         }

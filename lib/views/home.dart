@@ -251,8 +251,7 @@ class Home extends ConsumerWidget {
                                     child: Center(
                                       child: InkWell(
                                         onTap: () async {
-                                          await switchDay(
-                                              context, ref, index + 1);
+                                          await switchDay(context, ref, index);
                                         },
                                         child: CircleAvatar(
                                           backgroundColor:
@@ -263,8 +262,9 @@ class Home extends ConsumerWidget {
                                           child: Text(
                                             days[index]["day"].toString(),
                                             style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -294,27 +294,27 @@ class Home extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 8,
                           ),
                           Center(
                             child: Container(
                               height: 100,
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(30)),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemBuilder: ((context, index) {
+                                itemBuilder: ((_, index) {
                                   return Container(
-                                    margin: const EdgeInsets.all(5),
+                                    margin: const EdgeInsets.all(4),
                                     child: Center(
                                       child: InkWell(
                                         onTap: (() async {
                                           await switchRoute(
-                                              context, ref, index + 1);
+                                              context, ref, index);
                                         }),
                                         child: CircleAvatar(
                                           backgroundColor: userDetails.route ==
@@ -327,8 +327,9 @@ class Home extends ConsumerWidget {
                                           child: Text(
                                             routes[index]["route"].toString(),
                                             style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -338,9 +339,6 @@ class Home extends ConsumerWidget {
                                 itemCount: routes.length,
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
                           ),
                         ]),
                   ),

@@ -21,11 +21,28 @@ class CustomSearchField extends ConsumerStatefulWidget {
 }
 
 class _CustomSearchFieldState extends ConsumerState<CustomSearchField> {
+  final customerSearchConroller = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    customerSearchConroller.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement initState
+    super.didChangeDependencies();
+    final customerSearchProvi = ref.watch(customerSerachProvider.notifier);
+    customerSearchConroller.text = customerSearchProvi.state;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final customerSearchProvi = ref.watch(customerSerachProvider.notifier);
+    // print('builded');
 
-    final customerSearchConroller = TextEditingController();
+    final customerSearchProvi = ref.watch(customerSerachProvider.notifier);
 
     var size = MediaQuery.of(context).size;
     return Container(
@@ -61,7 +78,9 @@ class _CustomSearchFieldState extends ConsumerState<CustomSearchField> {
                 onChanged: (value) {
                   customerSearchProvi
                       .setSearchText(customerSearchConroller.text);
+                  // customerSearchConroller.selection = previousSelection;
                 },
+                autofocus: true,
                 controller: customerSearchConroller,
                 style: TextStyle(fontSize: 15),
                 cursorColor: textBlack,

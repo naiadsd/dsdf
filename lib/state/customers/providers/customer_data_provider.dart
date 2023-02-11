@@ -34,6 +34,7 @@ final customersProvider = Provider<List<Customer>?>((ref) {
   var customers = customerProvider.customers;
 
   final searchText = ref.watch(customerSerachProvider);
+  print('$searchText from cdp');
   if (searchText.isNotEmpty) {
     return customers!
         .where((element) => (element.customerName.contains(searchText) ||

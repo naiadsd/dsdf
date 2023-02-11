@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dsd/db/db_provider.dart';
 import 'package:dsd/state/customers/model/customer.dart';
 import 'package:dsd/views/invoice/api/pdf_api.dart';
-import 'package:dsd/views/invoice/invoice.dart';
 
 import 'package:dsd/views/invoice/model/inovice.dart';
 import 'package:dsd/views/invoice/model/supplier.dart';

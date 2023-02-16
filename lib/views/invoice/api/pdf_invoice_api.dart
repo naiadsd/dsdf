@@ -254,7 +254,7 @@ class PdfInvoiceApi {
 
   static Widget buildInvoiceInfo(InvoiceInfo info, String invoiceNumber) {
     final titles = <String>[
-      'Inovice',
+      'Invoice',
       'Invoice Number:',
       'Invoice Date:',
     ];
@@ -339,8 +339,8 @@ class PdfInvoiceApi {
         item.quantity * item.reOrderQuantity,
         item.itemId,
         item.itemDescription,
-        '\$${item.saleprice.toStringAsFixed(2)}',
-        '\$${item.totalPrice.toStringAsFixed(2)}',
+        '${item.itemId.substring(4) == "996" ? "- " : ""}\$${item.saleprice.toStringAsFixed(2)}',
+        '${item.itemId.substring(4) == "996" ? "- " : ""}\$${item.totalPrice.toStringAsFixed(2)}',
       ];
     }).toList();
     return Table.fromTextArray(

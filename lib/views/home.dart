@@ -8,6 +8,7 @@ import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
+import 'package:dsd/state/week/provider/week.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:dsd/utils/constants.dart';
 import 'package:dsd/views/components/constants/strings.dart';
@@ -29,6 +30,37 @@ class Home extends ConsumerWidget {
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
     ref.watch(routeDayProvider.notifier).setRouteDay(value);
+    ref.watch(isloadingProvider.notifier).turnOffLoading();
+  }
+
+  refreshPromos(BuildContext c, WidgetRef ref) async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+    LoadingScreen.instance().show(context: c, text: Strings.refreshPromos);
+
+    int route = await ref.read(userDetailsProvider.notifier).getRoute();
+    int day = await ref.read(routeDayProvider.notifier).getRouteDay();
+    await fetchAndStoreCustomers(route, day);
+    final customerDataProvider = ref.watch(customerStateProvider.notifier);
+    await customerDataProvider.fetchFromDB();
+    //ref.watch(userDetailsProvider.notifier).setRoute(value);
+    ref.watch(isloadingProvider.notifier).turnOffLoading();
+  }
+
+/**
+ * This should be implemented 
+ * 
+ */
+  switchWeek(BuildContext c, WidgetRef ref, int value) async {
+    ref.watch(isloadingProvider.notifier).turnOnLoading();
+    LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
+    int route = await ref.read(userDetailsProvider.notifier).getRoute();
+    int day = await ref.read(routeDayProvider.notifier).getRouteDay();
+
+    //await fetchAndStoreCustomers(route, value);
+
+    //final customerDataProvider = ref.watch(customerStateProvider.notifier);
+    //await customerDataProvider.fetchFromDB();
+    ref.watch(weekRouteProvider.notifier).setWeekRoute(value);
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
 
@@ -58,6 +90,7 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(userDetailsProvider);
     final routeDay = ref.watch(routeDayProvider);
+    final weekRoute = ref.watch(weekRouteProvider);
     GlobalKey scaffoldh = GlobalKey();
     return Scaffold(
       key: scaffoldh,
@@ -246,23 +279,30 @@ class Home extends ConsumerWidget {
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
                                 itemBuilder: ((_, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.all(4),
+                                  return SizedBox(
+                                    height: 100,
+                                    // margin: const EdgeInsets.all(4),
                                     child: Center(
                                       child: InkWell(
                                         onTap: () async {
                                           await switchDay(context, ref, index);
                                         },
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              routeDay == days[index]["id"]
-                                                  ? Colors.green
-                                                  : secondary,
-                                          radius: 28.0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(18.0),
+                                          margin: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  routeDay == days[index]["id"]
+                                                      ? Colors.green
+                                                      : secondary,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10.0))),
                                           child: Text(
                                             days[index]["day"].toString(),
                                             style: const TextStyle(
                                               fontSize: 15,
+                                              color: Colors.white,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -308,26 +348,35 @@ class Home extends ConsumerWidget {
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: ((_, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.all(4),
+                                  return SizedBox(
+                                    height: 100,
+                                    //  margin: const EdgeInsets.all(4),
                                     child: Center(
                                       child: InkWell(
                                         onTap: (() async {
                                           await switchRoute(
                                               context, ref, index);
                                         }),
-                                        child: CircleAvatar(
-                                          backgroundColor: userDetails.route ==
-                                                  int.parse(routes[index]
-                                                          ["route"]
-                                                      .toString())
-                                              ? Colors.green
-                                              : secondary,
-                                          radius: 28.0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(18.0),
+                                          margin: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                              color: userDetails.route ==
+                                                      int.parse(routes[index]
+                                                              ["route"]
+                                                          .toString())
+                                                  ? Colors.green
+                                                  : secondary,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10.0))),
                                           child: Text(
-                                            routes[index]["route"].toString(),
+                                            index == 0
+                                                ? " All "
+                                                : "  ${index.toString()}  ",
                                             style: const TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 18,
+                                              color: Colors.white,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -343,25 +392,119 @@ class Home extends ConsumerWidget {
                         ]),
                   ),
                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Center(
+                            child: Text(
+                              'Switch Week',
+                              style: TextStyle(
+                                color: secondary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Center(
+                            child: Container(
+                              height: 100,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: ((_, index) {
+                                  return SizedBox(
+                                    height: 100,
+                                    //  margin: const EdgeInsets.all(4),
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: (() async {
+                                          await switchWeek(context, ref, index);
+                                        }),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(18.0),
+                                          margin: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                              color: weekRoute == index
+                                                  ? Colors.green
+                                                  : secondary,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10.0))),
+                                          child: Text(
+                                            weeks[index]["week"]!,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                itemCount: weeks.length,
+                              ),
+                            ),
+                          ),
+                        ]),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 20, horizontal: 12),
-                    child: InkWell(
-                      onTap: (() async {
-                        await refreshItems(context, ref);
-                      }),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: secondary,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Text(
-                          "Refresh Items",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: (() async {
+                            await refreshItems(context, ref);
+                          }),
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: secondary,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Text(
+                              "Refresh Items",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        InkWell(
+                          onTap: (() async {
+                            await refreshPromos(context, ref);
+                          }),
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: secondary,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Text(
+                              "Refresh promos",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
@@ -390,7 +533,7 @@ class Home extends ConsumerWidget {
         await DBProvier.db.clearData();
         SharedPreferences preferences = await SharedPreferences.getInstance();
         await preferences.clear();
-        ref.read(authStateProvider.notifier).logout();
+        await ref.read(authStateProvider.notifier).logout();
       }),
       child: const Text('Logout'),
     );

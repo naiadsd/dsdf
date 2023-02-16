@@ -55,3 +55,21 @@ var routes = [
     'route': '5',
   }
 ];
+
+var weeks = [
+  {
+    'week': 'All',
+  },
+  {
+    'week': 'D1',
+  },
+  {
+    'week': 'D2',
+  },
+  {
+    'week': 'D3',
+  },
+  {
+    'week': 'D4',
+  }
+];

@@ -123,7 +123,7 @@ class _ItemsState extends State<Items> {
                                   padding: const EdgeInsets.only(
                                       left: 8.0, right: 8.0),
                                   child: Text(
-                                    widget.customer.customerName,
+                                    "${widget.customer.customerName} - ${widget.customer.customerId}",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(

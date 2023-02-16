@@ -31,7 +31,7 @@ class Strings {
 
   static const refreshCustomers =
       'Local data will be refreshed based on your selection please wait';
-
+  static const refreshPromos = 'Promos will be refreshed ';
   static const generateInvoice =
       'Please wait while we are generating your invoice...';
 

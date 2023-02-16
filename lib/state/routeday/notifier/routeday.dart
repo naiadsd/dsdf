@@ -22,4 +22,19 @@ class RouteDayP extends StateNotifier<int> {
     pref = await SharedPreferences.getInstance();
     pref.setInt('routeday', routeday);
   }
+
+  Future<int> getRouteDay() async {
+    pref = await SharedPreferences.getInstance();
+    int res;
+    var routeCode = pref.getInt('routeday');
+
+    if (routeCode != null) {
+      state = routeCode;
+      res = state;
+    } else {
+      res = 0;
+      state = 0;
+    }
+    return res;
+  }
 }

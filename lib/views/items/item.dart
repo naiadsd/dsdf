@@ -167,7 +167,10 @@ class ItemContainerState extends ConsumerState<ItemContainer> {
                         style: itemPriceStyle),
                     Text(
                       '\$ ${cartPrice.toStringAsFixed(2)}',
-                      style: itemPriceStyle,
+                      style: itemPriceStyle.copyWith(
+                          color: widget.promo != null
+                              ? Colors.green
+                              : Colors.white),
                     ),
                   ],
                 ),

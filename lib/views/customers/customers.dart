@@ -6,7 +6,6 @@ import 'package:dsd/views/components/clipper.dart';
 import 'package:dsd/views/components/custom_heading.dart';
 import 'package:dsd/views/components/customer_search.dart';
 import 'package:dsd/views/components/no_resultsfound.dart';
-import 'package:dsd/views/components/noresults_found.dart';
 import 'package:dsd/views/customers/customer.dart';
 
 import 'package:flutter/material.dart';
@@ -69,8 +68,9 @@ class _ListCustomerState extends ConsumerState<ListCustomer> {
                           CustomHeading(
                             title:
                                 '${userDetails.firstName} ${userDetails.lastName}',
-                            subTitle:
-                                "Let's start orders for route ${userDetails.route}, total customers $totalCustoemrs",
+                            subTitle: userDetails.route != null
+                                ? "Let's start orders ${userDetails.route == 0 ? "" : "for route ${userDetails.route} "}, total customers $totalCustoemrs"
+                                : "",
                             color: textWhite,
                           ),
                           SizedBox(

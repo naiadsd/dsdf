@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dsd/state/auth/backend/authenticator.dart';
+import 'package:dsd/state/data/data_service.dart';
 import 'package:dsd/state/userinfo/backend/userdetailservice.dart';
 import 'package:dsd/state/userinfo/model/user.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,7 +49,7 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
     }
   }
 
-  Future<void> fetchUserDetails(String uuid) async {
+  Future<User> fetchUserDetails(String uuid, WidgetRef ref) async {
     final result = await _userSerevice.fetchUserDetails(uuid);
     final userinfo = result.toJson();
     prefs.setString('userInfo', json.encode(userinfo));
@@ -67,6 +68,15 @@ class UserDetailsStateNotifier extends StateNotifier<User> {
       totalOrders: result.totalOrders,
       valueAdded: result.valueAdded,
     );
+    return state;
+  }
+
+  Future<bool> setLoggedInUser(User user) async {
+    final userinfo = user.toJson();
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('userInfo', json.encode(userinfo));
+    state = user;
+    return true;
   }
 
   void setUserTotals(int? to, double? totalAmount) {

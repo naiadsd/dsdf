@@ -2,8 +2,12 @@ import 'package:dsd/state/auth/models/auth_results.dart';
 import 'package:dsd/state/auth/providers/auth_state_provider.dart';
 import 'package:dsd/state/auth/providers/is_logged_in_provider.dart';
 import 'package:dsd/state/auth/providers/user_id_provider.dart';
+import 'package:dsd/state/customers/providers/customer_data_provider.dart';
+import 'package:dsd/state/data/data_service.dart';
+import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/search/loading.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
+import 'package:dsd/state/week/provider/week.dart';
 import 'package:dsd/views/components/loading/loading_screen.dart';
 import 'package:dsd/views/login/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
@@ -109,45 +113,59 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: const EdgeInsets.all(25.0),
                         child: GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.deepPurple,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Sign In',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          onTap: () async {
-                            if (formKey.currentState!.validate()) {
-                              ref
-                                  .read(isloadingProvider.notifier)
-                                  .turnOnLoading();
-                              LoadingScreen.instance().show(
-                                  context: context, text: 'loggin you in');
-                              final authProvider =
-                                  ref.read(authStateProvider.notifier);
-                              await authProvider
-                                  .loginWithEmailPassword(emailController.text,
-                                      passwordController.text)
-                                  .then((value) {
-                                if (value == AuthResult.success) {
-                                  final userID = ref.read(userIdProvider);
-                                  final userDetailsPRovider =
-                                      ref.read(userDetailsProvider.notifier);
-                                  userDetailsPRovider.fetchUserDetails(userID);
+                            onTap: () async {
+                              if (formKey.currentState!.validate()) {
+                                ref
+                                    .read(isloadingProvider.notifier)
+                                    .turnOnLoading();
+                                var c = context;
+                                LoadingScreen.instance()
+                                    .show(context: c, text: 'Logging you in');
+                                final authProvider =
+                                    ref.read(authStateProvider.notifier);
 
+                                final userId = await authProvider
+                                    .loginWithEmailPasswordNew(
+                                        emailController.text,
+                                        passwordController.text);
+
+                                if (userId != null) {
+                                  LoadingScreen.instance().show(
+                                      context: c,
+                                      text: 'Refreshing  your data');
+                                  var user = await fetchUserDetails(userId);
+
+                                  await initialRefresh(user.route ?? 0);
+                                  await fetchAndStoreItems();
+                                  final customerDataProvider =
+                                      ref.watch(customerStateProvider.notifier);
+                                  await customerDataProvider.fetchFromDB();
+                                  ref
+                                      .read(userDetailsProvider.notifier)
+                                      .setLoggedInUser(user);
                                   ref
                                       .read(isloadingProvider.notifier)
                                       .turnOffLoading();
+                                  ref
+                                      .read(authStateProvider.notifier)
+                                      .setLoginState(userId);
                                 } else {
                                   ref
                                       .read(isloadingProvider.notifier)
@@ -169,19 +187,21 @@ class _LoginState extends State<Login> {
                                     ),
                                   );
                                 }
-                              }).catchError((e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Error occured,Please contact admin.',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                );
-                              });
+                              }
                             }
-                          },
-                        ),
+                            //     }).catchError((e) {
+                            //       ScaffoldMessenger.of(context).showSnackBar(
+                            //         const SnackBar(
+                            //           content: Text(
+                            //             'Error occured,Please contact admin.',
+                            //             style: TextStyle(color: Colors.red),
+                            //           ),
+                            //         ),
+                            //       );
+                            //     });
+                            //   }
+                            // }),
+                            ),
                       ),
                     ],
                   ),

@@ -5,3 +5,5 @@ String createOrder = "${baseURL}order/createorder";
 String itemsURL = "${baseURL}item/getItems";
 String customersForDayAndRoute(int route, int day) =>
     "${baseURL}customer/getCustomersByRouteAndDay/$route/$day";
+String customersForDayAndRouteWeek(int route, int day, int week) =>
+    "${baseURL}customer/getCustomersByRouteAndDayAndWeek/$route/$day/$week";

@@ -10,7 +10,7 @@ class RouteDayP extends StateNotifier<int> {
 
     if (routeCode != null) {
       state = routeCode;
-    }
+    } else {}
   }
 
   RouteDayP() : super(0) {
@@ -26,10 +26,10 @@ class RouteDayP extends StateNotifier<int> {
   Future<int> getRouteDay() async {
     pref = await SharedPreferences.getInstance();
     int res;
-    var routeCode = pref.getInt('routeday');
+    var routeDay = pref.getInt('routeday');
 
-    if (routeCode != null) {
-      state = routeCode;
+    if (routeDay != null) {
+      state = routeDay;
       res = state;
     } else {
       res = 0;

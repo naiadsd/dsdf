@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -187,7 +189,9 @@ class _CartDataState extends ConsumerState<CartData> {
 
   buildInvoideNumer() {
     final DateTime now = DateTime.now();
-    return 'RR-${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}';
+    var month = now.month > 9 ? now.month : "0${now.month}";
+    var day = now.day > 9 ? now.day : "0${now.day}";
+    return 'RR-${now.year}${month}${day}${now.hour}${now.minute}${now.second}';
   }
 
   generateInvoice() async {
@@ -266,14 +270,12 @@ class _CartDataState extends ConsumerState<CartData> {
           await PdfApi.openFile(pdfFile);
           ref.watch(isloadingProvider.notifier).turnOffLoading();
           // ignore: use_build_context_synchronously
-          if (cart.driverID != null) {
-            var uid = cart.driverID;
-            const userSerevice = UserDetailService();
-            final result = await userSerevice.fetchUserDetails(uid!);
+          var uid = cart.driverID;
+          const userSerevice = UserDetailService();
+          final result = await userSerevice.fetchUserDetails(uid);
 
-            final userDetails = ref.watch(userDetailsProvider.notifier);
-            userDetails.setUserTotals(result.totalOrders, result.valueAdded);
-          }
+          final userDetails = ref.watch(userDetailsProvider.notifier);
+          userDetails.setUserTotals(result.totalOrders, result.valueAdded);
 
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(

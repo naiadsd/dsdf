@@ -7,6 +7,7 @@ import 'package:dsd/state/items/backend/item_service.dart';
 import 'package:dsd/state/items/models/item.dart';
 import 'package:dsd/state/routeday/provider/routeday.dart';
 import 'package:dsd/state/userinfo/provider/userdetails.dart';
+import 'package:dsd/state/week/provider/week.dart';
 import 'package:dsd/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -104,8 +105,9 @@ class _SettingsState extends State<Settings> {
                 onPressed: (() async {
                   int routeday = await ref.watch(routeDayProvider);
                   int? day = ref.watch(userDetailsProvider).route;
-
-                  await fetchAndStoreCustomers(routeday, day ?? 1);
+                  int week =
+                      await ref.read(weekRouteProvider.notifier).getWeekRoute();
+                  await fetchAndStoreCustomers(routeday, day ?? 1, week);
                 }),
                 icon: const Icon(Icons.store),
                 label: const Text('Fetch All  Items'),

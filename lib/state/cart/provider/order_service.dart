@@ -9,8 +9,8 @@ Future<bool> sendOrdertoServer(Map<String, dynamic> order) async {
     //  print(order);
     //var bd = jsonEncode({"order": order});
     // const payload = {order:jsonEncode(order)};
-    var map = new Map<String, dynamic>();
-    map['order'] = {'oder data': 'id'};
+    // var map = new Map<String, dynamic>();
+    // map['order'] = {'oder data': 'id'};
     //map['password'] = 'password';
     print(jsonEncode(order));
     final res = await http.post(url,
@@ -18,10 +18,9 @@ Future<bool> sendOrdertoServer(Map<String, dynamic> order) async {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(order));
-    print(res.request);
+
     return true;
   } catch (e) {
-    print('error');
     print(e.toString());
     return false;
   }

@@ -25,8 +25,8 @@ class Home extends ConsumerWidget {
     ref.watch(isloadingProvider.notifier).turnOnLoading();
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
     int route = await ref.read(userDetailsProvider.notifier).getRoute();
-    await fetchAndStoreCustomers(route, value);
-
+    int week = await ref.read(weekRouteProvider.notifier).getWeekRoute();
+    await fetchAndStoreCustomers(route, value, week);
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
     ref.watch(routeDayProvider.notifier).setRouteDay(value);
@@ -39,7 +39,8 @@ class Home extends ConsumerWidget {
 
     int route = await ref.read(userDetailsProvider.notifier).getRoute();
     int day = await ref.read(routeDayProvider.notifier).getRouteDay();
-    await fetchAndStoreCustomers(route, day);
+    int week = await ref.read(weekRouteProvider.notifier).getWeekRoute();
+    await fetchAndStoreCustomers(route, day, week);
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
     //ref.watch(userDetailsProvider.notifier).setRoute(value);
@@ -56,10 +57,10 @@ class Home extends ConsumerWidget {
     int route = await ref.read(userDetailsProvider.notifier).getRoute();
     int day = await ref.read(routeDayProvider.notifier).getRouteDay();
 
-    //await fetchAndStoreCustomers(route, value);
+    await fetchAndStoreCustomers(route, value, value);
 
-    //final customerDataProvider = ref.watch(customerStateProvider.notifier);
-    //await customerDataProvider.fetchFromDB();
+    final customerDataProvider = ref.watch(customerStateProvider.notifier);
+    await customerDataProvider.fetchFromDB();
     ref.watch(weekRouteProvider.notifier).setWeekRoute(value);
     ref.watch(isloadingProvider.notifier).turnOffLoading();
   }
@@ -69,8 +70,8 @@ class Home extends ConsumerWidget {
     LoadingScreen.instance().show(context: c, text: Strings.refreshCustomers);
 
     int route = await ref.read(routeDayProvider);
-
-    await fetchAndStoreCustomers(route, value);
+    int week = await ref.read(weekRouteProvider.notifier).getWeekRoute();
+    await fetchAndStoreCustomers(route, value, week);
     final customerDataProvider = ref.watch(customerStateProvider.notifier);
     await customerDataProvider.fetchFromDB();
     ref.watch(userDetailsProvider.notifier).setRoute(value);
@@ -529,6 +530,9 @@ class Home extends ConsumerWidget {
 
     Widget logOut = TextButton(
       onPressed: (() async {
+        ref.invalidate(customerStateProvider);
+        ref.invalidate(itemStaeProvider);
+
         Navigator.of(context).pop();
         await DBProvier.db.clearData();
         SharedPreferences preferences = await SharedPreferences.getInstance();

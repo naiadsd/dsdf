@@ -27,7 +27,7 @@ class SubmitButton extends ConsumerWidget {
           if (result == AuthResult.success) {
             final userId = ref.read(userIdProvider);
 
-            userService.fetchUserDetails(userId);
+            userService.fetchUserDetails(userId, ref);
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(

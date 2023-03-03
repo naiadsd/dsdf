@@ -37,6 +37,23 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     return AuthResult.failure;
   }
 
+  Future<String?> loginWithEmailPasswordNew(
+      String email, String password) async {
+    state = state.copiedWithIsLoading(true);
+    final result = await _authenticator.loginWithEmailPassword(email, password);
+    final userId = _authenticator.userId;
+    if (result == AuthResult.success && userId != null) {
+      return userId;
+    }
+    return null;
+  }
+
+  Future<bool> setLoginState(String userId) async {
+    state =
+        AuthState(result: AuthResult.success, isLoading: false, userId: userId);
+    return true;
+  }
+
   Future<AuthResult> loginWithGoogle() async {
     state = state.copiedWithIsLoading(true);
     final result = await _authenticator.loginWithGoogle();

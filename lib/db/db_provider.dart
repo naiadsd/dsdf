@@ -205,9 +205,12 @@ class DBProvier {
   }
 
   Future<void> clearData() async {
+    print('clearing data');
     await deleteAllCustomers();
     await deleteAllPromos();
     await deleteAllCustomers();
+
+    print('cleared');
   }
 
 /*Items logic End */

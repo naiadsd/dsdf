@@ -3,7 +3,7 @@
 class User {
   String? lastName;
   String? uuid;
-  int? phoneNumber;
+  String? phoneNumber;
   int? id;
   String? email;
   String? role;
@@ -36,7 +36,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     lastName = json['lastName'];
     uuid = json['uuid'];
-    phoneNumber = json['phoneNumber'];
+    phoneNumber = json['phoneNumber'].toString();
     id = json['id'];
     email = json['email'];
     role = json['role'];

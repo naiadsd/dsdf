@@ -18,6 +18,7 @@ class CustomerStateNotifier extends StateNotifier<CustomerState> {
     try {
       List<Customer> customersInDB = await fetchCustomersfromDB();
       state = state.loadState(customersInDB);
+      print('fetching from db for initial db');
       return true;
     } catch (e) {
       print(e);

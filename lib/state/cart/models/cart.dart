@@ -175,7 +175,10 @@ class Cart {
     //print('cart');
     // print(this.toString());
     final _data = <String, dynamic>{};
-    var newDt = DateFormat.yMMMEd().format(DateTime.now());
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    var newDt = formatter.format(now);
+    //var newDt = DateFormat.yMMMEd().format(DateTime.now());
     var time = DateFormat.Hm().format(DateTime.now());
 
     _data['orderDate'] = newDt;
